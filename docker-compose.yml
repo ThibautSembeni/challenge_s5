@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  server:
+    container_name: server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    build:
+      context: server
+      dockerfile: Dockerfile
+      target: server
+    volumes:
+      - ./server:/srv/app
+    links:
+      - php
+    ports:
+      - '8888:80'
+  php:
+    container_name: php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    build:
+      context: server
+      dockerfile: Dockerfile
+      target: php_dev
+    volumes:
+      - ./server/.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ~/server/.config/composer:/home/prod/.composer
+      - ./server:/srv/app
+  database:
+    container_name: database
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-app}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_USER=${POSTGRES_USER:-app}
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  ###> symfony/mailer ###
+  mailer:
+    container_name: mailer
+    image: schickling/mailcatcher
+    ports: ["1025:1025", "1080:1080"]
+###< symfony/mailer ###
+
+volumes:
+  database_data:
