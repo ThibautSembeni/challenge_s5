@@ -2,7 +2,7 @@
 FROM php:8.2-fpm-alpine as php
 
 RUN apk update
-RUN apk add curl
+RUN apk --no-cache add curl@latest
 
 # Installing and enabling required PHP extension
 

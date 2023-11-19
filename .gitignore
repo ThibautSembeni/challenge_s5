@@ -1,4 +1,4 @@
 .idea/
 .vscode/
-*/.env
+server/.env.local
 */.env.*.local

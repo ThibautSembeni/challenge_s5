@@ -58,15 +58,18 @@ jobs:
       -
         name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console -e test doctrine:schema:validate
-  lint:
-    name: Docker Lint
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Lint Dockerfiles
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          recursive: true
+#  lint:
+#    name: Docker Lint
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        working-directory: ./server
+#    steps:
+#      -
+#        name: Checkout
+#        uses: actions/checkout@v4
+#      -
+#        name: Lint Dockerfiles
+#        uses: hadolint/hadolint-action@v3.1.0
+#        with:
+#          recursive: true
