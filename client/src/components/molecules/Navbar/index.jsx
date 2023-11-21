@@ -14,10 +14,19 @@ export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
 
   const [navigation, setNavigation] = useState([
-    { name: "Dashboard", href: "#", current: true },
-    { name: "Team", href: "#", current: false },
-    { name: "Projects", href: "#", current: false },
-    { name: "Calendar", href: "#", current: false },
+    {
+      name: "Mon Compte",
+      iconName: "UserIcon",
+      type: "link",
+      to: "/account",
+      current: false,
+    },
+    {
+      name: "Déconnexion",
+      iconName: "ArrowLeftOnRectangleIcon",
+      type: "button",
+      onClick: () => logout(),
+    },
   ]);
   return (
     <Disclosure as="nav" className="bg-white">
@@ -35,8 +44,20 @@ export default function Navbar() {
                 </div>
               </div>
               <div className={"flex items-center justify-center text-sm gap-2"}>
+                <div className="flex items-center lg:hidden">
+                  {/* Mobile menu button */}
+                  <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                    <span className="absolute -inset-0.5" />
+                    <span className="sr-only">Open main menu</span>
+                    {open ? (
+                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    )}
+                  </Disclosure.Button>
+                </div>
                 {isAuthenticated ? (
-                  <>
+                  <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
                     <Link to={"#"}>Mes rendez-vous</Link>
                     <RadiosButtonsWithIcons
                       placeholder={`${user.firstname} ${user.lastname}`}
@@ -62,7 +83,7 @@ export default function Navbar() {
                         ],
                       ]}
                     />
-                  </>
+                  </div>
                 ) : (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
                     <Link
@@ -84,64 +105,67 @@ export default function Navbar() {
           </div>
 
           <Disclosure.Panel className="lg:hidden">
-            <div className="space-y-1 pb-3 pt-2">
-              {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-indigo-50 border-indigo-500 text-indigo-700"
-                      : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800",
-                    "block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:bg-gray-50",
-                  )}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setNavigation(
-                      navigation.map((nav) => ({
-                        ...nav,
-                        current: nav.name === item.name,
-                      })),
-                    );
-                  }}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
             {isAuthenticated ? (
-              <RadiosButtonsWithIcons
-                placeholder={`${user.firstname} ${user.lastname}`}
-                options={[
-                  [
-                    {
-                      name: "Mon Compte",
-                      iconName: "UserIcon",
-                      type: "link",
-                      to: "/account",
-                    },
-                  ],
-                  [
-                    {
-                      name: "Déconnexion",
-                      iconName: "ArrowLeftOnRectangleIcon",
-                      type: "button",
-                      onClick: () => logout(),
-                    },
-                  ],
-                ]}
-              />
-            ) : (
-              <div className="py-6">
-                <Link
-                  to="/login"
-                  className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+              <div className="space-y-1 pb-3 pt-2">
+                {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" */}
+                {navigation.map((item) => (
+                  <Fragment key={item.name}>
+                    {item.type === "link" && (
+                      <Link
+                        to={item.href}
+                        className={classNames(
+                          item.current
+                            ? "bg-indigo-50 border-indigo-500 text-indigo-700"
+                            : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800",
+                          "block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:bg-gray-50",
+                        )}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setNavigation(
+                            navigation.map((nav) => ({
+                              ...nav,
+                              current: nav.name === item.name,
+                            })),
+                          );
+                        }}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                    {item.type === "button" && (
+                      <button
+                        onClick={item.onClick}
+                        className={classNames(
+                          item.current
+                            ? "bg-indigo-50 border-indigo-500 text-indigo-700"
+                            : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800",
+                          "block border-l-4 py-2 pl-3 pr-4 text-left font-medium hover:bg-gray-50 w-full",
+                        )}
+                      >
+                        {item.name}
+                      </button>
+                    )}
+                  </Fragment>
+                ))}
               </div>
+            ) : (
+              <>
+                <div className="py-4">
+                  <Link
+                    to={""}
+                    className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Vous êtes vétérinaire ?
+                  </Link>
+
+                  <Link
+                    to="/login"
+                    className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              </>
             )}
           </Disclosure.Panel>
         </>
