@@ -29,7 +29,7 @@ class Clinics
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
-    #[ORM\OneToMany(mappedBy: 'clinicID', targetEntity: Veterinarians::class)]
+    #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
     public function __construct()
@@ -102,7 +102,7 @@ class Clinics
     {
         if (!$this->veterinarians->contains($veterinarian)) {
             $this->veterinarians->add($veterinarian);
-            $veterinarian->setClinicID($this);
+            $veterinarian->setClinic($this);
         }
 
         return $this;
@@ -112,8 +112,8 @@ class Clinics
     {
         if ($this->veterinarians->removeElement($veterinarian)) {
             // set the owning side to null (unless already changed)
-            if ($veterinarian->getClinicID() === $this) {
-                $veterinarian->setClinicID(null);
+            if ($veterinarian->getClinic() === $this) {
+                $veterinarian->setClinic(null);
             }
         }
 

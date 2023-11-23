@@ -3,13 +3,28 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VeterinariansRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Post(normalizationContext: ['groups' => ['veterinarians:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Get(),
+        new Put(),
+        new Delete(),
+        new Patch()
+    ],
+)]
 class Veterinarians
 {
     #[ORM\Id]
@@ -17,23 +32,29 @@ class Veterinarians
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['veterinarians:write:create'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
+    #[Groups(['veterinarians:write:create'])]
     #[ORM\Column(length: 100)]
-    private ?string $fistname = null;
+    private ?string $firstname = null;
 
+    #[Groups(['veterinarians:write:create'])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+
+    #[Groups(['veterinarians:write:create'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
+    #[Groups(['veterinarians:write:create'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
-    private ?Clinics $clinicID = null;
+    private ?Clinics $clinic = null;
 
     #[ORM\OneToMany(mappedBy: 'veterinarianID', targetEntity: Appointments::class)]
     private Collection $appointments;
@@ -68,14 +89,14 @@ class Veterinarians
         return $this;
     }
 
-    public function getFistname(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->fistname;
+        return $this->firstname;
     }
 
-    public function setFistname(string $fistname): static
+    public function setFirstname(string $firstname): static
     {
-        $this->fistname = $fistname;
+        $this->firstname = $firstname;
 
         return $this;
     }
@@ -116,14 +137,14 @@ class Veterinarians
         return $this;
     }
 
-    public function getClinicID(): ?Clinics
+    public function getClinic(): ?Clinics
     {
-        return $this->clinicID;
+        return $this->clinic;
     }
 
-    public function setClinicID(?Clinics $clinicID): static
+    public function setClinic(?Clinics $clinic): static
     {
-        $this->clinicID = $clinicID;
+        $this->clinic = $clinic;
 
         return $this;
     }

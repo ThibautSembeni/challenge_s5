@@ -63,7 +63,6 @@ export default function TextInput({
           handleBlur();
           onBlur();
         }}
-        onFocusOut={handleBlur}
         onFocus={onFocus}
         placeholder=" "
         disabled={disabled}

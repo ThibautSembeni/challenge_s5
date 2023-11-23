@@ -1,9 +1,46 @@
 import Input from "@/components/atoms/Inputs/Input.jsx";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import { useEffect, useState } from "react";
+import { createVeterinarians } from "@/api/veterinarians/index.jsx";
 
 export default function PracticienRegister() {
   const [form, setForm] = useState({});
+  const inputs = [
+    {
+      type: "text",
+      label: "Nom",
+      required: true,
+      name: "lastname",
+    },
+    {
+      type: "text",
+      label: "Prénom",
+      required: true,
+      name: "firstname",
+    },
+    {
+      type: "tel",
+      label: "Téléphone portable",
+      required: true,
+      name: "phone",
+      className: "sm:col-span-2",
+    },
+    {
+      type: "text",
+      label: "Votre spécialité",
+      required: true,
+      name: "specialties",
+      className: "sm:col-span-2",
+    },
+    {
+      type: "email",
+      label: "Adresse email",
+      required: true,
+      name: "email",
+      className: "sm:col-span-2",
+    },
+  ];
+  const canBeSubmitted = !areRequiredInputsFilled(form, inputs);
 
   const handleChange = (e) => {
     setForm({
@@ -15,11 +52,21 @@ export default function PracticienRegister() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(form);
+    createVeterinarians(form)
+      .then((r) => console.log(r))
+      .catch((e) => console.log(e));
   };
 
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
+  function areRequiredInputsFilled(form, inputs) {
+    for (let input of inputs) {
+      if (input.required) {
+        if (!form[input.name]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
   return (
     <div className="isolate bg-white">
@@ -49,60 +96,26 @@ export default function PracticienRegister() {
         <div className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <div className="relative grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-              <div>
-                <Input
-                  type={"text"}
-                  label={"Nom"}
-                  required={true}
-                  className={"w-full"}
-                  name={"lastname"}
-                  onChange={handleChange}
-                  value={form.lastname}
-                />
-              </div>
-              <div>
-                <Input
-                  type={"text"}
-                  label={"Prénom"}
-                  required={true}
-                  name={"firstname"}
-                  onChange={handleChange}
-                  value={form.firstname}
-                />
-              </div>
-              <div>
-                <Input
-                  type={"text"}
-                  label={"Code postal cabinet"}
-                  required={true}
-                  name={"postalCode"}
-                  onChange={handleChange}
-                  value={form.postalCode}
-                />
-              </div>
-              <div>
-                <Input
-                  type={"tel"}
-                  label={"Téléphone portable"}
-                  required={true}
-                  onChange={handleChange}
-                  name={"phone"}
-                  value={form.phone}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Input
-                  type={"email"}
-                  label={"Adresse email"}
-                  required={true}
-                  name={"email"}
-                  onChange={handleChange}
-                  value={form.email}
-                />
-              </div>
+              {inputs.map((input, index) => (
+                <div key={input.name} className={input?.className}>
+                  <Input
+                    type={input.type}
+                    label={input.label}
+                    required={input?.required}
+                    name={input.name}
+                    onChange={handleChange}
+                    value={form[input.name]}
+                  />
+                </div>
+              ))}
             </div>
             <div className="mt-8 flex justify-end">
-              <Button size="m" color={"blue"} onClick={handleSubmit}>
+              <Button
+                size="m"
+                color={"blue"}
+                onClick={handleSubmit}
+                disabled={canBeSubmitted}
+              >
                 Sauvegarder
               </Button>
             </div>
