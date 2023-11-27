@@ -13,6 +13,7 @@ use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VeterinariansRepository::class)]
 #[ApiResource(
@@ -24,6 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
         new Delete(),
         new Patch()
     ],
+    normalizationContext: ['groups' => ['veterinarians:read']],
 )]
 class Veterinarians
 {
@@ -32,27 +34,28 @@ class Veterinarians
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 
+    #[Groups(['veterinarians:read'])]
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
     private ?Clinics $clinic = null;
 

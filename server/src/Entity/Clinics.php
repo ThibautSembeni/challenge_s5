@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filters\CustomSearchFilter;
 use App\Repository\ClinicsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['clinics:read:collection']],
+)]
 class Clinics
 {
     #[ORM\Id]
@@ -17,9 +22,12 @@ class Clinics
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ApiFilter(CustomSearchFilter::class)]
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -29,8 +37,15 @@ class Clinics
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
+    #[Groups(['clinics:read:collection'])]
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $latitude = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $longitude = null;
 
     public function __construct()
     {
@@ -116,6 +131,30 @@ class Clinics
                 $veterinarian->setClinic(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?float $latitude): static
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?float $longitude): static
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }
