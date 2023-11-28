@@ -13,6 +13,7 @@ use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: VeterinariansRepository::class)]
@@ -37,11 +38,11 @@ class Veterinarians
     #[ORM\Column(type: 'uuid', unique: true)]
     private Uuid $uuid;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'clinics:read'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'clinics:read'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
@@ -54,7 +55,7 @@ class Veterinarians
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:write:create', 'clinics:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 
