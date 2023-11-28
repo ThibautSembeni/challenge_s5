@@ -1,5 +1,6 @@
 import Login from "@/pages/Auth/Login.jsx";
 import Register from "@/pages/Auth/Register.jsx";
+import Account from "@/pages/Auth/Account.jsx";
 import Home from "@/pages/Home/Home.jsx";
 import PracticienRegister from "@/pages/PracticienRegister/index.jsx";
 import Clinic from "@/pages/Veterinarian/Clinic.jsx";
@@ -31,6 +32,10 @@ const list = [
         path: "veterinaire/:uuid",
         element: <Veterinarian />,
       },
+      {
+        path: "mon-compte",
+        element: <Account />
+      }
     ],
   },
   {

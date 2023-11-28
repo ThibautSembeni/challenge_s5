@@ -18,7 +18,7 @@ export default function Navbar() {
       name: "Mon Compte",
       iconName: "UserIcon",
       type: "link",
-      to: "/account",
+      to: "/mon-compte",
       current: false,
     },
     {
@@ -70,7 +70,7 @@ export default function Navbar() {
                             name: "Mon Compte",
                             iconName: "UserIcon",
                             type: "link",
-                            to: "/account",
+                            to: "/mon-compte",
                           },
                         ],
                         [
