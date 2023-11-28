@@ -13,6 +13,7 @@ use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: VeterinariansRepository::class)]
 #[ApiResource(
@@ -31,6 +32,10 @@ class Veterinarians
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private Uuid $uuid;
 
     #[Groups(['veterinarians:write:create'])]
     #[ORM\Column(length: 100)]
@@ -70,11 +75,17 @@ class Veterinarians
         $this->appointments = new ArrayCollection();
         $this->appointmentHistories = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->uuid = Uuid::v4();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): Uuid
+    {
+        return $this->uuid;
     }
 
     public function getLastname(): ?string
