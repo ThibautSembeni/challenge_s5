@@ -70,11 +70,16 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicSchedules::class)]
     private Collection $clinicSchedules;
 
+    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
+    private Collection $clinicComplementaryInformation;
+
     public function __construct()
     {
         $this->veterinarians = new ArrayCollection();
         $this->uuid = Uuid::v4();
         $this->clinicSchedules = new ArrayCollection();
+        $this->clinicComplementaryInformation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,6 +207,36 @@ class Clinics
             // set the owning side to null (unless already changed)
             if ($clinicSchedule->getClinicId() === $this) {
                 $clinicSchedule->setClinicId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClinicComplementaryInformation>
+     */
+    public function getClinicComplementaryInformation(): Collection
+    {
+        return $this->clinicComplementaryInformation;
+    }
+
+    public function addClinicComplementaryInformation(ClinicComplementaryInformation $clinicComplementaryInformation): static
+    {
+        if (!$this->clinicComplementaryInformation->contains($clinicComplementaryInformation)) {
+            $this->clinicComplementaryInformation->add($clinicComplementaryInformation);
+            $clinicComplementaryInformation->setClinicId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClinicComplementaryInformation(ClinicComplementaryInformation $clinicComplementaryInformation): static
+    {
+        if ($this->clinicComplementaryInformation->removeElement($clinicComplementaryInformation)) {
+            // set the owning side to null (unless already changed)
+            if ($clinicComplementaryInformation->getClinicId() === $this) {
+                $clinicComplementaryInformation->setClinicId(null);
             }
         }
 
