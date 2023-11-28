@@ -116,6 +116,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const checkUser = async (token = localStorage.getItem("access_token")) => {
+    setIsLoading(true);
     await getAuthenticated(token)
       .then((res) => {
         if (res.status === 200) {
@@ -129,6 +130,7 @@ const AuthProvider = ({ children }) => {
           setIsAuthenticated(false);
         }
       });
+    setIsLoading(false);
   };
 
   useEffect(() => {
