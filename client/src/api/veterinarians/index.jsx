@@ -2,7 +2,7 @@ import axiosInstance from "@/utils/axiosInstance.js";
 import axios from "axios";
 
 export const getAllVeterinarians = async () => {
-  return axiosInstance.get(`/veterinarians`);
+  return axios.get(`${import.meta.env.VITE_API_URL}/veterinarians`);
 };
 export const createVeterinarians = async ({
   lastname,

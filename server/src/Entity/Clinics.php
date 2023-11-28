@@ -41,9 +41,11 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 

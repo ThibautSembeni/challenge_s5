@@ -44,7 +44,7 @@ export function Icon({ width = 24, height = 24, icon, className }) {
         <CheckedCircle width={width} height={height} className={className} />
       );
     case "cross":
-      return <Cross width={width} height={height} />;
+      return <Cross width={width} height={height} className={className} />;
     case "arrow":
       return <Arrow width={width} height={height} className={className} />;
     case "cross-square":
@@ -56,33 +56,35 @@ export function Icon({ width = 24, height = 24, icon, className }) {
         <CrossCircle width={width} height={height} className={className} />
       );
     case "denied":
-      return <Denied width={width} height={height} />;
+      return <Denied width={width} height={height} className={className} />;
     case "warning":
-      return <Warning width={width} height={height} />;
+      return <Warning width={width} height={height} className={className} />;
     case "unknown":
-      return <Unknown width={width} height={height} />;
+      return <Unknown width={width} height={height} className={className} />;
     case "gare":
-      return <Gare width={width} height={height} />;
+      return <Gare width={width} height={height} className={className} />;
     case "gear":
-      return <Gear width={width} height={height} />;
+      return <Gear width={width} height={height} className={className} />;
     case "loupe":
-      return <Loupe width={width} height={height} />;
+      return <Loupe width={width} height={height} className={className} />;
     case "moon":
-      return <Moon width={width} height={height} />;
+      return <Moon width={width} height={height} className={className} />;
     case "pin":
-      return <Pin width={width} height={height} />;
+      return <Pin width={width} height={height} className={className} />;
     case "plus":
       return <Plus width={width} height={height} className={className} />;
     case "profile":
-      return <Profile width={width} height={height} />;
+      return <Profile width={width} height={height} className={className} />;
     case "reversed-arrow":
-      return <ReversedArrow width={width} height={height} />;
+      return (
+        <ReversedArrow width={width} height={height} className={className} />
+      );
     case "screen":
-      return <Screen width={width} height={height} />;
+      return <Screen width={width} height={height} className={className} />;
     case "trash":
-      return <Trash width={width} height={height} />;
+      return <Trash width={width} height={height} className={className} />;
     case "getIn":
-      return <GetIn width={width} height={height} />;
+      return <GetIn width={width} height={height} className={className} />;
     case "chevron":
       return <Chevron width={width} height={height} className={className} />;
     case "move":
@@ -122,6 +124,8 @@ export function Icon({ width = 24, height = 24, icon, className }) {
         <DatabaseRemove width={width} height={height} className={className} />
       );
     default:
-      return <Placeholder width={width} height={height} />;
+      return (
+        <Placeholder width={width} height={height} className={className} />
+      );
   }
 }

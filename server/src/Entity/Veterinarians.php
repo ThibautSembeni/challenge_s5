@@ -26,6 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Patch()
     ],
     normalizationContext: ['groups' => ['veterinarians:read']],
+    paginationPartial: false,
 )]
 class Veterinarians
 {

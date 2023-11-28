@@ -36,6 +36,7 @@ security:
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api/veterinarians, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/api/veterinarians, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs,       roles: PUBLIC_ACCESS }
         - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
 
