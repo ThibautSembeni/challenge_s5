@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
@@ -19,9 +20,9 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: VeterinariansRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(normalizationContext: ['groups' => ['veterinarians:read']]),
         new Post(normalizationContext: ['groups' => ['veterinarians:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
-        new Get(),
+        new Get(normalizationContext: ['groups' => ['veterinarians:read']]),
         new Put(),
         new Delete(),
         new Patch()
@@ -32,30 +33,33 @@ class Veterinarians
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
+    #[Groups(['veterinarians:read', 'clinics:read'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
-    #[Groups(['veterinarians:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create'])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
 
-    #[Groups(['veterinarians:write:create'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['veterinarians:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 

@@ -1,9 +1,10 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
-import React, {Fragment, useEffect, useRef, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import imgBanner from "@/assets/images/veterinayBanner.jpg";
-import {getOneClinics} from "@/api/veterinarians/Clinic.jsx";
+import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {useParams} from "react-router-dom";
+import Footer from "@/components/molecules/Footer/index.jsx";
 
 const featuredTestimonial = {
   body: 'Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.',
@@ -114,6 +115,7 @@ export default function ClinicProfil() {
         clinicData.data.veterinarians.map(veterinarian => ({
           name: veterinarian.firstname + ' ' + veterinarian.lastname,
           role: veterinarian.specialties,
+          uuid: veterinarian.uuid,
           imageUrl:
             'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
         }))
@@ -411,10 +413,12 @@ export default function ClinicProfil() {
               >
                 {teams.map((person) => (
                   <li key={person.name}>
-                    <img className="mx-auto h-24 w-24 rounded-full" src={person.imageUrl} alt=""/>
-                    <h3
-                      className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 uppercase">{person.name}</h3>
-                    <p className="text-sm leading-6 text-gray-600">{person.role}</p>
+                    <a href={`/veterinaire/${person.uuid}`}>
+                      <img className="mx-auto h-24 w-24 rounded-full" src={person.imageUrl} alt=""/>
+                      <h3
+                        className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 uppercase">DR. {person.name}</h3>
+                      <p className="text-sm leading-6 text-gray-600">{person.role}</p>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -518,6 +522,8 @@ export default function ClinicProfil() {
           </div>
         </main>
       )}
+
+      <Footer />
     </>
   )
 }
