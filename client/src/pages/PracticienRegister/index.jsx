@@ -1,7 +1,7 @@
 import Input from "@/components/atoms/Inputs/Input.jsx";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import { useEffect, useState } from "react";
-import { createVeterinarians } from "@/api/veterinarians/index.jsx";
+import { createVeterinarians } from "@/api/veterinarian/index.jsx";
 
 export default function PracticienRegister() {
   const [form, setForm] = useState({});

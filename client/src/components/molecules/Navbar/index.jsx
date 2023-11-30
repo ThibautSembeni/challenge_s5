@@ -1,7 +1,6 @@
 import { Fragment, useState } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { MagnifyingGlassIcon, UserIcon } from "@heroicons/react/20/solid";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Disclosure } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import RadiosButtonsWithIcons from "@/components/atoms/RadiosButtons/RadiosButtonsWithIcons.jsx";
@@ -18,7 +17,7 @@ export default function Navbar() {
       name: "Mon Compte",
       iconName: "UserIcon",
       type: "link",
-      to: "/account",
+      to: "/mon-compte",
       current: false,
     },
     {
@@ -70,7 +69,7 @@ export default function Navbar() {
                             name: "Mon Compte",
                             iconName: "UserIcon",
                             type: "link",
-                            to: "/account",
+                            to: "/mon-compte",
                           },
                         ],
                         [
