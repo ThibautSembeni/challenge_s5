@@ -1,5 +1,6 @@
 import { Icon } from "@/components/atoms/Icons/Icon.jsx";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchInput({ value, onChange }) {
   return (

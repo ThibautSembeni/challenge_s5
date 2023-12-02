@@ -22,7 +22,6 @@ class Clinics
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ApiFilter(CustomSearchFilter::class)]
     #[Groups(['clinics:read:collection', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -48,6 +47,15 @@ class Clinics
     #[Groups(['clinics:read:collection', 'veterinarians:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
+
+    #[ApiFilter(CustomSearchFilter::class)]
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[ORM\Column(length: 50)]
+    private ?string $city = null;
+
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[ORM\Column(length: 15)]
+    private ?string $postalCode = null;
 
     public function __construct()
     {
@@ -157,6 +165,30 @@ class Clinics
     public function setLongitude(?float $longitude): static
     {
         $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
 
         return $this;
     }

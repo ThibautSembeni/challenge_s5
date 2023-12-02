@@ -35,11 +35,11 @@ class Veterinarians
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read', 'clinics:read:collection'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read', 'clinics:read:collection'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
@@ -52,7 +52,7 @@ class Veterinarians
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['veterinarians:write:create', 'veterinarians:read'])]
+    #[Groups(['veterinarians:write:create', 'veterinarians:read', 'clinics:read:collection'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 

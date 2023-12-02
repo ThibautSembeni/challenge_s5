@@ -2,43 +2,63 @@ import SideMap from "@/components/organisms/Search/Map.jsx";
 import PracticienSection, {
   PracticienSectionSkeleton,
 } from "@/components/organisms/Search/PracticienSection.jsx";
-import { useEffect, useState } from "react";
-import { getAllVeterinarians } from "@/api/veterinarians/index.jsx";
-const veterinarians = [
-  {
-    "@id": "/api/veterinarians/3",
-    "@type": "Veterinarians",
-    lastname: "Sembeni",
-    firstname: "Thibaut",
-    email: "thibautsembeni@gmail.com",
-    phone: "0768462492",
-    specialties: "test",
-    clinic: {
-      "@id": "/api/clinics/1",
-      "@type": "Clinics",
-      name: "test",
-      address: "20 rue des chaumonts, saulchery, 02310",
-    },
-  },
-];
+import {
+  Fragment,
+  useEffect,
+  useState,
+  createRef,
+  useCallback,
+  useMemo,
+} from "react";
+import { getAllClinics } from "@/api/clinics/index.jsx";
 
 export default function ResultSection({ city }) {
   const [loading, setLoading] = useState(true);
-  const [veterinarians, setVeterinarians] = useState([]);
+  const [clinics, setClinics] = useState([]);
+  const [clinicId, setClinicId] = useState(null);
+  const [selectedClinicId, setSelectedClinicId] = useState(null);
+
+  const handleSelectWGS = (id) => {
+    setClinicId(id);
+  };
+
+  const clinicRefs = useMemo(() => {
+    if (clinics && clinics["hydra:member"]) {
+      return clinics["hydra:member"].reduce((acc, clinic) => {
+        acc[clinic["@id"]] = createRef();
+        return acc;
+      }, {});
+    } else {
+      return {};
+    }
+  }, [clinics]);
+
   useEffect(() => {
     setLoading(true);
-    getAllVeterinarians()
+    getAllClinics({ "city[custom_contain]": city })
       .then((res) => {
-        console.log(res);
-        setVeterinarians(res.data);
+        setClinics(res.data);
       })
       .catch((err) => {
-        setVeterinarians([]);
+        setClinics([]);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [city]);
+
+  useEffect(() => {
+    if (selectedClinicId && clinicRefs[selectedClinicId].current) {
+      clinicRefs[selectedClinicId].current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [selectedClinicId]);
+
+  useEffect(() => {
+    console.log(selectedClinicId);
+  }, [selectedClinicId]);
 
   return (
     <div className="bg-white py-10 sm:py-12">
@@ -51,22 +71,45 @@ export default function ResultSection({ city }) {
           ligne
         </p>
         <p className="mt-2 text-lg leading-8 text-black">
-          {veterinarians["hydra:totalItems"]} résultats
+          {clinics["hydra:totalItems"]} résultats
         </p>
 
         {loading ? (
           <PracticienSectionSkeleton />
         ) : (
-          <div className="flex gap-4">
-            <div className="mt-6 space-y-20 lg:mt-8 lg:space-y-20 w-full">
-              {veterinarians["hydra:member"].map((veterinarian) => (
-                <PracticienSection
-                  info={veterinarian}
-                  key={veterinarian["@id"]}
-                />
-              ))}
+          <div className="flex gap-4 relative">
+            <div className="mt-6 space-y-3 lg:mt-8 w-2/4 overflow-y">
+              {clinics["hydra:member"].length > 0 ? (
+                clinics["hydra:member"].map((clinic) => (
+                  <Fragment key={clinic["@id"]}>
+                    {clinic.veterinarians.map((veterinarian) => (
+                      <PracticienSection
+                        ref={clinicRefs[clinic["@id"]]}
+                        className={
+                          selectedClinicId === clinic["@id"]
+                            ? "shadow-2xl border-blue-400"
+                            : ""
+                        }
+                        clinic={clinic}
+                        veterinarian={veterinarian}
+                        key={veterinarian["@id"]}
+                        onMouseEnter={() => handleSelectWGS(clinic["@id"])}
+                        onMouseLeave={() => handleSelectWGS(null)}
+                      />
+                    ))}
+                  </Fragment>
+                ))
+              ) : (
+                <div className="text-center text-gray-500">Aucun résultat</div>
+              )}
             </div>{" "}
-            <SideMap className={"max-w-[30%]"} veterinarians={veterinarians} />
+            <SideMap
+              className={"w-2/4 sticky top-6"}
+              clinics={clinics}
+              selectedMarkerId={clinicId}
+              setClinicId={setClinicId}
+              onSelectMarker={setSelectedClinicId}
+            />
           </div>
         )}
       </div>
