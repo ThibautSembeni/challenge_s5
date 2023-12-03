@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['clinics:read:collection']],
+    paginationPartial: false,
 )]
 class Clinics
 {

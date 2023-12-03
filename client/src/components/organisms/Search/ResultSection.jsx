@@ -11,12 +11,20 @@ import {
   useMemo,
 } from "react";
 import { getAllClinics } from "@/api/clinics/index.jsx";
+import Pagination from "@/components/molecules/Pagination/index.jsx";
+import { useLocation } from "react-router-dom";
+function useQuery() {
+  const { search } = useLocation();
 
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 export default function ResultSection({ city }) {
   const [loading, setLoading] = useState(true);
   const [clinics, setClinics] = useState([]);
   const [clinicId, setClinicId] = useState(null);
   const [selectedClinicId, setSelectedClinicId] = useState(null);
+  const query = useQuery();
+  const [currentPage, setCurrentPage] = useState(query.get("page") || 1);
 
   const handleSelectWGS = (id) => {
     setClinicId(id);
@@ -35,7 +43,11 @@ export default function ResultSection({ city }) {
 
   useEffect(() => {
     setLoading(true);
-    getAllClinics({ "city[custom_contain]": city })
+    getAllClinics({
+      page: currentPage,
+      pagination: true,
+      "city[custom_contain]": city,
+    })
       .then((res) => {
         setClinics(res.data);
       })
@@ -45,7 +57,11 @@ export default function ResultSection({ city }) {
       .finally(() => {
         setLoading(false);
       });
-  }, [city]);
+  }, [city, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(parseInt(query.get("page"), 10) || 1);
+  }, [query.get("page")]);
 
   useEffect(() => {
     if (selectedClinicId && clinicRefs[selectedClinicId].current) {
@@ -54,10 +70,6 @@ export default function ResultSection({ city }) {
         block: "start",
       });
     }
-  }, [selectedClinicId]);
-
-  useEffect(() => {
-    console.log(selectedClinicId);
   }, [selectedClinicId]);
 
   return (
@@ -112,6 +124,13 @@ export default function ResultSection({ city }) {
             />
           </div>
         )}
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          basePath={`/search/${city}`}
+          itemsPerPage={1}
+          totalItems={clinics["hydra:totalItems"]}
+        />
       </div>
     </div>
   );
