@@ -1,8 +1,12 @@
 import Login from "@/pages/Auth/Login.jsx";
 import Register from "@/pages/Auth/Register.jsx";
+import Account from "@/pages/Auth/Account.jsx";
 import Home from "@/pages/Home/Home.jsx";
 import PracticienRegister from "@/pages/PracticienRegister/index.jsx";
 import SearchResult from "@/pages/Search/Search.jsx";
+import Clinic from "@/pages/Veterinarian/Clinic.jsx";
+import Veterinarian from "@/pages/Veterinarian/Veterinarian.jsx";
+import NotFound404 from "@/pages/NotFound404.jsx";
 const list = [
   {
     path: "",
@@ -25,6 +29,18 @@ const list = [
         path: "search/:city",
         element: <SearchResult />,
       },
+      {
+        path: "cabinet/:uuid",
+        element: <Clinic />,
+      },
+      {
+        path: "veterinaire/:uuid",
+        element: <Veterinarian />,
+      },
+      {
+        path: "mon-compte",
+        element: <Account />,
+      },
     ],
   },
   {
@@ -37,7 +53,7 @@ const list = [
   },
   {
     path: "*",
-    element: <h1>404</h1>,
+    element: <NotFound404 />,
   },
 ];
 

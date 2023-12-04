@@ -17,7 +17,7 @@ trait Auth
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'user:read:full'])]
     #[Assert\Email()]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;

@@ -5,16 +5,16 @@ export const getAllVeterinarians = async () => {
   return axios.get(`${import.meta.env.VITE_API_URL}/veterinarians`);
 };
 export const createVeterinarians = async ({
-  lastname,
-  firstname,
-  phone,
-  specialties,
-  email,
-  clinicID,
-  appointments,
-  appointmentHistories,
-  schedules,
-}) => {
+                                            lastname,
+                                            firstname,
+                                            phone,
+                                            specialties,
+                                            email,
+                                            clinicID,
+                                            appointments,
+                                            appointmentHistories,
+                                            schedules,
+                                          }) => {
   return axios.post(`${import.meta.env.VITE_API_URL}/veterinarians`, {
     lastname,
     firstname,
@@ -28,11 +28,11 @@ export const createVeterinarians = async ({
   });
 };
 
-export const getOneVeterinarians = async (id) => {
-  return axiosInstance.get(`/veterinarians/${id}`);
+export const getOneVeterinarians = async (uuid) => {
+  return axiosInstance.get(`/veterinarians/${uuid}`);
 };
 export const replaceOneVeterinarians = async (
-  id,
+  uuid,
   {
     lastname,
     firstname,
@@ -45,7 +45,7 @@ export const replaceOneVeterinarians = async (
     schedules,
   },
 ) => {
-  return axiosInstance.put(`/veterinarians/${id}`, {
+  return axiosInstance.put(`/veterinarians/${uuid}`, {
     lastname,
     firstname,
     phone,
@@ -58,12 +58,12 @@ export const replaceOneVeterinarians = async (
   });
 };
 
-export const deleteVeterinarians = async (id) => {
-  return axiosInstance.delete(`/veterinarians/${id}`);
+export const deleteVeterinarians = async (uuid) => {
+  return axiosInstance.delete(`/veterinarians/${uuid}`);
 };
 
 export const updateOneVeterinarians = async (
-  id,
+  uuid,
   {
     lastname,
     firstname,
@@ -76,7 +76,7 @@ export const updateOneVeterinarians = async (
     schedules,
   },
 ) => {
-  return axiosInstance.patch(`/veterinarians/${id}`, {
+  return axiosInstance.patch(`/veterinarians/${uuid}`, {
     lastname,
     firstname,
     phone,

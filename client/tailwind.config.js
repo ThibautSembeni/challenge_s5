@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -49,11 +49,10 @@ export default {
       },
     },
   },
-  plugins: [],
-};
+  plugins: [
+    require("@tailwindcss/forms")({
+      strategy: 'class',
+    }),
+  ],
+}
 
-export const plugins = [
-  require("@tailwindcss/forms")({
-    strategy: "class",
-  }),
-];

@@ -64,9 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userID', targetEntity: Notifications::class)]
     private Collection $notifications;
 
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $addresse = null;
 
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
