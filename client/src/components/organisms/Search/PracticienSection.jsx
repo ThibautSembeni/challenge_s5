@@ -1,38 +1,41 @@
 import { forwardRef } from "react";
+import { Link } from "react-router-dom";
 
 const PracticienSection = forwardRef(
   ({ clinic, veterinarian, onMouseEnter, onMouseLeave, className }, ref) => {
     return (
-      <article
-        ref={ref}
-        key={veterinarian["@id"]}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        className={`relative isolate flex flex-col gap-8 lg:flex-row border-2 border-gray-900/5 rounded-xl p-4 hover:shadow-2xl hover:border-blue-400 ${className}`}
-      >
-        <div>
-          <div className="mb-6 flex border-b border-gray-900/5 pb-6">
-            <div className="relative flex items-center gap-x-4">
-              <div className="text-sm leading-6">
-                <p className="font-semibold text-gray-900">
-                  <a href={veterinarian["@id"]}>
-                    <span className="absolute inset-0" />
-                    {veterinarian.lastname} {veterinarian.firstname}
-                  </a>
-                </p>
-                <p className="text-gray-600">
-                  Spécialité : {veterinarian.specialties}
-                </p>
+      <Link to={`/veterinaire/${veterinarian.uuid}`}>
+        <article
+          ref={ref}
+          key={veterinarian["@id"]}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          className={`relative isolate flex flex-col gap-8 lg:flex-row border-2 border-gray-900/5 rounded-xl p-4 hover:shadow-2xl hover:border-blue-400 ${className}`}
+        >
+          <div>
+            <div className="mb-6 flex border-b border-gray-900/5 pb-6">
+              <div className="relative flex items-center gap-x-4">
+                <div className="text-sm leading-6">
+                  <p className="font-semibold text-gray-900">
+                    <a href={veterinarian["@id"]}>
+                      <span className="absolute inset-0" />
+                      {veterinarian.lastname} {veterinarian.firstname}
+                    </a>
+                  </p>
+                  <p className="text-gray-600">
+                    Spécialité : {veterinarian.specialties}
+                  </p>
+                </div>
               </div>
             </div>
+            <div className="group relative max-w-xl">
+              <p className="mt-5 text-sm leading-6 text-gray-600">
+                {clinic.address}, {clinic.city}, {clinic.postalCode}
+              </p>
+            </div>
           </div>
-          <div className="group relative max-w-xl">
-            <p className="mt-5 text-sm leading-6 text-gray-600">
-              {clinic.address}, {clinic.city}, {clinic.postalCode}
-            </p>
-          </div>
-        </div>
-      </article>
+        </article>
+      </Link>
     );
   },
 );

@@ -24,7 +24,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['clinics:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
         new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Put(),
