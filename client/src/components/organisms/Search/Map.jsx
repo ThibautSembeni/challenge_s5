@@ -1,8 +1,14 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { Icon, divIcon, point } from "leaflet";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import defaultMarker from "@/assets/defaultMarker.png";
 import selectedMarker from "@/assets/selectedMarker.png";
 
@@ -14,6 +20,7 @@ export default function SideMap({
   setClinicId,
 }) {
   const [markers, setMarkers] = useState([]);
+  const map = useRef();
 
   const defaultIcon = new Icon({
     iconUrl: defaultMarker,
@@ -36,7 +43,7 @@ export default function SideMap({
 
   useEffect(() => {
     setMarkers([]);
-    clinics["hydra:member"].map((clinic) => {
+    clinics["hydra:member"].forEach((clinic) => {
       setMarkers((markers) => [
         ...markers,
         {
@@ -66,11 +73,21 @@ export default function SideMap({
     };
   }, []);
 
+  useEffect(() => {
+    if (map.current && markers[0]) map.current.flyTo(markers[0]?.geocode, 13);
+  }, [markers, map.current]);
+
   return (
     <MapContainer
-      center={[48.8566, 2.3522]}
-      zoom={12}
+      center={[46.2276, 2.2137]}
+      zoom={7}
       className={`${className}`}
+      ref={(e) => (map.current = e)}
+      // eventHandlers={{
+      //   load: (e) => {
+      //     map.current = e;
+      //   },
+      // }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

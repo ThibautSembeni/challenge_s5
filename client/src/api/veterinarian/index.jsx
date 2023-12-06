@@ -5,16 +5,16 @@ export const getAllVeterinarians = async () => {
   return axios.get(`${import.meta.env.VITE_API_URL}/veterinarians`);
 };
 export const createVeterinarians = async ({
-                                            lastname,
-                                            firstname,
-                                            phone,
-                                            specialties,
-                                            email,
-                                            clinicID,
-                                            appointments,
-                                            appointmentHistories,
-                                            schedules,
-                                          }) => {
+  lastname,
+  firstname,
+  phone,
+  specialties,
+  email,
+  clinicID,
+  appointments,
+  appointmentHistories,
+  schedules,
+}) => {
   return axios.post(`${import.meta.env.VITE_API_URL}/veterinarians`, {
     lastname,
     firstname,
@@ -29,7 +29,7 @@ export const createVeterinarians = async ({
 };
 
 export const getOneVeterinarians = async (uuid) => {
-  return axiosInstance.get(`/veterinarians/${uuid}`);
+  return axios.get(`${import.meta.env.VITE_API_URL}/veterinarians/${uuid}`);
 };
 export const replaceOneVeterinarians = async (
   uuid,
