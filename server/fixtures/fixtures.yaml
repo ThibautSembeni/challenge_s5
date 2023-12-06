@@ -39,3 +39,38 @@ App\Entity\Veterinarians:
         phone: "<phoneNumber()>"
         specialties: '<randomElement(["chirurgie", "dentisterie", "dermatologie", "endocrinologie", "gériatrie", "gynécologie", "hématologie", "neurologie", "ophtalmologie", "orthopédie", "pédiatrie", "radiologie", "urologie"])>'
         clinic: "@clinics_*->id"
+
+App\Entity\ClinicComplementaryInformation:
+    clinicComplementaryInformation_{1..10}:
+        name: "<company()>"
+        description: "<text(200)>"
+        clinic_id: "@clinics_*->id"
+
+App\Entity\TimeSlots:
+    timeSlots_{1..10}:
+        isOpen: "<boolean()>"
+
+App\Entity\ClinicSchedules:
+    clinicSchedules_{1..10}:
+        day: '<randomElement(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"])>'
+        clinic_id: "@clinics_*->id"
+        timeslot_id: "@timeSlots_*->id"
+
+App\Entity\Schedules:
+    schedules_{1..10}:
+        day: '<randomElement(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"])>'
+        type: '<randomElement(["consult", "vaccin", "opération"])>'
+        veterinarianID: "@veterinarians_*->id"
+
+App\Entity\Appointments:
+    appointments_{1..10}:
+        date: '<dateTimeBetween("-10 years", "now")>'
+        reason: "<text(200)>"
+        userID: "@user_*->id"
+        veterinarianID: "@veterinarians_*->id"
+        petID: "@pets_*->id"
+
+App\Entity\AppointmentServices:
+    appointmentServices_{1..10}:
+        appointmentID: "@appointments_*->id"
+        serviceID: "@services_*->id"
