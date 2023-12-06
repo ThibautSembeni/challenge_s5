@@ -27,6 +27,8 @@ use Symfony\Component\Uid\Uuid;
         new Delete(),
         new Patch()
     ],
+    normalizationContext: ['groups' => ['veterinarians:read']],
+    paginationPartial: false,
 )]
 class Veterinarians
 {
@@ -42,11 +44,11 @@ class Veterinarians
     #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
@@ -54,15 +56,15 @@ class Veterinarians
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-
     #[Groups(['veterinarians:read', 'veterinarians:write:create'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 
+    #[Groups(['veterinarians:read'])]
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
     private ?Clinics $clinic = null;
 

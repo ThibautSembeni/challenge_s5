@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiProperty;
+
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filters\CustomSearchFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -22,13 +25,15 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['clinics:read']]),
+        new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
         new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('EDIT', object)"),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('EDIT', object)"),
         new Patch(security: "is_granted('EDIT', object)")
     ],
+    normalizationContext: ['groups' => ['clinics:read:collection']],
+    paginationPartial: false,
 )]
 class Clinics
 {
@@ -44,11 +49,11 @@ class Clinics
     #[Groups(['user:read:full'])]
     private Uuid $uuid;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'user:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -60,11 +65,28 @@ class Clinics
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[ORM\Column(nullable: true)]
+    private ?float $latitude = null;
+
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[ORM\Column(nullable: true)]
+    private ?float $longitude = null;
+
+    #[ApiFilter(CustomSearchFilter::class)]
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[ORM\Column(length: 50)]
+    private ?string $city = null;
+
+    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[ORM\Column(length: 15)]
+    private ?string $postalCode = null;
+
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -176,6 +198,16 @@ class Clinics
         return $this;
     }
 
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(?float $latitude): static
+    {
+        $this->latitude = $latitude;
+        return $this;
+    }
     public function getDescription(): ?string
     {
         return $this->description;
@@ -184,7 +216,17 @@ class Clinics
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+        return $this;
+    }
 
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(?float $longitude): static
+    {
+        $this->longitude = $longitude;
         return $this;
     }
 
@@ -207,6 +249,16 @@ class Clinics
         return $this;
     }
 
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+        return $this;
+    }
     public function removeClinicSchedule(ClinicSchedules $clinicSchedule): static
     {
         if ($this->clinicSchedules->removeElement($clinicSchedule)) {
@@ -216,6 +268,17 @@ class Clinics
             }
         }
 
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
         return $this;
     }
 
@@ -245,7 +308,6 @@ class Clinics
                 $clinicComplementaryInformation->setClinicId(null);
             }
         }
-
         return $this;
     }
 

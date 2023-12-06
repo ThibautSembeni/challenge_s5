@@ -122,6 +122,10 @@ docker-compose up -d database
 docker-compose exec php php bin/console doctrine:database:create --if-not-exists
 docker-compose exec php php bin/console doctrine:migrations:migrate -n
 ```
+- Pour exporter le fichier swagger: (vous pouvez l'importer sur postman)
+```bash
+docker compose exec php bin/console api:openapi:export --output=swagger_docs.json
+```
 ## Liens utiles
 - Pour accéder la documentation de API Platform : http://localhost:8888/api/docs
 - Pour accéder à de l'application React.js : http://localhost:5173
