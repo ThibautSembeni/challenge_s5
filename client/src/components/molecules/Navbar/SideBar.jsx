@@ -173,7 +173,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                 <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
                 <ul role="list" className="-mx-2 mt-2 space-y-1">
                   {teams.map((team) => (
-                    <li key={team.name}>
+                    <li key={team.uuid}>
                       <a
                         href={team.href}
                         className={classNames(

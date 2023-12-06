@@ -1,29 +1,28 @@
 import React, {Fragment, useEffect, useState} from 'react'
 import {
+  CalendarDaysIcon,
   CalendarIcon,
   HomeIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
-import Loading from "@/components/molecules/Loading.jsx";
-import TeamSectionComponent from "@/components/organisms/Veterinarian/TeamSectionComponent.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
-import {CalendarDaysIcon, IdentificationIcon} from "@heroicons/react/24/outline/index.js";
+import Loading from "@/components/molecules/Loading.jsx";
+import {IdentificationIcon} from "@heroicons/react/24/outline/index.js";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
-  { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: true },
+  { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: false },
   { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
   { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
-  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
+  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: true },
 ]
-
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },
 ]
 
-export default function Teams () {
+export default function Pet() {
   const { user } = useAuth();
   const uuid = user.clinic_id.uuid;
   const [clinicInfo, setClinicInfo] = useState({
@@ -72,23 +71,7 @@ export default function Teams () {
 
               <main className="py-10">
                 <div className="px-4 sm:px-6 lg:px-8">
-                  <div className="mb-20">
-                    <div className="sm:flex sm:items-center">
-                      <div className="sm:flex-auto">
-                        <h1 className="text-base font-semibold leading-6 text-gray-900">Vétérinaires</h1>
-                      </div>
-                      <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <button
-                          type="button"
-                          className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                          Ajouter un vétérinaire
-                        </button>
-                      </div>
-                    </div>
 
-                    <TeamSectionComponent teams={clinicInfo.teams} />
-                  </div>
                 </div>
               </main>
             </div>

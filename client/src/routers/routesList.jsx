@@ -8,6 +8,8 @@ import Clinic from "@/pages/Veterinarian/Clinic.jsx";
 import Veterinarian from "@/pages/Veterinarian/Veterinarian.jsx";
 import ClinicAdminHome from "@/pages/Admin/Clinic/Home.jsx";
 import Teams from "@/pages/Admin/Clinic/Teams.jsx";
+import Pet from "@/pages/Admin/Clinic/Pet.jsx";
+import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
 import AddAppointments from "@/pages/Admin/Clinic/AddAppointments.jsx";
 import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
@@ -69,6 +71,16 @@ const list = [
       {
         path: "calendrier-ouverture",
         element: <ClinicAdminSchedule />,
+        roles: ["ROLE_MANAGER"],
+      },
+      {
+        path: "rendez-vous",
+        element: <Appointment />,
+        roles: ["ROLE_MANAGER"],
+      },
+      {
+        path: "animaux",
+        element: <Pet />,
         roles: ["ROLE_MANAGER"],
       }
     ]

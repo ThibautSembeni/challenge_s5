@@ -11,6 +11,7 @@ import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
+import {CalendarDaysIcon, IdentificationIcon} from "@heroicons/react/24/outline/index.js";
 
 const stats = [
   { id: 1, name: 'Nombre de rdv aujourd\'hui', stat: '71', icon: UsersIcon},
@@ -21,7 +22,9 @@ const stats = [
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: true },
   { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: false },
-  { name: 'Calendrier', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
+  { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
+  { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
+  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },

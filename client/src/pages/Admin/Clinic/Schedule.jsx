@@ -3,17 +3,21 @@ import {
   CalendarIcon,
   HomeIcon,
   UsersIcon,
+  IdentificationIcon,
 } from '@heroicons/react/24/outline'
 import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
+import {CalendarDaysIcon} from "@heroicons/react/24/outline/index.js";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
   { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: false },
-  { name: 'Calendrier', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: true },
+  { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: true },
+  { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
+  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },

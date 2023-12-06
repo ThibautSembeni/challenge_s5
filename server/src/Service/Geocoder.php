@@ -7,7 +7,7 @@ use Geocoder\Query\GeocodeQuery;
 use Geocoder\StatefulGeocoder;
 use GuzzleHttp\Client as GuzzleAdapter;
 
-class GeocoderService
+class Geocoder
 {
     private $geocoder;
 

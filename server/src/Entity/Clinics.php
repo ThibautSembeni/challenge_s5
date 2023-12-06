@@ -26,7 +26,7 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
-        new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('EDIT', object)"),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']]),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('EDIT', object)"),
