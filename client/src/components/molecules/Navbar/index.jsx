@@ -28,6 +28,8 @@ export default function Navbar() {
       onClick: () => logout(),
     },
   ]);
+
+  console.log(user);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (

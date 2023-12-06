@@ -74,8 +74,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phone = null;
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
-    #[ORM\OneToOne(inversedBy: 'user_id', cascade: ['persist', 'remove'])]
-    private ?Clinics $clinic_id = null;
+    #[ORM\OneToOne(inversedBy: 'manager', cascade: ['persist', 'remove'])]
+    private ?Clinics $clinic = null;
 
     public function __construct()
     {
@@ -233,14 +233,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getClinicId(): ?Clinics
+    public function getClinic(): ?Clinics
     {
-        return $this->clinic_id;
+        return $this->clinic;
     }
 
-    public function setClinicId(?Clinics $clinic_id): static
+    public function setClinic(?Clinics $clinic): static
     {
-        $this->clinic_id = $clinic_id;
+        $this->clinic = $clinic;
 
         return $this;
     }

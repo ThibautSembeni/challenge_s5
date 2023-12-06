@@ -18,7 +18,7 @@ const navigation = [
   { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
   { name: 'Téléconsultation', href: '/administration/animaux', icon: VideoCameraIcon, current: false },
   { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
-  { name: 'Informations cabinet', href: '/administration/animaux', icon: PencilSquareIcon, current: false },
+  { name: 'Informations cabinet', href: '/administration/informations-cabinet', icon: PencilSquareIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },
@@ -26,7 +26,7 @@ const userNavigation = [
 
 export default function AddAppointments() {
   const { user } = useAuth();
-  const uuid = user.clinic_id.uuid;
+  const uuid = user.clinic.uuid;
   const [clinicInfo, setClinicInfo] = useState({
     clinic: null,
     teams: [],

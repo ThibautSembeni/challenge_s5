@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Auth\User;
 use App\Filters\CustomSearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
@@ -13,7 +14,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Entity\Auth\User;
 use App\Repository\ClinicsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,11 +26,11 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
-        new Post(normalizationContext: ['groups' => ['clinics:write:create']]),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
-        new Put(security: "is_granted('EDIT', object)"),
-        new Delete(security: "is_granted('EDIT', object)"),
-        new Patch(security: "is_granted('EDIT', object)")
+        new Put(),
+        new Delete(),
+        new Patch()
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
     paginationPartial: false,
@@ -43,14 +43,13 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:read'])]
+    #[Groups(['veterinarians:read', 'user:read:full'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['user:read:full'])]
     private Uuid $uuid;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'user:read:full'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -58,15 +57,15 @@ class Clinics
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
@@ -91,17 +90,16 @@ class Clinics
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicSchedules::class)]
     private Collection $clinicSchedules;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
-    #[ORM\OneToOne(mappedBy: 'clinic_id', cascade: ['persist', 'remove'])]
-    private ?User $user_id = null;
+    #[ORM\OneToOne(mappedBy: 'clinic', cascade: ['persist', 'remove'])]
+    private ?User $manager = null;
 
     public function __construct()
     {
@@ -312,24 +310,24 @@ class Clinics
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getManager(): ?User
     {
-        return $this->user_id;
+        return $this->manager;
     }
 
-    public function setUserId(?User $user_id): static
+    public function setManager(?User $manager): static
     {
         // unset the owning side of the relation if necessary
-        if ($user_id === null && $this->user_id !== null) {
-            $this->user_id->setClinicId(null);
+        if ($manager === null && $this->manager !== null) {
+            $this->manager->setClinic(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($user_id !== null && $user_id->getClinicId() !== $this) {
-            $user_id->setClinicId($this);
+        if ($manager !== null && $manager->getClinic() !== $this) {
+            $manager->setClinic($this);
         }
 
-        $this->user_id = $user_id;
+        $this->manager = $manager;
 
         return $this;
     }
