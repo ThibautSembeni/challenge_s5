@@ -1,6 +1,41 @@
 App\Entity\Auth\User:
-  user_{1..10}:
-    firstname: '<firstname()>'
-    lastname: '<lastname()>'
-    email: '<email()>'
-    password: "\\$2y\\$13\\$WGuoNX07bAXHdMOM5kFV6eWKDLMkX/Js2hKrzrro6IzA3LaNRFgYO"
+    user_{1..10}:
+        firstname: "<firstname()>"
+        lastname: "<lastname()>"
+        email: "<email()>"
+        password: "\\$2y\\$13\\$WGuoNX07bAXHdMOM5kFV6eWKDLMkX/Js2hKrzrro6IzA3LaNRFgYO"
+
+App\Entity\Pets:
+    pets_{1..10}:
+        name: "<name()>"
+        species: '<randomElement(["chat", "chien", "poisson", "oiseau", "lapin", "hamster", "souris", "rat", "serpent", "tortue"])>'
+        breed: '<randomElement(["européen", "persan", "siamois", "sphynx", "chartreux", "sacré de Birmanie", "bengal"])>'
+        birthdate: '<dateTimeBetween("-10 years", "now")>'
+        medicalHistory: "<text(200)>"
+        userID: "@user_*->id"
+
+App\Entity\Services:
+    services_{1..10}:
+        description: "<text(200)>"
+        price: "<numberBetween(5, 100)>"
+
+App\Entity\Clinics:
+    clinics_{1..10}:
+        name: "<company()>"
+        address: "242 rue du Faubourg Saint-Antoine"
+        email: "<email()>"
+        phone: "<phoneNumber()>"
+        latitude: "<latitude()>"
+        longitude: "<longitude()>"
+        city: "<city()>"
+        postalCode: "<postcode()>"
+        description: "<text(200)>"
+
+App\Entity\Veterinarians:
+    veterinarians_{1..10}:
+        firstname: "<firstname()>"
+        lastname: "<lastname()>"
+        email: "<email()>"
+        phone: "<phoneNumber()>"
+        specialties: '<randomElement(["chirurgie", "dentisterie", "dermatologie", "endocrinologie", "gériatrie", "gynécologie", "hématologie", "neurologie", "ophtalmologie", "orthopédie", "pédiatrie", "radiologie", "urologie"])>'
+        clinic: "@clinics_*->id"
