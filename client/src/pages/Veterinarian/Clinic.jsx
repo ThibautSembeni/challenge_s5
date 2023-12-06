@@ -148,7 +148,7 @@ export default function ClinicProfil() {
   // Helper functions
   const formatTime = date => `${date.getHours()}h${date.getMinutes() === 0 ? '00' : date.getMinutes()}`;
   const dayToColumnIndex = day => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].indexOf(day.toLowerCase()) + 1;
-  const timeToRowIndex = time => time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 5;
+  const timeToRowIndex = time => time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 7;
 
   // Render functions
   const renderTimeRows = () => {

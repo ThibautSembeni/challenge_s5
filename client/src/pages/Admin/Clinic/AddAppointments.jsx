@@ -9,14 +9,16 @@ import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {IdentificationIcon} from "@heroicons/react/24/outline/index.js";
+import {IdentificationIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
   { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: false },
   { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
   { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
+  { name: 'Téléconsultation', href: '/administration/animaux', icon: VideoCameraIcon, current: false },
   { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
+  { name: 'Informations cabinet', href: '/administration/animaux', icon: PencilSquareIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },

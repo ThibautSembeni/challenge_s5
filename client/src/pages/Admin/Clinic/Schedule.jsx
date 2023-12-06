@@ -10,14 +10,16 @@ import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {CalendarDaysIcon} from "@heroicons/react/24/outline/index.js";
+import {CalendarDaysIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
   { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: false },
   { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: true },
   { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
+  { name: 'Téléconsultation', href: '/administration/animaux', icon: VideoCameraIcon, current: false },
   { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
+  { name: 'Informations cabinet', href: '/administration/animaux', icon: PencilSquareIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },
@@ -88,7 +90,7 @@ export default function Schedule () {
   // Helper functions
   const formatTime = date => `${date.getHours()}h${date.getMinutes() === 0 ? '00' : date.getMinutes()}`;
   const dayToColumnIndex = day => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].indexOf(day.toLowerCase()) + 1;
-  const timeToRowIndex = time => time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 5;
+  const timeToRowIndex = time => time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 7;
 
   // Render functions
   const renderTimeRows = () => {
