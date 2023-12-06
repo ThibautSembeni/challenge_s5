@@ -42,6 +42,7 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
+    #[Groups(['veterinarians:read'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
@@ -51,7 +52,7 @@ class Clinics
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -67,24 +68,24 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
     #[ApiFilter(CustomSearchFilter::class)]
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(length: 15)]
     private ?string $postalCode = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
