@@ -5,6 +5,10 @@ import Home from "@/pages/Home/Home.jsx";
 import PracticienRegister from "@/pages/PracticienRegister/index.jsx";
 import Clinic from "@/pages/Veterinarian/Clinic.jsx";
 import Veterinarian from "@/pages/Veterinarian/Veterinarian.jsx";
+import ClinicAdminHome from "@/pages/Admin/Clinic/Home.jsx";
+import Teams from "@/pages/Admin/Clinic/Teams.jsx";
+import AddAppointments from "@/pages/Admin/Clinic/AddAppointments.jsx";
+import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
 const list = [
   {
@@ -24,19 +28,33 @@ const list = [
         element: <h1>admin</h1>,
         roles: ["ROLE_ADMIN"],
       },
-      {
-        path: "cabinet/:uuid",
-        element: <Clinic />,
-      },
-      {
-        path: "veterinaire/:uuid",
-        element: <Veterinarian />,
-      },
-      {
-        path: "mon-compte",
-        element: <Account />
-      }
     ],
+  },
+  ////// CLINIC ADMINISTRATION //////
+  {
+    path: "administration",
+    children: [
+      {
+        path: "accueil",
+        element: <ClinicAdminHome />,
+        roles: ["ROLE_MANAGER"],
+      },
+      {
+        path: "equipe",
+        element: <Teams />,
+        roles: ["ROLE_MANAGER"],
+      },
+      {
+        path: "ajouter-rdv",
+        element: <AddAppointments />,
+        roles: ["ROLE_MANAGER"],
+      },
+      {
+        path: "calendrier-ouverture",
+        element: <ClinicAdminSchedule />,
+        roles: ["ROLE_MANAGER"],
+      }
+    ]
   },
   {
     path: "login",
@@ -45,6 +63,19 @@ const list = [
   {
     path: "register",
     element: <Register />,
+  },
+
+  {
+    path: "cabinet/:uuid",
+    element: <Clinic />,
+  },
+  {
+    path: "veterinaire/:uuid",
+    element: <Veterinarian />,
+  },
+  {
+    path: "mon-compte",
+    element: <Account />
   },
   {
     path: "*",

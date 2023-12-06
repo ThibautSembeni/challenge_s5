@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import RadiosButtonsWithIcons from "@/components/atoms/RadiosButtons/RadiosButtonsWithIcons.jsx";
+import logo from "@/assets/images/logo.png";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -36,9 +37,9 @@ export default function Navbar() {
               <div className="flex px-2 lg:px-0">
                 <div className="flex flex-shrink-0 items-center">
                   <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
+                    className="h-12 w-auto"
+                    src={logo}
+                    alt="Vetcare"
                   />
                 </div>
               </div>

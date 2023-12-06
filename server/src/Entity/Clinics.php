@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Entity\Auth\User;
 use App\Repository\ClinicsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,11 +23,11 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read']]),
-        new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('EDIT', object)"),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
-        new Put(),
-        new Delete(),
-        new Patch()
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('EDIT', object)")
     ],
 )]
 class Clinics
@@ -40,39 +41,44 @@ class Clinics
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
+    #[Groups(['user:read:full'])]
     private Uuid $uuid;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicSchedules::class)]
     private Collection $clinicSchedules;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'user:read:full'])]
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
+
+    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[ORM\OneToOne(mappedBy: 'clinic_id', cascade: ['persist', 'remove'])]
+    private ?User $user_id = null;
 
     public function __construct()
     {
@@ -239,6 +245,28 @@ class Clinics
                 $clinicComplementaryInformation->setClinicId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?User $user_id): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($user_id === null && $this->user_id !== null) {
+            $this->user_id->setClinicId(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user_id !== null && $user_id->getClinicId() !== $this) {
+            $user_id->setClinicId($this);
+        }
+
+        $this->user_id = $user_id;
 
         return $this;
     }

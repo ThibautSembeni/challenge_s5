@@ -78,7 +78,6 @@ const testimonials = [
   ],
 ]
 export default function ClinicProfil() {
-
   const {uuid} = useParams();
   const [clinicInfo, setClinicInfo] = useState({
     clinic: null,

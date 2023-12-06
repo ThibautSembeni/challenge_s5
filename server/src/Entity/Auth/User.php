@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Appointments;
+use App\Entity\Clinics;
 use App\Entity\Notifications;
 use App\Entity\Pets;
 use App\Repository\AuthRepository;
@@ -71,6 +72,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
+
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[ORM\OneToOne(inversedBy: 'user_id', cascade: ['persist', 'remove'])]
+    private ?Clinics $clinic_id = null;
 
     public function __construct()
     {
@@ -224,6 +229,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getClinicId(): ?Clinics
+    {
+        return $this->clinic_id;
+    }
+
+    public function setClinicId(?Clinics $clinic_id): static
+    {
+        $this->clinic_id = $clinic_id;
 
         return $this;
     }
