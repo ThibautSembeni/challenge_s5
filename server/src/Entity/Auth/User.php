@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Appointments;
+use App\Entity\Clinics;
 use App\Entity\Notifications;
 use App\Entity\Pets;
 use App\Repository\AuthRepository;
@@ -47,11 +48,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
@@ -71,6 +72,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
+
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[ORM\OneToOne(inversedBy: 'manager', cascade: ['persist', 'remove'])]
+    private ?Clinics $clinic = null;
 
     public function __construct()
     {
@@ -224,6 +229,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getClinic(): ?Clinics
+    {
+        return $this->clinic;
+    }
+
+    public function setClinic(?Clinics $clinic): static
+    {
+        $this->clinic = $clinic;
 
         return $this;
     }

@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import RadiosButtonsWithIcons from "@/components/atoms/RadiosButtons/RadiosButtonsWithIcons.jsx";
+import logo from "@/assets/images/logo.png";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +28,8 @@ export default function Navbar() {
       onClick: () => logout(),
     },
   ]);
+
+  console.log(user);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -38,8 +41,8 @@ export default function Navbar() {
                   <Link to={"/"}>
                     <img
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                      alt="Your Company"
+                      src={logo}
+                      alt="Vetcare"
                     />
                   </Link>
                 </div>

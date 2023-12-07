@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Auth\User;
 use App\Filters\CustomSearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
@@ -42,7 +43,7 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:read'])]
+    #[Groups(['veterinarians:read', 'user:read:full'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
@@ -96,6 +97,9 @@ class Clinics
     #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
+
+    #[ORM\OneToOne(mappedBy: 'clinic', cascade: ['persist', 'remove'])]
+    private ?User $manager = null;
 
     public function __construct()
     {
@@ -303,6 +307,28 @@ class Clinics
                 $clinicComplementaryInformation->setClinicId(null);
             }
         }
+        return $this;
+    }
+
+    public function getManager(): ?User
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?User $manager): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($manager === null && $this->manager !== null) {
+            $this->manager->setClinic(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($manager !== null && $manager->getClinic() !== $this) {
+            $manager->setClinic($this);
+        }
+
+        $this->manager = $manager;
+
         return $this;
     }
 }

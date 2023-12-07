@@ -39,7 +39,7 @@ function TeamSectionComponent({ teams }) {
           className="mx-auto mt-20 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-16 text-center sm:grid-cols-3 md:grid-cols-4 lg:mx-0 lg:max-w-none lg:grid-cols-5 xl:grid-cols-6"
         >
           {teams.map((person) => (
-            <li key={person.name}>
+            <li key={person.uuid}>
               <a href={`/veterinaire/${person.uuid}`}>
                 <img className="mx-auto h-24 w-24 rounded-full" src={person.imageUrl} alt=""/>
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 uppercase">DR. {person.name}</h3>
