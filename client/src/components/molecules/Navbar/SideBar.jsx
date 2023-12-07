@@ -5,6 +5,7 @@ import {Bars3Icon, BellIcon} from "@heroicons/react/24/outline/index.js";
 import dogImg from "@/assets/images/dog.jpg";
 import logo from "@/assets/images/logo.png";
 import {ChevronDownIcon} from "@heroicons/react/20/solid/index.js";
+import {useAuth} from "@/contexts/AuthContext.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -207,7 +208,9 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
   );
 }
 
-export function TopSideBar ({ navigation, sidebarOpen, setSidebarOpen }) {
+export function TopSideBar ({ navigation, setSidebarOpen }) {
+  const { user, isAuthenticated } = useAuth();
+
   return (
     <>
       <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -239,8 +242,12 @@ export function TopSideBar ({ navigation, sidebarOpen, setSidebarOpen }) {
                   alt="chien"
                 />
                 <span className="hidden lg:flex lg:items-center">
-                      <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Tom Cook
+                      <span className="ml-4 text-sm font-semibold leading-6 text-gray-900 capitalize" aria-hidden="true">
+                        {isAuthenticated ? (
+                          `${user.firstname} ${user.lastname}`
+                        ) : (
+                          "Erreur de récupération du compte"
+                        )}
                       </span>
                       <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>

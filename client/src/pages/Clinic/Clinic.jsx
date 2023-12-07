@@ -1,7 +1,7 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
 import React, { Fragment, useEffect, useState } from "react";
 import imgBanner from "@/assets/images/veterinayBanner.jpg";
-import { getOneClinics } from "@/api/veterinarian/Clinic.jsx";
+import { getOneClinics } from "@/api/clinic/Clinic.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/molecules/Footer/index.jsx";

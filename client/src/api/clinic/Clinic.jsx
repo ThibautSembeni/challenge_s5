@@ -1,8 +1,33 @@
 import axiosInstance from "@/utils/axiosInstance.js";
 import axios from "axios";
 
-export const getAllClinics = async () => {
-  return axiosInstance.get(`/clinics`);
+export const getAllClinics = async ({
+    page = 1,
+    itemsPerPage = 30,
+    pagination = false,
+    ...filters
+  } = {}) => {
+  const params = new URLSearchParams({
+    page,
+    itemsPerPage,
+    pagination,
+    ...filters,
+  });
+  return axios.get(
+    `${import.meta.env.VITE_API_URL}/clinics?${params.toString()}`,
+  );
+};
+
+export const createClinicSchedules = async ({
+    day,
+    clinicId,
+    timeslotId
+  }) => {
+  await axios.post(`${import.meta.env.VITE_API_URL}/clinic_schedules`, {
+    day,
+    clinicId,
+    timeslotId
+  });
 };
 export const createClinics = async ({
   name,

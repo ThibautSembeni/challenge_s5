@@ -5,12 +5,13 @@ import {
   UsersIcon,
   IdentificationIcon,
 } from '@heroicons/react/24/outline'
-import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
+import {getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {CalendarDaysIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
+import Modal from "@/components/organisms/Modal/Modal.jsx";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
@@ -37,6 +38,7 @@ export default function Schedule () {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     getOneClinics(uuid)
@@ -87,6 +89,9 @@ export default function Schedule () {
     }
   }, [clinicInfo.clinicSchedules]);
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   // Helper functions
   const formatTime = date => `${date.getHours()}h${date.getMinutes() === 0 ? '00' : date.getMinutes()}`;
   const dayToColumnIndex = day => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].indexOf(day.toLowerCase()) + 1;
@@ -106,6 +111,79 @@ export default function Schedule () {
     }
     return rows;
   };
+
+  const days = {
+    "lundi": "Lundi",
+    "mardi": "Mardi",
+    "mercredi": "Mercredi",
+    "jeudi": "Jeudi",
+    "vendredi": "Vendredi",
+    "samedi": "Samedi",
+    "dimanche": "Dimanche",
+  }
+
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        options.push(time);
+      }
+    }
+    return options;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const day = data.get("day");
+    const isOpen = data.get("isOpen");
+    const openTime = data.get("openTime");
+    const closeTime = data.get("closeTime");
+  };
+
+  function TimeSelect() {
+    const timeOptions = generateTimeOptions();
+
+    return (
+      <>
+        <div className="sm:col-span-3">
+          <label htmlFor="openTime" className="block text-sm font-medium leading-6 text-gray-900">
+            Horaire de début
+          </label>
+          <div className="mt-2">
+            <select
+              id="openTime"
+              name="openTime"
+              className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            >
+              {timeOptions.map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="sm:col-span-3">
+          <label htmlFor="closeTime" className="block text-sm font-medium leading-6 text-gray-900">
+            Horaire de fin
+          </label>
+          <div className="mt-2">
+            <select
+              id="closeTime"
+              name="closeTime"
+              className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+            >
+              {timeOptions.map(time => (
+                <option key={time} value={time}>{time}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -128,12 +206,70 @@ export default function Schedule () {
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                       <button
                         type="button"
+                        onClick={openModal}
                         className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
                         Ajouter des horaires d'ouverture
                       </button>
                     </div>
                   </div>
+
+                  <Modal isOpen={isModalOpen} onClose={closeModal} title="Ajouter des horaires d'ouverture">
+                    <form onSubmit={handleSubmit}>
+                      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="sm:col-span-3">
+                          <label htmlFor="day" className="block text-sm font-medium leading-6 text-gray-900">
+                            Jour
+                          </label>
+                          <div className="mt-2">
+                            <select
+                              id="day"
+                              name="day"
+                              className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                            >
+                              {Object.keys(days).map(day => (
+                                <option key={day}>{days[day]}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
+                          <label htmlFor="isOpen" className="block text-sm font-medium leading-6 text-gray-900">
+                            Ouverture
+                          </label>
+                          <div className="mt-2">
+                            <select
+                              id="isOpen"
+                              name="isOpen"
+                              className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                            >
+                              <option value="1">Ouvert</option>
+                              <option value="0">Fermé</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {TimeSelect()}
+                      </div>
+                      <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                        <button
+                          type="submit"
+                          className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+
+                        >
+                          Enregistrer
+                        </button>
+                        <button
+                          type="button"
+                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                          onClick={closeModal}
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                    </form>
+                  </Modal>
 
                   <div className="mb-20">
                     <CalendarOpenCloseComponent

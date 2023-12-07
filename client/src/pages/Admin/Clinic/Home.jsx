@@ -7,7 +7,7 @@ import {
   EnvelopeOpenIcon, VideoCameraIcon, PencilSquareIcon
 } from '@heroicons/react/24/outline'
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
+import {getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";

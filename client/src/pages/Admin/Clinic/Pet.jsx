@@ -5,12 +5,12 @@ import {
   HomeIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
-import {getOneClinics} from "@/api/veterinarian/Clinic.jsx";
+import {getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {IdentificationIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
-import {getAllPets} from "@/api/veterinarian/Pet.jsx";
+import {getAllPets} from "@/api/clinic/Pet.jsx";
 import {Link} from "react-router-dom";
 
 const navigation = [

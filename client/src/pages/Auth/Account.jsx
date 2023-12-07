@@ -3,7 +3,7 @@ import Navbar from "@/components/molecules/Navbar/index.jsx";
 import Footer from "@/components/molecules/Footer/index.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {createVeterinarians} from "@/api/veterinarian/index.jsx";
+import {createVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import Input from "@/components/atoms/Inputs/Input.jsx";
 import {Button} from "@/components/atoms/Buttons/Button.jsx";
 export default function Account() {
