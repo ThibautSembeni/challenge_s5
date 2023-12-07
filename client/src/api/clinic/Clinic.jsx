@@ -20,15 +20,42 @@ export const getAllClinics = async ({
 
 export const createClinicSchedules = async ({
     day,
-    clinicId,
-    timeslotId
+    isOpen,
+    startTime,
+    endTime,
+    clinicId
   }) => {
-  await axios.post(`${import.meta.env.VITE_API_URL}/clinic_schedules`, {
-    day,
-    clinicId,
-    timeslotId
-  });
+  try {
+    const isOpenBool = isOpen === '1' || isOpen === 1;
+
+    const $timeSlot = await axiosInstance.post(`${import.meta.env.VITE_API_URL}/time_slots`, {
+      isOpen: isOpenBool,
+      startTime,
+      endTime
+    });
+
+    await axiosInstance.post(`${import.meta.env.VITE_API_URL}/clinic_schedules`, {
+      day,
+      timeslotId: $timeSlot.data['@id'],
+      clinicId: clinicId
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la création du créneau" };
+  }
 };
+
+export const deleteClinicsSchedules = async (id) => {
+  try {
+    await axiosInstance.delete(`${import.meta.env.VITE_API_URL}/clinic_schedules/${id}`);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la suppression du créneau" };
+  }
+};
+
 export const createClinics = async ({
   name,
   address,

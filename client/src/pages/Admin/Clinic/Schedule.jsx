@@ -5,13 +5,14 @@ import {
   UsersIcon,
   IdentificationIcon,
 } from '@heroicons/react/24/outline'
-import {getOneClinics} from "@/api/clinic/Clinic.jsx";
+import {createClinicSchedules, getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {CalendarDaysIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
+import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
@@ -39,78 +40,45 @@ export default function Schedule () {
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    getOneClinics(uuid)
-      .then((clinicData) => {
-        const {data} = clinicData;
-        setClinicInfo(prev => ({
-          ...prev,
-          clinic: data,
-          teams: data.veterinarians.map(({firstname, lastname, specialties, uuid}) => ({
-            name: `${firstname} ${lastname}`,
-            initial: `${firstname[0]}`,
-            role: specialties,
-            uuid,
-            current: false,
-            imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-            href: `/veterinaire/${uuid}`,
-          })),
-          clinicSchedules: data.clinicSchedules.map(schedule => ({
-            day: schedule.day,
-            startTime: new Date(schedule.timeslot_id.start_time),
-            endTime: new Date(schedule.timeslot_id.end_time),
-            isOpen: schedule.timeslot_id.isOpen,
-          })),
-        }));
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la récupération des données : ", error);
-        setIsLoading(false);
-      });
+    loadClinicData().then(() => setIsLoading(false));
   }, [uuid]);
 
-  useEffect(() => {
-    const {clinicSchedules} = clinicInfo;
-    if (clinicSchedules.length > 0) {
-      const times = clinicSchedules.map(({startTime, endTime}) => ({
-        startHour: startTime.getHours(),
-        endHour: endTime.getHours(),
-      }));
-      const earliestStart = Math.min(...times.map(t => t.startHour));
-      const latestEnd = Math.max(...times.map(t => t.endHour));
-
+  const loadClinicData = async () => {
+    try {
+      const clinicData = await getOneClinics(uuid);
+      const { data } = clinicData;
       setClinicInfo(prev => ({
         ...prev,
-        earliestStart,
-        latestEnd,
+        clinic: data,
+        teams: data.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
+          name: `${firstname} ${lastname}`,
+          initial: `${firstname[0]}`,
+          role: specialties,
+          uuid,
+          current: false,
+          imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+          href: `/veterinaire/${uuid}`,
+        })),
+        clinicSchedules: data.clinicSchedules.map(schedule => ({
+          day: schedule.day,
+          startTime: new Date(schedule.timeslot_id.start_time),
+          endTime: new Date(schedule.timeslot_id.end_time),
+          isOpen: schedule.timeslot_id.isOpen,
+          id: schedule.id,
+        })),
       }));
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
     }
-  }, [clinicInfo.clinicSchedules]);
+  };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  // Helper functions
-  const formatTime = date => `${date.getHours()}h${date.getMinutes() === 0 ? '00' : date.getMinutes()}`;
-  const dayToColumnIndex = day => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].indexOf(day.toLowerCase()) + 1;
-  const timeToRowIndex = time => time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 7;
-
-  // Render functions
-  const renderTimeRows = () => {
-    const rows = [];
-    for (let hour = clinicInfo.earliestStart; hour <= clinicInfo.latestEnd; hour++) {
-      rows.push(
-        <div key={hour}>
-          <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-            {hour}h00
-          </div>
-        </div>
-      );
-    }
-    return rows;
-  };
 
   const days = {
     "lundi": "Lundi",
@@ -134,13 +102,43 @@ export default function Schedule () {
   };
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const day = data.get("day");
     const isOpen = data.get("isOpen");
-    const openTime = data.get("openTime");
-    const closeTime = data.get("closeTime");
+    const startTime = data.get("startTime");
+    const endTime = data.get("endTime");
+    const clinicId = clinicInfo.clinic['@id'];
+
+    const createClinic = await createClinicSchedules({
+      day,
+      isOpen,
+      startTime,
+      endTime,
+      clinicId,
+    })
+
+    if (createClinic.success) {
+      await loadClinicData().then(() => setIsLoading(false));
+      closeModal();
+      setMessage("Les horaires d'ouverture ont bien été ajoutés");
+      setIsSuccess(true);
+      setShowNotificationToast(true);
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    } else {
+      setMessage(createClinic.message);
+      setIsSuccess(false);
+      setShowNotificationToast(true);
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    }
   };
 
   function TimeSelect() {
@@ -149,13 +147,13 @@ export default function Schedule () {
     return (
       <>
         <div className="sm:col-span-3">
-          <label htmlFor="openTime" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="startTime" className="block text-sm font-medium leading-6 text-gray-900">
             Horaire de début
           </label>
           <div className="mt-2">
             <select
-              id="openTime"
-              name="openTime"
+              id="startTime"
+              name="startTime"
               className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
               {timeOptions.map(time => (
@@ -166,13 +164,13 @@ export default function Schedule () {
         </div>
 
         <div className="sm:col-span-3">
-          <label htmlFor="closeTime" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="endTime" className="block text-sm font-medium leading-6 text-gray-900">
             Horaire de fin
           </label>
           <div className="mt-2">
             <select
-              id="closeTime"
-              name="closeTime"
+              id="endTime"
+              name="endTime"
               className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
               {timeOptions.map(time => (
@@ -192,6 +190,13 @@ export default function Schedule () {
       ) : (
         <>
           <div>
+            <NotificationToast
+              show={showNotificationToast}
+              setShow={setShowNotificationToast}
+              message={message}
+              isSuccess={isSuccess}
+            />
+
             <SideBar navigation={navigation} teams={clinicInfo.teams} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
             <div className="lg:pl-72">
@@ -273,12 +278,8 @@ export default function Schedule () {
 
                   <div className="mb-20">
                     <CalendarOpenCloseComponent
-                      clinicSchedules={clinicInfo.clinicSchedules}
-                      totalRows={clinicInfo.latestEnd - clinicInfo.earliestStart}
-                      renderTimeRows={renderTimeRows}
-                      dayToColumnIndex={dayToColumnIndex}
-                      timeToRowIndex={timeToRowIndex}
-                      formatTime={formatTime}
+                      clinicInformation={clinicInfo}
+                      admin={true}
                     />
                   </div>
                 </div>

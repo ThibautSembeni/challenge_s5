@@ -132,49 +132,6 @@ export default function ClinicProfil() {
       });
   }, [uuid]);
 
-  useEffect(() => {
-    const { clinicSchedules } = clinicInfo;
-    if (clinicSchedules.length > 0) {
-      const times = clinicSchedules.map(({ startTime, endTime }) => ({
-        startHour: startTime.getHours(),
-        endHour: endTime.getHours(),
-      }));
-      const earliestStart = Math.min(...times.map((t) => t.startHour));
-      const latestEnd = Math.max(...times.map((t) => t.endHour));
-
-      setClinicInfo((prev) => ({
-        ...prev,
-        earliestStart,
-        latestEnd,
-      }));
-    }
-  }, [clinicInfo.clinicSchedules]);
-
-  // Helper functions
-  const formatTime = date => `${date.getHours()}h${date.getMinutes() === 0 ? '00' : date.getMinutes()}`;
-  const dayToColumnIndex = day => ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'].indexOf(day.toLowerCase()) + 1;
-  const timeToRowIndex = time => time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 7;
-
-
-  // Render functions
-  const renderTimeRows = () => {
-    const rows = [];
-    for (
-      let hour = clinicInfo.earliestStart;
-      hour <= clinicInfo.latestEnd;
-      hour++
-    ) {
-      rows.push(
-        <div key={hour}>
-          <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-            {hour}h00
-          </div>
-        </div>,
-      );
-    }
-    return rows;
-  };
-
   return (
     <>
       <Navbar />
@@ -243,12 +200,7 @@ export default function ClinicProfil() {
             )}
 
             <CalendarOpenCloseComponent
-              clinicSchedules={clinicInfo.clinicSchedules}
-              totalRows={clinicInfo.latestEnd - clinicInfo.earliestStart}
-              renderTimeRows={renderTimeRows}
-              dayToColumnIndex={dayToColumnIndex}
-              timeToRowIndex={timeToRowIndex}
-              formatTime={formatTime}
+              clinicInformation={clinicInfo}
             />
 
             <TeamSectionComponent teams={clinicInfo.teams} />

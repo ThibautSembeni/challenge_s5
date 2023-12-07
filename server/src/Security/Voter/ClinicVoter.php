@@ -1,27 +1,53 @@
 <?php
-
 namespace App\Security\Voter;
 
-use App\Entity\Clinics;
+use App\Entity\ClinicSchedules;
 use App\Entity\Auth\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ClinicVoter extends Voter
 {
-    protected function supports(string $attribute, $subject): bool
-    {
-        return $attribute === 'EDIT' && $subject instanceof Clinics;
+    public function __construct(
+        private readonly Security $security,
+    ) {
     }
 
-    protected function voteOnAttribute(string $attribute, $clinic, TokenInterface $token): bool
+    protected function supports(string $attribute, $subject): bool
     {
-        $user = $token->getUser();
-
-        if (!$user instanceof User || !in_array('USER_MANAGER', $user->getRoles())) {
+        if (!in_array($attribute, ['DELETE'])) {
             return false;
         }
 
-        return $clinic->getUserId()->getClinicId() === $clinic->getId();
+        if (!$subject instanceof ClinicSchedules) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    {
+        $user = $token->getUser();
+
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        $clinicSchedule = $subject;
+
+        switch ($attribute) {
+            case 'DELETE':
+                return $this->canDelete($clinicSchedule, $user);
+        }
+
+        throw new \LogicException('This code should not be reached!');
+    }
+
+    private function canDelete(ClinicSchedules $clinicSchedule, User $user): bool
+    {
+        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinicSchedule->getClinicId();
     }
 }
