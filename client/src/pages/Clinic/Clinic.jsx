@@ -203,7 +203,7 @@ export default function ClinicProfil() {
               clinicInformation={clinicInfo}
             />
 
-            <TeamSectionComponent teams={clinicInfo.teams} />
+            <TeamSectionComponent teamsProps={clinicInfo.teams} />
 
             <TestimonialsComponent
               featuredTestimonial={featuredTestimonial}

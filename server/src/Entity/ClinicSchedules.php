@@ -17,10 +17,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinicSchedule:read:collection']]),
-        new Post(normalizationContext: ['groups' => ['clinicSchedule:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Post(normalizationContext: ['groups' => ['clinicSchedule:write:create']], securityPostDenormalize: "is_granted('CREATE_CLINIC_SCHEDULE', object)"),
         new Get(normalizationContext: ['groups' => ['clinicSchedule:read']]),
         new Put(),
-        new Delete(security: "is_granted('DELETE', object)"),
+        new Delete(security: "is_granted('DELETE_CLINIC_SCHEDULE', object)"),
         new Patch()
     ],
     normalizationContext: ['groups' => ['clinicSchedule:read:collection']],
