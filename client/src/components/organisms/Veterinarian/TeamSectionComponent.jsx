@@ -1,8 +1,41 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {deleteVeterinarians} from "@/api/clinic/Veterinarian.jsx";
+import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
+import {TrashIcon} from "@heroicons/react/24/outline/index.js";
 
-function TeamSectionComponent({ teams }) {
+function TeamSectionComponent({ teamsProps, admin = false }) {
+  const [teams, setTeams] = useState(teamsProps);
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  const deleteVeterinarianByAdmin = async (uuid) => {
+    const deleteItem = await deleteVeterinarians(uuid);
+
+    if (deleteItem.success) {
+      await setTeams(prevTeams => {
+        return prevTeams.filter(team => team.uuid !== uuid)
+      });
+
+      setIsSuccess(true);
+      setMessage("Vétérinaire supprimé avec succès");
+      setShowNotificationToast(true);
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    }
+  }
+
   return (
     <div>
+      <NotificationToast
+        show={showNotificationToast}
+        setShow={setShowNotificationToast}
+        message={message}
+        isSuccess={isSuccess}
+      />
+
       {/* Logo cloud */}
       <div className="relative isolate -z-10 mt-32 sm:mt-48">
         <div
@@ -40,6 +73,8 @@ function TeamSectionComponent({ teams }) {
         >
           {teams.map((person) => (
             <li key={person.uuid}>
+              {admin && <TrashIcon className="w-4 font-bold text-red-500 hover:text-black hover:scale-110 duration-75 ease-in cursor-pointer" onClick={() => deleteVeterinarianByAdmin(person.uuid)} />}
+
               <a href={`/veterinaire/${person.uuid}`}>
                 <img className="mx-auto h-24 w-24 rounded-full" src={person.imageUrl} alt=""/>
                 <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 uppercase">DR. {person.name}</h3>

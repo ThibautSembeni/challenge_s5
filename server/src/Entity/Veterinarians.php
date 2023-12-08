@@ -21,10 +21,10 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['veterinarians:read']]),
-        new Post(normalizationContext: ['groups' => ['veterinarians:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Post(normalizationContext: ['groups' => ['veterinarians:write:create']], securityPostDenormalize: "is_granted('CREATE_VETERINARIAN', object)"),
         new Get(normalizationContext: ['groups' => ['veterinarians:read']]),
         new Put(),
-        new Delete(),
+        new Delete(security: "is_granted('DELETE_VETERINARIAN', object)"),
         new Patch()
     ],
     normalizationContext: ['groups' => ['veterinarians:read']],

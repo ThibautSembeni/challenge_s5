@@ -6,9 +6,8 @@ use App\Entity\Auth\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class ClinicVoter extends Voter
+class ClinicScheduleVoter extends Voter
 {
     public function __construct(
         private readonly Security $security,
@@ -17,7 +16,7 @@ class ClinicVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        if (!in_array($attribute, ['DELETE'])) {
+        if (!in_array($attribute, ['CREATE_CLINIC_SCHEDULE', 'DELETE_CLINIC_SCHEDULE'])) {
             return false;
         }
 
@@ -36,14 +35,19 @@ class ClinicVoter extends Voter
             return false;
         }
 
-        $clinicSchedule = $subject;
-
         switch ($attribute) {
-            case 'DELETE':
-                return $this->canDelete($clinicSchedule, $user);
+            case 'CREATE_CLINIC_SCHEDULE':
+                return $this->canCreate($subject, $user);
+            case 'DELETE_CLINIC_SCHEDULE':
+                return $this->canDelete($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
+    }
+
+    private function canCreate(ClinicSchedules $clinicSchedule, User $user): bool
+    {
+        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinicSchedule->getClinicId();
     }
 
     private function canDelete(ClinicSchedules $clinicSchedule, User $user): bool
