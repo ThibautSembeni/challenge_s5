@@ -15,7 +15,7 @@ api.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-
+    console.log(error);
     if (
       error.response.status === 401 &&
       !originalRequest._retry &&
@@ -26,12 +26,23 @@ api.interceptors.response.use(
       try {
         if (localStorage.getItem("refresh_token")) {
           const tokenRefreshResponse = await api
-            .post("/token/refresh", {
-              refresh_token: localStorage.getItem("refresh_token"),
-            })
+            .post(
+              "/token/refresh",
+              {
+                refresh_token: `${localStorage.getItem("refresh_token")}`,
+              },
+              {
+                headers: {
+                  Authorization: ``,
+                },
+              },
+            )
             .then((res) => {
               localStorage.setItem("access_token", res.data.token);
               localStorage.setItem("refresh_token", res.data.refresh_token);
+            })
+            .catch((err) => {
+              // window.location.href = "/";
             });
 
           return api(originalRequest);
@@ -44,4 +55,10 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+api.interceptors.request.use((config) => {
+  if (config.method === "patch") {
+    config.headers["Content-Type"] = "application/merge-patch+json";
+  }
+  return config;
+});
 export default api;

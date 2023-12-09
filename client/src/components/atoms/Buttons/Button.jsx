@@ -23,6 +23,7 @@ Button.propTypes = {
   href: PropTypes.string,
   id: PropTypes.string,
   disabled: PropTypes.bool,
+  btnType: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -49,6 +50,7 @@ export function Button({
   href,
   id,
   disabled = false,
+  btnType,
 }) {
   const handleColor = () => {
     const colorMap = {
@@ -127,6 +129,7 @@ export function Button({
       onClick={onClick}
       id={id}
       disabled={disabled}
+      type={btnType}
     >
       {leftIcon && (
         <Icon

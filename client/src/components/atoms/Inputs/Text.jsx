@@ -6,6 +6,7 @@ const SIZES = ["s", "m", "l"];
 
 export default function TextInput({
   className,
+  id,
   name = "defaultName",
   label = "text",
   required = true,
@@ -20,6 +21,7 @@ export default function TextInput({
   minLength,
   maxLength,
   withIcon = false,
+  autoComplete = "off",
 }) {
   const [beenFocused, setBeenFocused] = useState(false);
   const inputRef = useRef();
@@ -49,7 +51,8 @@ export default function TextInput({
         minLength={minLength}
         type="text"
         name={name}
-        id={name}
+        id={id || name}
+        autoComplete={autoComplete || "off"}
         className={`block px-2.5 pb-1.5 pt-3 w-full text-sm text-black bg-transparent rounded-lg border border-1 border-gray-400 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer ${
           required && value === "" ? "bg-red-500" : "bg-green-500"
         }
