@@ -45,6 +45,7 @@ const list = [
       {
         path: "mon-compte",
         element: <Account />,
+        roles: ["ROLE_USER"],
       },
     ],
   },
@@ -76,8 +77,8 @@ const list = [
         path: "animaux",
         element: <Pet />,
         roles: ["ROLE_MANAGER"],
-      }
-    ]
+      },
+    ],
   },
   {
     path: "login",

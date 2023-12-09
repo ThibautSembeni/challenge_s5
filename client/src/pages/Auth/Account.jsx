@@ -5,8 +5,8 @@ import { useAuth } from "@/contexts/AuthContext.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {
   updateOneVeterinarians,
-} from "@/api/veterinarian/index.jsx";
-import {createVeterinarians} from "@/api/clinic/Veterinarian.jsx";
+  createVeterinarians,
+} from "@/api/clinic/Veterinarian.jsx";
 import Input from "@/components/atoms/Inputs/Input.jsx";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import { getUser, updateOneUsers } from "@/api/auth/index.jsx";
@@ -153,7 +153,7 @@ export default function Account() {
     return <Loading />;
   }
 
-  console.log(user)
+  console.log(user);
 
   return (
     <>
