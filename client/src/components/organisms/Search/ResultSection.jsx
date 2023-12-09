@@ -10,7 +10,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { getAllClinics } from "@/api/clinics/index.jsx";
+import { getAllClinics } from "@/api/clinic/Clinic.jsx";
 import Pagination from "@/components/molecules/Pagination/index.jsx";
 import { useLocation } from "react-router-dom";
 function useQuery() {

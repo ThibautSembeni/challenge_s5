@@ -1,7 +1,7 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { getOneVeterinarians } from "@/api/veterinarian/index.jsx";
+import { getOneVeterinarians } from "@/api/clinic/Veterinarian.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import imgDog from "@/assets/images/dogVeterinary.jpg";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";

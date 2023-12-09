@@ -4,9 +4,9 @@ import Footer from "@/components/molecules/Footer/index.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {
-  createVeterinarians,
   updateOneVeterinarians,
 } from "@/api/veterinarian/index.jsx";
+import {createVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import Input from "@/components/atoms/Inputs/Input.jsx";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import { getUser, updateOneUsers } from "@/api/auth/index.jsx";
@@ -152,6 +152,8 @@ export default function Account() {
   if (loading) {
     return <Loading />;
   }
+
+  console.log(user)
 
   return (
     <>

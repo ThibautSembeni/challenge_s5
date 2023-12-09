@@ -58,8 +58,34 @@ export const replaceOneVeterinarians = async (
   });
 };
 
+export const createVeterinarianByClinic = async ({
+     firstname,
+     lastname,
+     email,
+     clinicId,
+   }) => {
+  try {
+    await axiosInstance.post(`${import.meta.env.VITE_API_URL}/veterinarians`, {
+      firstname,
+      lastname,
+      email,
+      clinic: clinicId
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la création du profil du vétérinaire" };
+  }
+};
+
 export const deleteVeterinarians = async (uuid) => {
-  return axiosInstance.delete(`/veterinarians/${uuid}`);
+  try {
+    await axiosInstance.delete(`/veterinarians/${uuid}`);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la suppression du vétérinaire" };
+  }
 };
 
 export const updateOneVeterinarians = async (

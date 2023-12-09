@@ -1,7 +1,7 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
 import React, { Fragment, useEffect, useState } from "react";
 import imgBanner from "@/assets/images/veterinayBanner.jpg";
-import { getOneClinics } from "@/api/veterinarian/Clinic.jsx";
+import { getOneClinics } from "@/api/clinic/Clinic.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/molecules/Footer/index.jsx";
@@ -132,59 +132,6 @@ export default function ClinicProfil() {
       });
   }, [uuid]);
 
-  useEffect(() => {
-    const { clinicSchedules } = clinicInfo;
-    if (clinicSchedules.length > 0) {
-      const times = clinicSchedules.map(({ startTime, endTime }) => ({
-        startHour: startTime.getHours(),
-        endHour: endTime.getHours(),
-      }));
-      const earliestStart = Math.min(...times.map((t) => t.startHour));
-      const latestEnd = Math.max(...times.map((t) => t.endHour));
-
-      setClinicInfo((prev) => ({
-        ...prev,
-        earliestStart,
-        latestEnd,
-      }));
-    }
-  }, [clinicInfo.clinicSchedules]);
-
-  // Helper functions
-  const formatTime = (date) =>
-    `${date.getHours()}h${date.getMinutes() === 0 ? "00" : date.getMinutes()}`;
-  const dayToColumnIndex = (day) =>
-    [
-      "lundi",
-      "mardi",
-      "mercredi",
-      "jeudi",
-      "vendredi",
-      "samedi",
-      "dimanche",
-    ].indexOf(day.toLowerCase()) + 1;
-  const timeToRowIndex = (time) =>
-    time.getHours() + (time.getMinutes() >= 30 ? 1 : 0) - 5;
-
-  // Render functions
-  const renderTimeRows = () => {
-    const rows = [];
-    for (
-      let hour = clinicInfo.earliestStart;
-      hour <= clinicInfo.latestEnd;
-      hour++
-    ) {
-      rows.push(
-        <div key={hour}>
-          <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-            {hour}h00
-          </div>
-        </div>,
-      );
-    }
-    return rows;
-  };
-
   return (
     <>
       <Navbar />
@@ -253,15 +200,10 @@ export default function ClinicProfil() {
             )}
 
             <CalendarOpenCloseComponent
-              clinicSchedules={clinicInfo.clinicSchedules}
-              totalRows={clinicInfo.latestEnd - clinicInfo.earliestStart}
-              renderTimeRows={renderTimeRows}
-              dayToColumnIndex={dayToColumnIndex}
-              timeToRowIndex={timeToRowIndex}
-              formatTime={formatTime}
+              clinicInformation={clinicInfo}
             />
 
-            <TeamSectionComponent teams={clinicInfo.teams} />
+            <TeamSectionComponent teamsProps={clinicInfo.teams} />
 
             <TestimonialsComponent
               featuredTestimonial={featuredTestimonial}

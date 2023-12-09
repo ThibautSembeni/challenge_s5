@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Appointments;
+use App\Entity\Clinics;
 use App\Entity\Notifications;
 use App\Entity\Pets;
 use App\Entity\Traits\TimestampableTrait;
@@ -47,11 +48,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
     use TimestampableTrait;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
@@ -82,6 +83,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $deletedAt = null;
+
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[ORM\OneToOne(inversedBy: 'manager', cascade: ['persist', 'remove'])]
+    private ?Clinics $clinic = null;
 
     public function __construct()
     {
@@ -237,7 +242,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCity(?string $city): static
     {
         $this->city = $city;
+        return $this;
+    }
 
+    public function getClinic(): ?Clinics
+    {
+        return $this->clinic;
+    }
+
+    public function setClinic(?Clinics $clinic): static
+    {
+        $this->clinic = $clinic;
         return $this;
     }
 

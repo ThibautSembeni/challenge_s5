@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\TimeSlotsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +17,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TimeSlotsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['timeSlot:read:collection']]),
+        new Post(normalizationContext: ['groups' => ['timeSlot:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Get(normalizationContext: ['groups' => ['timeSlot:read']]),
+        new Put(),
+        new Delete(),
+        new Patch()
+    ],
+    normalizationContext: ['groups' => ['timeSlot:read:collection']],
+    paginationPartial: false,
+)]
 class TimeSlots
 {
     #[ORM\Id]
@@ -19,18 +36,18 @@ class TimeSlots
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['clinics:read'])]
+    #[Groups(['clinics:read', 'timeSlot:write:create', 'timeSlot:read:collection'])]
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $start_time = null;
 
-    #[Groups(['clinics:read'])]
+    #[Groups(['clinics:read', 'timeSlot:write:create', 'timeSlot:read:collection'])]
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $end_time = null;
 
     #[ORM\OneToMany(mappedBy: 'timeslot_id', targetEntity: ClinicSchedules::class)]
     private Collection $clinicSchedules;
 
-    #[Groups(['clinics:read'])]
+    #[Groups(['clinics:read', 'timeSlot:write:create', 'timeSlot:read:collection'])]
     #[ORM\Column(nullable: true)]
     private ?bool $isOpen = null;
 

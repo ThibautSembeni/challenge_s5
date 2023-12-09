@@ -3,7 +3,7 @@
 namespace App\EventListener;
 
 use App\Entity\Clinics;
-use App\Service\GeocoderService;
+use App\Service\Geocoder;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -12,11 +12,11 @@ use Doctrine\Persistence\ObjectManager;
 class ClinicsEventSubscriber implements EventSubscriber
 {
 
-    private GeocoderService $geocoderService;
+    private Geocoder $geocoderService;
 
     public function __construct()
     {
-        $this->geocoderService = new GeocoderService();
+        $this->geocoderService = new Geocoder();
     }
 
     public function getSubscribedEvents()
