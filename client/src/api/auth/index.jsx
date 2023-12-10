@@ -69,3 +69,7 @@ export const updateOneUsers = async (
     oldPassword,
   });
 };
+
+export const deleteUser = async (uuid) => {
+  return axiosInstance.delete(`/users/${uuid}`);
+};
