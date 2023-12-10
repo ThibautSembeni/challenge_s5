@@ -39,3 +39,37 @@ export const refreshToken = async () => {
     refresh_token: localStorage.getItem("refresh_token"),
   });
 };
+
+export const getUser = async (uuid) => {
+  return axiosInstance.get(`/users/${uuid}`);
+};
+export const updateOneUsers = async (
+  uuid,
+  {
+    firstname,
+    lastname,
+    email,
+    phone,
+    address,
+    city,
+    postalCode,
+    newPassword,
+    oldPassword,
+  },
+) => {
+  return axiosInstance.patch(`/users/${uuid}`, {
+    firstname,
+    lastname,
+    email,
+    phone,
+    address,
+    city,
+    postalCode,
+    newPassword,
+    oldPassword,
+  });
+};
+
+export const deleteUser = async (uuid) => {
+  return axiosInstance.delete(`/users/${uuid}`);
+};

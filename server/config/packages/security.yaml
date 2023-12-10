@@ -47,7 +47,6 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\Auth\User
-                property: email
 
 when@test:
     security:

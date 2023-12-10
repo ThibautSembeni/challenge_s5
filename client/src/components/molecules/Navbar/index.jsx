@@ -39,11 +39,7 @@ export default function Navbar() {
               <div className="flex px-2 lg:px-0">
                 <div className="flex flex-shrink-0 items-center">
                   <Link to={"/"}>
-                    <img
-                      className="h-8 w-auto"
-                      src={logo}
-                      alt="Vetcare"
-                    />
+                    <img className="h-8 w-auto" src={logo} alt="Vetcare" />
                   </Link>
                 </div>
               </div>
@@ -116,7 +112,7 @@ export default function Navbar() {
                   <Fragment key={item.name}>
                     {item.type === "link" && (
                       <Link
-                        to={item.href}
+                        to={item.to}
                         className={classNames(
                           item.current
                             ? "bg-indigo-50 border-indigo-500 text-indigo-700"
@@ -124,7 +120,6 @@ export default function Navbar() {
                           "block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:bg-gray-50",
                         )}
                         onClick={(e) => {
-                          e.preventDefault();
                           setNavigation(
                             navigation.map((nav) => ({
                               ...nav,

@@ -19,6 +19,7 @@ export default function EmailInput({
   pattern,
   minLength,
   maxLength,
+  autoComplete,
 }) {
   const [beenFocused, setBeenFocused] = useState(false);
   const inputRef = useRef();
@@ -66,6 +67,7 @@ export default function EmailInput({
         placeholder=" "
         disabled={disabled}
         // pattern={pattern}
+        autoComplete={autoComplete || "off"}
       />
       <label
         htmlFor={name}
