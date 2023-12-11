@@ -1,0 +1,12 @@
+{
+  "navbar.index.login.btn": "Login",
+  "footer": {
+    "language": {
+      "title.level3": "Language",
+      "values": {
+        "en": "English",
+        "fr": "French"
+      }
+    }
+  }
+}
