@@ -1,10 +1,26 @@
+# https://github.com/fzaninotto/Faker/blob/master/src/Faker/Provider/Base.php#L10
+
 App\Entity\Auth\User:
     user_{1..10}:
         firstname: "<firstname()>"
         lastname: "<lastname()>"
         email: "<email()>"
         password: "\\$2y\\$13\\$WGuoNX07bAXHdMOM5kFV6eWKDLMkX/Js2hKrzrro6IzA3LaNRFgYO"
-
+        address: "<address()>"
+        roles: ["ROLE_USER"]
+        phone: "<phoneNumber()>"
+        postalCode: "<postcode()>"
+        city: "<city()>"
+    user_{user, admin, manager}:
+        firstname: "<current()>"
+        lastname: "<lastname()>"
+        email: '<current()>\@user.fr'
+        password: "\\$2y\\$13\\$WGuoNX07bAXHdMOM5kFV6eWKDLMkX/Js2hKrzrro6IzA3LaNRFgYO"
+        roles: ["ROLE_<toUpper(<current()>)>"]
+        address: "<address()>"
+        phone: "<phoneNumber()>"
+        postalCode: "<postcode()>"
+        city: "<city()>"
 App\Entity\Pets:
     pets_{1..10}:
         name: "<name()>"
@@ -38,7 +54,7 @@ App\Entity\Veterinarians:
         email: "<email()>"
         phone: "<phoneNumber()>"
         specialties: '<randomElement(["chirurgie", "dentisterie", "dermatologie", "endocrinologie", "gériatrie", "gynécologie", "hématologie", "neurologie", "ophtalmologie", "orthopédie", "pédiatrie", "radiologie", "urologie"])>'
-        clinic: "@clinics_*->id"
+        clinic: "@clinics_*"
 
 App\Entity\ClinicComplementaryInformation:
     clinicComplementaryInformation_{1..10}:

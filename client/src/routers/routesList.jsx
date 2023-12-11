@@ -46,6 +46,7 @@ const list = [
       {
         path: "mon-compte",
         element: <Account />,
+        roles: ["ROLE_USER"],
       },
     ],
   },

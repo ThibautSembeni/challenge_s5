@@ -25,3 +25,12 @@ services:
     App\EventListener\ClinicsEventSubscriber:
         tags:
             - { name: doctrine.event_subscriber }
+
+    App\State\UserPasswordHasher:
+        bind:
+            $processor: '@api_platform.doctrine.orm.state.persist_processor'
+
+    App\Doctrine\UserExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }
