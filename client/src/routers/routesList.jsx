@@ -9,6 +9,7 @@ import Veterinarian from "@/pages/Clinic/Veterinarian.jsx";
 import ClinicAdminHome from "@/pages/Admin/Clinic/Home.jsx";
 import Teams from "@/pages/Admin/Clinic/Teams.jsx";
 import Pet from "@/pages/Admin/Clinic/Pet.jsx";
+import Information from "@/pages/Admin/Clinic/Information.jsx";
 import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
 import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
@@ -78,7 +79,12 @@ const list = [
         element: <Pet />,
         roles: ["ROLE_MANAGER"],
       },
-    ],
+      {
+        path: "informations-cabinet",
+        element: <Information />,
+        roles: ["ROLE_MANAGER"],
+      }
+    ]
   },
   {
     path: "login",
