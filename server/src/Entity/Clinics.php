@@ -26,11 +26,10 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
-        new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']], securityPostDenormalize: "is_granted('CREATE_CLINIC', object)"),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
-        new Put(),
-        new Delete(),
-        new Patch()
+        new Delete(security: "is_granted('DELETE_CLINIC', object)"),
+        new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)")
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
     paginationPartial: false,
