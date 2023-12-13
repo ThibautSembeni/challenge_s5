@@ -85,24 +85,33 @@ export const deleteClinicsSchedules = async (id) => {
 };
 
 export const createClinics = async ({
-  name,
-  address,
-  email,
-  phone,
-  description,
-}) => {
-  return axios.post(`${import.meta.env.VITE_API_URL}/clinics`, {
     name,
-    address,
     phone,
     email,
-    description,
+    address,
+    postalCode,
+    city,
+    description
+}) => {
+  const clinic = axios.post(`${import.meta.env.VITE_API_URL}/clinics`, {
+    name,
+    phone,
+    email,
+    address,
+    postalCode,
+    city,
+    description
   });
 };
 
 export const getOneClinics = async (uuid) => {
   return axios.get(`${import.meta.env.VITE_API_URL}/clinics/${uuid}`);
 };
+
+export const getAllClinicsByManager = async (uuid) => {
+  return axiosInstance.get(`${import.meta.env.VITE_API_URL}/clinics?manager=${uuid}`);
+}
+
 export const replaceOneClinics = async (
   uuid,
   { name, address, email, phone, description },

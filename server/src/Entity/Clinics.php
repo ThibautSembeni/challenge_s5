@@ -6,6 +6,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Auth\User;
+use App\Filters\ClinicByManagerFilter;
 use App\Filters\CustomSearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
@@ -26,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
-        new Post(normalizationContext: ['groups' => ['clinics:write:create']], securityPostDenormalize: "is_granted('CREATE_CLINIC', object)"),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']]),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Delete(security: "is_granted('DELETE_CLINIC', object)"),
         new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)")
@@ -34,6 +35,7 @@ use Symfony\Component\Uid\Uuid;
     normalizationContext: ['groups' => ['clinics:read:collection']],
     paginationPartial: false,
 )]
+#[ApiFilter(ClinicByManagerFilter::class)]
 class Clinics
 {
     #[ORM\Id]
@@ -42,7 +44,7 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'user:read:full'])]
+    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
@@ -97,7 +99,7 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
-    #[ORM\OneToOne(mappedBy: 'clinic', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'clinic')]
     private ?User $manager = null;
 
     public function __construct()
@@ -316,16 +318,6 @@ class Clinics
 
     public function setManager(?User $manager): static
     {
-        // unset the owning side of the relation if necessary
-        if ($manager === null && $this->manager !== null) {
-            $this->manager->setClinic(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($manager !== null && $manager->getClinic() !== $this) {
-            $manager->setClinic($this);
-        }
-
         $this->manager = $manager;
 
         return $this;

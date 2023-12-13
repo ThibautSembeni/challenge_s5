@@ -84,9 +84,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTime $deletedAt = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
-    #[ORM\OneToOne(inversedBy: 'manager', cascade: ['persist', 'remove'])]
-    private ?Clinics $clinic = null;
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
+    #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Clinics::class)]
+    private Collection $clinic;
 
     public function __construct()
     {
@@ -94,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->uuid = Uuid::v4();
+        $this->clinic = new ArrayCollection();
     }
 
     public function getFirstname(): ?string
@@ -245,17 +246,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getClinic(): ?Clinics
-    {
-        return $this->clinic;
-    }
-
-    public function setClinic(?Clinics $clinic): static
-    {
-        $this->clinic = $clinic;
-        return $this;
-    }
-
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
@@ -294,6 +284,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function delete(): self
     {
         $this->deletedAt = new \DateTime();
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Clinics>
+     */
+    public function getClinic(): Collection
+    {
+        return $this->clinic;
+    }
+
+    public function addClinic(Clinics $clinic): static
+    {
+        if (!$this->clinic->contains($clinic)) {
+            $this->clinic->add($clinic);
+            $clinic->setManager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClinic(Clinics $clinic): static
+    {
+        if ($this->clinic->removeElement($clinic)) {
+            // set the owning side to null (unless already changed)
+            if ($clinic->getManager() === $this) {
+                $clinic->setManager(null);
+            }
+        }
+
         return $this;
     }
 

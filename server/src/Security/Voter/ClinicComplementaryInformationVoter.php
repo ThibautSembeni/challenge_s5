@@ -50,16 +50,46 @@ class ClinicComplementaryInformationVoter extends Voter
 
     private function canCreate(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinicComplementaryInformation->getClinicId();
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $clinicComplementaryInformation->getClinicId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canEdit(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinicComplementaryInformation->getClinicId();
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $clinicComplementaryInformation->getClinicId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canDelete(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinicComplementaryInformation->getClinicId();
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $clinicComplementaryInformation->getClinicId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
