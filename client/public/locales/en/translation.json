@@ -7,6 +7,9 @@
         "en": "English",
         "fr": "French"
       }
+    },
+    "newsletter": {
+      "h3": "Subscribe to our newsletter"
     }
   }
 }
