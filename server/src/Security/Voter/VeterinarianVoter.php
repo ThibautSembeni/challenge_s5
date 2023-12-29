@@ -49,16 +49,46 @@ class VeterinarianVoter extends Voter
 
     private function canCreate(Veterinarians $veterinarians, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $veterinarians->getClinic();
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $veterinarians->getClinic()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canEdit(Veterinarians $veterinarians, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $veterinarians->getClinic();
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $veterinarians->getClinic()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canDelete(Veterinarians $veterinarians, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $veterinarians->getClinic();
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $veterinarians->getClinic()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -2,7 +2,6 @@ import Login from "@/pages/Auth/Login.jsx";
 import Register from "@/pages/Auth/Register.jsx";
 import Account from "@/pages/Auth/Account.jsx";
 import Home from "@/pages/Home/Home.jsx";
-import PracticienRegister from "@/pages/PracticienRegister/index.jsx";
 import SearchResult from "@/pages/Search/Search.jsx";
 import Clinic from "@/pages/Clinic/Clinic.jsx";
 import Veterinarian from "@/pages/Clinic/Veterinarian.jsx";
@@ -13,23 +12,24 @@ import Information from "@/pages/Admin/Clinic/Information.jsx";
 import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
 import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
+import InformationRegister from "@/pages/PracticienRegister/InformationRegister.jsx";
+import ClinicRegisterInformations from "@/pages/PracticienRegister/ClinicRegisterInformations.jsx";
 const list = [
   {
     path: "",
     element: <Home />,
     children: [
       {
-        path: "practicien-register",
-        element: <PracticienRegister />,
+        path: "inscription/informations",
+        element: <InformationRegister />,
       },
       {
-        path: "about",
+        path: "inscription/cabinet/information",
+        element: <ClinicRegisterInformations />,
+      },
+      {
+        path: "a-propos",
         element: <h1>About</h1>,
-      },
-      {
-        path: "admin",
-        element: <h1>admin</h1>,
-        roles: ["ROLE_ADMIN"],
       },
       {
         path: "search/:city",

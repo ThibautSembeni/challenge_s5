@@ -44,7 +44,7 @@ function ComplementaryInformationComponent({ complementaryInformationsProps, tit
         isSuccess={isSuccess}
       />
 
-      <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {title && (
           <div className="mx-auto max-w-2xl lg:mx-0 mb-4">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Informations complémentaires</h2>

@@ -21,6 +21,7 @@ export default function DeleteAccount({ user }) {
         console.log(res);
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+        localStorage.removeItem('selectedClinic');
         window.location.href = "/";
       })
       .catch((err) => {

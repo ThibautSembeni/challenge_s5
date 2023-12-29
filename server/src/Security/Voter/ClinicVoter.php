@@ -16,7 +16,7 @@ class ClinicVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        if (!in_array($attribute, ['CREATE_CLINIC', 'EDIT_CLINIC', 'DELETE_CLINIC'])) {
+        if (!in_array($attribute, ['EDIT_CLINIC', 'DELETE_CLINIC'])) {
             return false;
         }
 
@@ -36,8 +36,6 @@ class ClinicVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'CREATE_CLINIC':
-                return $this->canCreate();
             case 'EDIT_CLINIC':
                 return $this->canEdit($subject, $user);
             case 'DELETE_CLINIC':
@@ -47,18 +45,23 @@ class ClinicVoter extends Voter
         throw new \LogicException('This code should not be reached!');
     }
 
-    private function canCreate(): bool
-    {
-        return $this->security->isGranted('ROLE_MANAGER');
-    }
-
     private function canEdit(Clinics $clinics, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinics;
+        if (!$this->security->isGranted('ROLE_MANAGER')) {
+            return false;
+        }
+
+        foreach ($user->getClinic() as $userClinic) {
+            if ($userClinic === $clinics) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canDelete(Clinics $clinics, User $user): bool
     {
-        return $this->security->isGranted('ROLE_MANAGER') && $user->getClinic() === $clinics;
+        return $this->canEdit($clinics, $user);
     }
 }
