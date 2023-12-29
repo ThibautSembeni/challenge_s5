@@ -4,6 +4,8 @@ import React, {useState} from "react";
 import ProgressSteps from "@/components/organisms/Payment/ProgressSteps.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {createClinics} from "@/api/clinic/Clinic.jsx";
+import {useAuth} from "@/contexts/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {id: 'Étape 1', name: 'Informations sur le cabinet', href: '#', status: 'complete'},
@@ -12,7 +14,9 @@ const steps = [
 ];
 
 export default function ClinicRegisterInformations() {
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = async (e) => {
     e.preventDefault();
@@ -26,6 +30,7 @@ export default function ClinicRegisterInformations() {
     const postalCode = data.get('postal_code');
     const city = data.get('city');
     const description = data.get('description');
+    const manager = `api/users/${user.uuid}`;
 
     const clinicResponse = await createClinics({
       name,
@@ -34,8 +39,13 @@ export default function ClinicRegisterInformations() {
       address,
       postalCode,
       city,
-      description
+      description,
+      manager
     })
+
+    if (clinicResponse.success) {
+      console.log("Clinic created");
+    }
   }
 
   return (

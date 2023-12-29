@@ -99,8 +99,16 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\ManyToOne(inversedBy: 'clinic')]
     private ?User $manager = null;
+
+    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[ORM\Column(nullable: true)]
+    private ?bool $isActif = null;
+
+    #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Payments::class)]
+    private Collection $payments;
 
     public function __construct()
     {
@@ -108,6 +116,7 @@ class Clinics
         $this->uuid = Uuid::v4();
         $this->clinicSchedules = new ArrayCollection();
         $this->clinicComplementaryInformation = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -319,6 +328,48 @@ class Clinics
     public function setManager(?User $manager): static
     {
         $this->manager = $manager;
+
+        return $this;
+    }
+
+    public function isIsActif(): ?bool
+    {
+        return $this->isActif;
+    }
+
+    public function setIsActif(?bool $isActif): static
+    {
+        $this->isActif = $isActif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payments>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payments $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setClinic($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payments $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getClinic() === $this) {
+                $payment->setClinic(null);
+            }
+        }
 
         return $this;
     }

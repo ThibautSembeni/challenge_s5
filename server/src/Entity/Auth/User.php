@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Post;
 use App\Entity\Appointments;
 use App\Entity\Clinics;
 use App\Entity\Notifications;
+use App\Entity\Payments;
 use App\Entity\Pets;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AuthRepository;
@@ -88,6 +89,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Clinics::class)]
     private Collection $clinic;
 
+    #[ORM\OneToMany(mappedBy: 'person', targetEntity: Payments::class)]
+    private Collection $payments;
+
     public function __construct()
     {
         $this->pets = new ArrayCollection();
@@ -95,6 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifications = new ArrayCollection();
         $this->uuid = Uuid::v4();
         $this->clinic = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getFirstname(): ?string
@@ -311,6 +316,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($clinic->getManager() === $this) {
                 $clinic->setManager(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payments>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payments $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payments $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getPerson() === $this) {
+                $payment->setPerson(null);
             }
         }
 

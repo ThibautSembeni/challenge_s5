@@ -19,7 +19,9 @@ final class ClinicByManagerFilter extends AbstractFilter
         $queryBuilder
             ->join('o.manager', 'm')
             ->andWhere(sprintf('m.uuid = :%s', $parameterName))
-            ->setParameter($parameterName, $value);
+            ->andWhere('o.isActif = :isActif')
+            ->setParameter($parameterName, $value)
+            ->setParameter('isActif', true);
     }
 
     public function getDescription(string $resourceClass): array
@@ -29,7 +31,7 @@ final class ClinicByManagerFilter extends AbstractFilter
                 'property' => 'manager',
                 'type' => 'string',
                 'required' => false,
-                'description' => 'Filter clinics by manager UUID',
+                'description' => 'Filter clinics by manager UUID (isActif = true)',
             ],
         ];
     }
