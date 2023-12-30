@@ -9,7 +9,7 @@ RUN apk update \
     && docker-php-ext-install pdo pdo_pgsql zip \
     && docker-php-ext-enable pdo_pgsql \
     && apk upgrade --no-cache \
-    && apk add --no-cache -U tzdata \
+    && apk add --no-cache -U "tzdata=2023d-r0" \
     && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime \
     && apk del tzdata
 
