@@ -85,7 +85,26 @@ docker-compose exec php php bin/console doctrine:database:create --if-not-exists
 docker-compose exec php php bin/console doctrine:migrations:migrate -n
 ```
 
+### Exécution des tests clients avec Playwright
 
+Pour exécuter les tests avec [Playwright](https://playwright.dev/docs/writing-tests), suivez ces étapes :
+
+1. Assurez-vous que Playwright est installé. Si ce n'est pas le cas, vous pouvez l'installer avec npm :
+
+```bash
+npm install playwright
+```
+2. Pour exécuter les tests, utilisez la commande suivante :
+```bash
+npx playwright test
+```
+Cette commande exécutera tous les tests dans le répertoire tests de votre projet. 
+
+3. Pour afficher les resultats des tests, utilisez la commande suivante :
+```bash
+npx playwright show-report
+```
+Cette commande affichera les résultats des tests dans le navigateur.
 ### Commandes supplémentaires
 
 - Pour accéder à un shell PHP :
