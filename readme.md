@@ -1,5 +1,7 @@
 # Projet VetDoc
 
+![Healthcheck](https://github.com/ThibautSembeni/challenge_fullstack/workflows/CI/badge.svg)
+
 Projet VetDoc est une application inspirée de Doctolib, mais spécialisée pour les vétérinaires. L'objectif de cette plateforme est de faciliter l'intégration des vétérinaires en leur offrant un système de prise de rendez-vous avec des créneaux horaires, etc.
 
 ## Sommaire
