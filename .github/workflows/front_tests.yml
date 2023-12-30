@@ -10,6 +10,9 @@ jobs:
     name: Run Playwright tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.40.0
+    outputs:
+      playwright_version: ${{ steps.playwright-version.outputs.var3 }}
     defaults:
       run:
         working-directory: ./client
@@ -36,28 +39,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Get installed Playwright version
-        id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').dependencies['@playwright/test'].version)")" >> $GITHUB_ENV
-
-      - name: Cache playwright binaries
-        uses: actions/cache@v3
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Playwright Browsers with dependencies
-        run: npx playwright install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-
-      - name: Install Playwright Browsers dependencies
-        run: npx playwright install-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+#      - name: Install Playwright Browsers with dependencies
+#        run: npx playwright install --with-deps
+#        if: steps.playwright-cache.outputs.cache-hit != 'true'
+#
+#      - name: Install Playwright Browsers dependencies
+#        run: npx playwright install-deps
+#        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
