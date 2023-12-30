@@ -1,22 +1,18 @@
-#<<<<<<<<<<Start: PHP-FPM Image Target>>>>>>>>>>#
 FROM php:8.2-fpm-alpine as php
 
 RUN apk update \
-    && apk --no-cache add curl pcre-dev ${PHPIZE_DEPS} rabbitmq-c-dev yaml-dev libpq-dev libzip-dev zip \
-    && apk add --update linux-headers \
-    && apk add --no-cache --virtual .build-deps g++ make autoconf \
+    && apk --no-cache add "curl=8.4.0-r0" "pcre-dev=8.45-r3" "${PHPIZE_DEPS}" "rabbitmq-c-dev=0.13.0-r1" "yaml-dev=0.2.5-r1" "libpq-dev=15.4-r0" "libzip-dev=1.9.2-r2" "zip=3.0-r12" \
+    && apk add --no-cache --virtual .build-deps "g++-12.2.1_git20220924-r10" "make=4.4.1-r1" "autoconf=2.71-r2" \
     && pecl channel-update pecl.php.net \
     && pecl install amqp yaml xdebug \
     && docker-php-ext-enable amqp yaml xdebug \
     && docker-php-ext-install pdo pdo_pgsql zip \
     && docker-php-ext-enable pdo_pgsql \
-    && apk upgrade --update \
-    && apk add -U tzdata \
+    && apk upgrade --no-cache \
+    && apk add --no-cache -U tzdata \
     && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime \
-    && apk del tzdata \
-    && rm -rf /var/cache/apk/*
+    && apk del tzdata
 
-# Installing Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /srv/app/
@@ -30,16 +26,9 @@ RUN composer install --no-dev --no-scripts \
 
 COPY . /srv/app/
 
-#<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
-
-#<<<<<<<<<<Start: PHP-FPM Image For the Dev Environment Target>>>>>>>>>>#
 FROM php as php_dev
 
-#<<<<<<<<<<End: PHP-FPM Image For the Dev Environment Target>>>>>>>>>>#
-
-#<<<<<<<<<<Start: Server Image Target>>>>>>>>>>#
 FROM httpd:2 as server
 
 COPY ./.docker/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY --from=php /srv/app/public /srv/app/public
-#<<<<<<<<<<End: Server Image Target>>>>>>>>>>#
