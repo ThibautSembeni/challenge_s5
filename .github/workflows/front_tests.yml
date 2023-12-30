@@ -59,9 +59,6 @@ jobs:
         run: npx playwright install-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
-      - name: Install Playwright Browsers
-        run: pnpm exec npx playwright install --with-deps
-
       - name: Run Playwright tests
         run: pnpm exec playwright test
 
