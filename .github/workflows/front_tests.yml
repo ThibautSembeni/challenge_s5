@@ -39,19 +39,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Cache Playwright dependencies
-        uses: actions/cache@v3
-        id: cache-playwright
-        with:
-          path: ~/.cache/ms-playwright/
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
       - name: Install Playwright Browsers
-        if: steps.cache-playwright.outputs.cache-hit != 'true'
-        run: |
-          pnpm exec playwright install --with-deps
+        run: pnpm exec npx playwright install --with-deps
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
