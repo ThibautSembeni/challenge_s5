@@ -10,9 +10,6 @@ jobs:
     name: Run Playwright tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.40.0
-    outputs:
-      playwright_version: ${{ steps.playwright-version.outputs.var3 }}
     defaults:
       run:
         working-directory: ./client
@@ -42,13 +39,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-#      - name: Install Playwright Browsers with dependencies
-#        run: npx playwright install --with-deps
-#        if: steps.playwright-cache.outputs.cache-hit != 'true'
-#
-#      - name: Install Playwright Browsers dependencies
-#        run: npx playwright install-deps
-#        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install Playwright Browsers with dependencies
+        run: npx playwright install --with-deps
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
