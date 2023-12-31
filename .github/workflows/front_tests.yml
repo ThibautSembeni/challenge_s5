@@ -52,9 +52,3 @@ jobs:
           name: playwright-report
           path: client/playwright-report/
           retention-days: 7
-
-      - name: Debug Workflow
-        run: |
-          echo "Working Directory: $(pwd)"
-          echo "Contents of client directory: $(ls -R client)"
-          echo "Contents of playwright-report directory: $(ls -R client/playwright-report)"
