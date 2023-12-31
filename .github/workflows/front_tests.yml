@@ -45,6 +45,9 @@ jobs:
       - name: Run Playwright tests
         run: pnpm exec playwright test
 
+      - name: Debug Playwright Test Output
+        run: ls -R playwright-report/
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
