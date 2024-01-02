@@ -15,7 +15,7 @@ jobs:
     env:
         APP_ENV: test
         APP_SECRET: 123456
-        DATABASE_URL: postgresql://app:password@postgres:5432/app?serverVersion=15&charset=utf8
+        DATABASE_URL: postgresql://app:password@localhost:5432/app?serverVersion=15&charset=utf8
     services:
       postgres:
         image: postgres:latest
