@@ -51,6 +51,13 @@ jobs:
       - name: Start services
         run: docker compose up -d php
 
+      -
+        name: Create test database
+        run: docker compose exec -T php bin/console -e test doctrine:database:create
+      -
+        name: Run migrations
+        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+
       - name: Install dependencies
         run: docker compose exec -T php composer install --prefer-dist --no-progress --no-suggest
 
