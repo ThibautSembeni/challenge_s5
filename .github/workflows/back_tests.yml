@@ -38,7 +38,7 @@ jobs:
         run: docker compose -f docker-compose.test.yml exec -T php composer install --prefer-dist --no-progress --no-suggest
 
       - name: Generate JWT keys
-        run: docker-compose -f docker-compose.test.yml run php php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
+        run: docker-compose -f docker-compose.test.yml exec -T php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
 
       -
         name: Create test database
