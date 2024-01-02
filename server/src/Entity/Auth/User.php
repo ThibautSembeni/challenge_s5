@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\GetCurrentUserController;
+use App\Controller\UserController;
 use App\Entity\Appointments;
 use App\Entity\Clinics;
 use App\Entity\Notifications;
@@ -37,7 +39,13 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
         new Post(processor: UserPasswordHasher::class),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class),
-        new Get(uriTemplate: '/me', openapiContext: ['summary' => 'Get current user'], normalizationContext: ['groups' => ['user:read:full']], security: 'is_granted("ROLE_USER")',),
+        new GetCollection(
+            uriTemplate: '/users/current/me',
+            controller: GetCurrentUserController::class,
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can access this resource.',
+            name: 'current_user_get',
+        ),
         new Delete()
         // new Put(), // I don't use PUT, only PATCH
     ],
