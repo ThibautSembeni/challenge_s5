@@ -34,6 +34,18 @@ jobs:
       - name: Start services
         run: docker compose -f docker-compose.test.yml up -d
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(docker compose exec -T php composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: Install dependencies
         run: docker compose -f docker-compose.test.yml exec -T php composer install --prefer-dist --no-progress --no-suggest
 
