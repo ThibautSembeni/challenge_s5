@@ -13,20 +13,6 @@ jobs:
         APP_ENV: test
         APP_SECRET: 123456
         DATABASE_URL: postgresql://app:password@database:5432/app?serverVersion=15&charset=utf8
-#    services: 24s
-#      postgres:
-#        image: postgres:latest
-#        env:
-#          POSTGRES_DB: app
-#          POSTGRES_PASSWORD: password
-#          POSTGRES_USER: app
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#        ports:
-#          - 5432:5432/tcp
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,6 +36,9 @@ jobs:
 
       - name: Install dependencies
         run: docker compose -f docker-compose.test.yml exec -T php composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Generate JWT keys
+        run: docker-compose -f docker-compose.test.yml run php php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
 
       -
         name: Create test database
