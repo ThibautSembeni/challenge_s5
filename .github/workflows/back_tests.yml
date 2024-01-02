@@ -9,9 +9,6 @@ jobs:
   test:
     name: Run Functional tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     env:
         APP_ENV: test
         APP_SECRET: 123456
