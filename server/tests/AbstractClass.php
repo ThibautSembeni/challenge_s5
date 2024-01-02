@@ -9,7 +9,7 @@ use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-abstract class AbstractTest extends ApiTestCase
+abstract class AbstractClass extends ApiTestCase
 {
     private ?string $token = null;
     private ?string $refresh_token = null;

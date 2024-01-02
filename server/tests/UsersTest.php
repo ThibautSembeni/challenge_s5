@@ -9,7 +9,7 @@ use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-final class UsersTest extends AbstractTest
+final class UsersTest extends AbstractClass
 {
     use Factories;
 

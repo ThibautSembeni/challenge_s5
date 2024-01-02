@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use App\Entity\Auth\User;
 
-final class AuthenticationTest extends AbstractTest
+final class AuthenticationTest extends AbstractClass
 {
     private static ?string $refreshToken = null;
     private static ?string $token = null;
