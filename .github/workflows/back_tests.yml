@@ -15,7 +15,7 @@ jobs:
     env:
         APP_ENV: test
         APP_SECRET: 123456
-        DATABASE_URL: postgresql://app:password@postgres:5432/app?serverVersion=15&charset=utf8
+        DATABASE_URL: postgresql://app:password@127.0.0.1:5432/app?serverVersion=15&charset=utf8
     services:
       postgres:
         image: postgres:latest
@@ -29,7 +29,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 5432:5432/tcp
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,24 +42,24 @@ jobs:
         with:
           load: true
           files: |
-            docker-compose.yml
+            docker-compose.test.yml
           set: |
             *.cache-from=type=gha,scope=${{github.ref}}
             *.cache-from=type=gha,scope=refs/heads/main
             *.cache-to=type=gha,scope=${{github.ref}},mode=max
 
       - name: Start services
-        run: docker compose up -d php
+        run: docker compose -f docker-compose.test.yml up -d
 
       - name: Install dependencies
-        run: docker compose exec -T php composer install --prefer-dist --no-progress --no-suggest
+        run: docker compose -f docker-compose.test.yml exec -T php composer install --prefer-dist --no-progress --no-suggest
 
       -
         name: Create test database
-        run: docker compose exec -T php bin/console -e test doctrine:database:create
+        run: docker compose -f docker-compose.test.yml exec -T php bin/console -e test doctrine:database:create
       -
         name: Run migrations
-        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+        run: docker compose -f docker-compose.test.yml exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
 
       - name: Run PHPUnit tests
-        run: docker-compose exec -T php ./vendor/bin/phpunit tests
+        run: docker-compose -f docker-compose.test.yml exec -T php ./vendor/bin/phpunit tests

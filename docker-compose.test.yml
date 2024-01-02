@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  php:
+    container_name: php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    build:
+      context: server
+      dockerfile: Dockerfile
+      target: php_dev
+    volumes:
+      - ./server/.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ~/server/.config/composer:/home/prod/.composer
+      - ./server:/srv/app
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://app:password@postgres:5432/app?serverVersion=15&charset=utf8}
