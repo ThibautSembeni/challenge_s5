@@ -91,7 +91,33 @@ function Chatbot() {
                                 onClick={toggleChatbox}
                                 className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
                             >
-                                {/* SVG pour l'icône */}
+                                <svg
+                                    xmlns=" http://www.w3.org/2000/svg"
+                                    width="27"
+                                    height="27"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-white block border-gray-200 align-middle"
+                                >
+                                    <line
+                                        x1="18"
+                                        y1="6"
+                                        x2="6"
+                                        y2="18"
+                                        className="border-gray-200"
+                                    ></line>
+                                    <line
+                                        x1="6"
+                                        y1="6"
+                                        x2="18"
+                                        y2="18"
+                                        className="border-gray-200"
+                                    ></line>
+                                </svg>
                             </button>
                         </div>
                         <div className="p-4 h-80 overflow-y-auto">
