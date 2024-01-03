@@ -37,7 +37,6 @@ class ChatbotController extends AbstractController
                 ],
             ]);
 
-            echo 'ok';
             $openaiResponse = $response->toArray();
 
             return $this->json(['response' => $openaiResponse['choices'][0]['message']['content']]);
