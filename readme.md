@@ -1,8 +1,8 @@
 # Projet VetDoc
 
-[![API Healthcheck](https://github.com/ThibautSembeni/challenge_s5/workflows/api_healthcheck/badge.svg)](https://github.com/ThibautSembeni/challenge_s5/actions/workflows/api_healthcheck.yml)
-[![Back Tests Status](https://github.com/ThibautSembeni/challenge_s5/workflows/back_tests/badge.svg)](https://github.com/ThibautSembeni/challenge_s5/actions/workflows/back_tests.yml)
-[![Front Tests Status](https://github.com/ThibautSembeni/challenge_s5/workflows/front_tests/badge.svg)](https://github.com/ThibautSembeni/challenge_s5/actions/workflows/front_tests.yml)
+[![API Healthcheck](https://github.com/ThibautSembeni/challenge_s5/workflows/API%20Healthcheck/badge.svg)](https://github.com/ThibautSembeni/challenge_s5/actions/workflows/api_healthcheck.yml)
+[![Back Tests Status](https://github.com/ThibautSembeni/challenge_s5/workflows/CI%20-%20Back%20Tests/badge.svg)](https://github.com/ThibautSembeni/challenge_s5/actions/workflows/back_tests.yml)
+[![Front Tests Status](https://github.com/ThibautSembeni/challenge_s5/workflows/CI%20-%20Front%20Tests/badge.svg)](https://github.com/ThibautSembeni/challenge_s5/actions/workflows/front_tests.yml)
 
 
 Projet VetDoc est une application inspirée de Doctolib, mais spécialisée pour les vétérinaires. L'objectif de cette plateforme est de faciliter l'intégration des vétérinaires en leur offrant un système de prise de rendez-vous avec des créneaux horaires, etc.
