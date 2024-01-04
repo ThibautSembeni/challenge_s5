@@ -42,9 +42,10 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
         new GetCollection(
             uriTemplate: '/users/current/me',
             controller: GetCurrentUserController::class,
+            normalizationContext: ['groups' => ['user:read:full']],
             security: 'is_granted("ROLE_USER")',
             securityMessage: 'Only authenticated users can access this resource.',
-            name: 'current_user_get',
+            name: 'current_user_get'
         ),
         new Delete()
         // new Put(), // I don't use PUT, only PATCH

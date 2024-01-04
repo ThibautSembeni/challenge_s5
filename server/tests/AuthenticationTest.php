@@ -91,6 +91,8 @@ final class AuthenticationTest extends AbstractClass
         $this->assertArrayHasKey('token', $response->toArray());
         $this->assertArrayHasKey('refresh_token', $response->toArray());
         $this->assertNotEquals(self::$refreshToken, $response->toArray()['refresh_token']);
+        self::$refreshToken = $response->toArray()['refresh_token'];
+
     }
 
     public function testGetUserConnected(): void
@@ -110,17 +112,16 @@ final class AuthenticationTest extends AbstractClass
     public function testLogout(): void
     {
         $this->createClientWithCredentials(self::$token)->request('POST', '/api/logout', [
-            'headers' => ['Content-Type' => 'application/ld+json; charset=utf-8'],
-            'json' => [
+            'headers' => ['Content-Type' => 'application/json'],
+            'query' => [
                 'refresh_token' => self::$refreshToken,
             ]
         ]);
 
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains([
-            "@context" => "/api/contexts/Logout",
-            "@type" => "Logout"
+            "code" => 200,
+            "message" => "The supplied refresh_token has been invalidated."
         ]);
     }
 }
