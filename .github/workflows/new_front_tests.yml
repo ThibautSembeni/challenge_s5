@@ -23,11 +23,16 @@ jobs:
       - name: Build Docker images
         uses: docker/bake-action@v4
         with:
-          context: .
+          files: |
+            ./docker-bake.hcl
+          targets: app
           set: |
             *.cache-from=type=gha,scope=${{github.ref}}
             *.cache-from=type=gha,scope=refs/heads/main
             *.cache-to=type=gha,scope=${{github.ref}},mode=max
+
+      - name: Run Docker container
+        run: docker run app
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.0.0
