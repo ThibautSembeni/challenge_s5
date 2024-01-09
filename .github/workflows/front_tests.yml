@@ -44,9 +44,10 @@ jobs:
         uses: actions/cache@v3
         id: playwright-cache
         with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
+#          path: |
+#            ~/.cache/ms-playwright
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-1.40.1
 
       - name: Install dependencies
         run: pnpm install
