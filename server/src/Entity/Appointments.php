@@ -2,40 +2,73 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use App\Controller\GenerateIcsFileFromAppointmentController;
 use App\Entity\Auth\User;
+use App\Enum\AppointmentsStatusEnum;
 use App\Repository\AppointmentsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AppointmentsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['appointments:read:collections']]),
+        new GetCollection(uriTemplate: '/appointments/history', normalizationContext: ['groups' => ['appointments:read:collections']], name: 'get_appointments_history'),
+        new Get(normalizationContext: ['groups' => ['appointments:read:item']], name: 'getOneAppointment'),
+        new Get(
+            uriTemplate: '/appointments/{uuid}/ics',
+            controller: GenerateIcsFileFromAppointmentController::class,
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can access this resource.',
+            name: 'generate_ics_file_from_appointment',
+        ),
+    ],
+)]
 class Appointments
 {
+    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['appointments:read:collections', 'appointments:read:item'])]
+    private Uuid $uuid;
+
+    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $reason = null;
 
+    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\Column]
-    private array $status = [];
+    private ?string $status = null;
 
+    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
-    private ?Veterinarians $veterinarianID = null;
+    private ?Veterinarians $veterinarian = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 
+   #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
-    private ?Pets $petID = null;
+    private ?Pets $pet = null;
 
     #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: AppointmentServices::class)]
     private Collection $appointmentServices;
@@ -51,6 +84,7 @@ class Appointments
         $this->appointmentServices = new ArrayCollection();
         $this->feedbacks = new ArrayCollection();
         $this->appointmentHistories = new ArrayCollection();
+        $this->uuid = Uuid::v4();
     }
 
     public function getId(): ?int
@@ -82,26 +116,29 @@ class Appointments
         return $this;
     }
 
-    public function getStatus(): array
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(array $status): static
+    #[Groups(['appointments:write'])]
+    #[ApiProperty(example: AppointmentsStatusEnum::STATUS_SCHEDULED->value)]
+    public function setStatus(string $status): static
     {
-        $this->status = $status;
+        $enum = AppointmentsStatusEnum::from($status);
+        $this->status = $enum->value;
 
         return $this;
     }
 
-    public function getVeterinarianID(): ?Veterinarians
+    public function getVeterinarian(): ?Veterinarians
     {
-        return $this->veterinarianID;
+        return $this->veterinarian;
     }
 
-    public function setVeterinarianID(?Veterinarians $veterinarianID): static
+    public function setVeterinarian(?Veterinarians $veterinarian): static
     {
-        $this->veterinarianID = $veterinarianID;
+        $this->veterinarian = $veterinarian;
 
         return $this;
     }
@@ -118,14 +155,14 @@ class Appointments
         return $this;
     }
 
-    public function getPetID(): ?Pets
+    public function getPet(): ?Pets
     {
-        return $this->petID;
+        return $this->pet;
     }
 
-    public function setPetID(?Pets $petID): static
+    public function setPet(?Pets $pet): static
     {
-        $this->petID = $petID;
+        $this->pet = $pet;
 
         return $this;
     }
@@ -218,5 +255,10 @@ class Appointments
         }
 
         return $this;
+    }
+
+    public function getUuid(): Uuid
+    {
+        return $this->uuid;
     }
 }

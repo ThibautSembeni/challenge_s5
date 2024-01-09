@@ -44,17 +44,17 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
+    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -62,7 +62,7 @@ class Clinics
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'appointments:read:item'])]
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
@@ -79,11 +79,11 @@ class Clinics
     private ?float $longitude = null;
 
     #[ApiFilter(CustomSearchFilter::class)]
-    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read', 'appointments:read:item'])]
     #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read', 'appointments:read:item'])]
     #[ORM\Column(length: 15)]
     private ?string $postalCode = null;
 
