@@ -1,4 +1,4 @@
 target "app" {
- dockerfile = "./Dockerfile"
+ dockerfile = "./client/Dockerfile"
  context = "."
 }
