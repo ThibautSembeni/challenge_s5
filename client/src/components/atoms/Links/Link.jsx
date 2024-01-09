@@ -72,6 +72,11 @@ export function Link({
         bordered:
           "bg-transparent text-red border border-red hover:bg-red hover:text-white duration-150",
       },
+      blue: {
+        filled: "bg-blue text-white",
+        bordered:
+          "bg-transparent text-blue border border-blue hover:bg-blue hover:text-white duration-150",
+      },
     };
 
     return colorMap[colorButton][styledButton];

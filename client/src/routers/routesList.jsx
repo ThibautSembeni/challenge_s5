@@ -14,6 +14,9 @@ import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
 import InformationRegister from "@/pages/PracticienRegister/InformationRegister.jsx";
 import ClinicRegisterInformations from "@/pages/PracticienRegister/ClinicRegisterInformations.jsx";
+import MonEspace from "@/pages/MonEspace/index.jsx";
+import Appointments from "@/pages/Appointment/index.jsx";
+import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 const list = [
   {
     path: "",
@@ -46,6 +49,32 @@ const list = [
       {
         path: "mon-compte",
         element: <Account />,
+        roles: ["ROLE_USER"],
+      },
+      {
+        path: "mes-rendez-vous",
+        element: <Appointments />,
+        roles: ["ROLE_USER"],
+      },
+      {
+        path: "mon-espace",
+        roles: ["ROLE_USER"],
+        children: [
+          {
+            path: "",
+            element: <MonEspace />,
+            roles: ["ROLE_USER"],
+          },
+          {
+            path: "mes-animaux",
+            element: <MonEspace />,
+            roles: ["ROLE_USER"],
+          },
+        ],
+      },
+      {
+        path: "booking-appointment/:uuid",
+        element: <BookingAppointment />,
         roles: ["ROLE_USER"],
       },
     ],
@@ -83,8 +112,8 @@ const list = [
         path: "informations-cabinet",
         element: <Information />,
         roles: ["ROLE_MANAGER"],
-      }
-    ]
+      },
+    ],
   },
   {
     path: "login",

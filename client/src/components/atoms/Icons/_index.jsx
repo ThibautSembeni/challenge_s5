@@ -39,3 +39,4 @@ export { Upload } from "./Upload";
 export { TablerSend } from "./TablerSend";
 export { DatabaseChecked } from "./DatabaseChecked";
 export { DatabaseRemove } from "./DatabaseRemove";
+export { Pets } from "./Pets";
