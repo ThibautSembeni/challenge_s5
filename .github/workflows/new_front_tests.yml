@@ -11,8 +11,8 @@ jobs:
     name: Run Functional tests
     runs-on: ubuntu-latest
     defaults:
-        run:
-            working-directory: ./client
+      run:
+        working-directory: ./client
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,7 +24,7 @@ jobs:
         uses: docker/bake-action@v4
         with:
           files: |
-            ./docker-bake.hcl
+            client/docker-bake.hcl
           targets: app
           set: |
             *.cache-from=type=gha,scope=${{github.ref}}
