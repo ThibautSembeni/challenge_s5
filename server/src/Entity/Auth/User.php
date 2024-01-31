@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Post;
 use App\Entity\Appointments;
 use App\Entity\Clinics;
 use App\Entity\Notifications;
+use App\Entity\Payments;
 use App\Entity\Pets;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AuthRepository;
@@ -84,9 +85,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTime $deletedAt = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
-    #[ORM\OneToOne(inversedBy: 'manager', cascade: ['persist', 'remove'])]
-    private ?Clinics $clinic = null;
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
+    #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Clinics::class)]
+    private Collection $clinic;
+
+    #[ORM\OneToMany(mappedBy: 'person', targetEntity: Payments::class)]
+    private Collection $payments;
 
     public function __construct()
     {
@@ -94,6 +98,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->appointments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->uuid = Uuid::v4();
+        $this->clinic = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getFirstname(): ?string
@@ -245,17 +251,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getClinic(): ?Clinics
-    {
-        return $this->clinic;
-    }
-
-    public function setClinic(?Clinics $clinic): static
-    {
-        $this->clinic = $clinic;
-        return $this;
-    }
-
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
@@ -294,6 +289,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function delete(): self
     {
         $this->deletedAt = new \DateTime();
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Clinics>
+     */
+    public function getClinic(): Collection
+    {
+        return $this->clinic;
+    }
+
+    public function addClinic(Clinics $clinic): static
+    {
+        if (!$this->clinic->contains($clinic)) {
+            $this->clinic->add($clinic);
+            $clinic->setManager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClinic(Clinics $clinic): static
+    {
+        if ($this->clinic->removeElement($clinic)) {
+            // set the owning side to null (unless already changed)
+            if ($clinic->getManager() === $this) {
+                $clinic->setManager(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payments>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payments $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payments $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getPerson() === $this) {
+                $payment->setPerson(null);
+            }
+        }
+
         return $this;
     }
 

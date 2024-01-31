@@ -5,7 +5,7 @@ import {
 import {deleteClinicsSchedules} from "@/api/clinic/Clinic.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
-function ClinicScheduleComponent({ clinicInformation, admin = false }) {
+function ClinicScheduleComponent({ clinicInformation, admin = false, titleClinic = false }) {
   const [clinicInfo, setClinicInfo] = useState(clinicInformation);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
@@ -28,6 +28,8 @@ function ClinicScheduleComponent({ clinicInformation, admin = false }) {
       }));
     }
   }, [clinicInfo.clinicSchedules]);
+
+  console.log(clinicInfo);
 
   // Helper functions
   const totalRows = clinicInfo.latestEnd - clinicInfo.earliestStart;
@@ -80,7 +82,14 @@ function ClinicScheduleComponent({ clinicInformation, admin = false }) {
 
       <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0 mb-4">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Horaires d'ouverture</h2>
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Horaires d'ouverture</h2>
+            {titleClinic && (
+              <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+                {clinicInfo.clinicInfo.name}
+              </span>
+            )}
+          </div>
           <p className="mt-6 text-lg leading-8 text-gray-600">
             Attention, ces horaires peuvent varier en fonction des jours fériés.
           </p>

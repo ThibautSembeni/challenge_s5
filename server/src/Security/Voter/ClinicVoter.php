@@ -1,13 +1,13 @@
 <?php
 namespace App\Security\Voter;
 
-use App\Entity\ClinicSchedules;
 use App\Entity\Auth\User;
+use App\Entity\Clinics;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class ClinicScheduleVoter extends Voter
+class ClinicVoter extends Voter
 {
     public function __construct(
         private readonly Security $security,
@@ -16,11 +16,11 @@ class ClinicScheduleVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        if (!in_array($attribute, ['CREATE_CLINIC_SCHEDULE', 'DELETE_CLINIC_SCHEDULE'])) {
+        if (!in_array($attribute, ['EDIT_CLINIC', 'DELETE_CLINIC'])) {
             return false;
         }
 
-        if (!$subject instanceof ClinicSchedules) {
+        if (!$subject instanceof Clinics) {
             return false;
         }
 
@@ -36,23 +36,23 @@ class ClinicScheduleVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'CREATE_CLINIC_SCHEDULE':
-                return $this->canCreate($subject, $user);
-            case 'DELETE_CLINIC_SCHEDULE':
+            case 'EDIT_CLINIC':
+                return $this->canEdit($subject, $user);
+            case 'DELETE_CLINIC':
                 return $this->canDelete($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
-    private function canCreate(ClinicSchedules $clinicSchedule, User $user): bool
+    private function canEdit(Clinics $clinics, User $user): bool
     {
         if (!$this->security->isGranted('ROLE_MANAGER')) {
             return false;
         }
 
         foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicSchedule->getClinicId()) {
+            if ($userClinic === $clinics) {
                 return true;
             }
         }
@@ -60,18 +60,8 @@ class ClinicScheduleVoter extends Voter
         return false;
     }
 
-    private function canDelete(ClinicSchedules $clinicSchedule, User $user): bool
+    private function canDelete(Clinics $clinics, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
-            return false;
-        }
-
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicSchedule->getClinicId()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->canEdit($clinics, $user);
     }
 }
