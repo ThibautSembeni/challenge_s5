@@ -1,0 +1,21 @@
+{
+  "navbar.index.login.btn": "Se connecter",
+  "footer": {
+    "language": {
+      "title.level3": "Langue",
+      "values": {
+        "en": "Anglais",
+        "fr": "Français"
+      }
+    },
+    "Footer": {
+      "h2": "Pied de page"
+    },
+    "Company": {
+      "h3": "Société"
+    },
+    "newsletter": {
+      "h3": "Inscrivez-vous à notre newsletter"
+    }
+  }
+}
