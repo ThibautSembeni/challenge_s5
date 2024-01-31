@@ -4,7 +4,6 @@ import RouterProvider from "./routers/router.provider.jsx";
 import AuthProvider from "./contexts/AuthContext.jsx";
 import ClinicAdminContext from "@/contexts/ClinicAdminContext.jsx";
 
-
 function App() {
   return (
     <>
