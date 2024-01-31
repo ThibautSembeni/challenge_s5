@@ -17,11 +17,16 @@ import ClinicRegisterInformations from "@/pages/PracticienRegister/ClinicRegiste
 import MonEspace from "@/pages/MonEspace/index.jsx";
 import Appointments from "@/pages/Appointment/index.jsx";
 import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
+import { Outlet } from "react-router-dom";
 const list = [
   {
     path: "",
-    element: <Home />,
+    element: <Outlet />,
     children: [
+      {
+        path: "",
+        element: <Home />,
+      },
       {
         path: "inscription/informations",
         element: <InformationRegister />,

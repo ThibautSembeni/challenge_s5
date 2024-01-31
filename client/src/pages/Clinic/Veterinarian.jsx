@@ -1,6 +1,6 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
-import { useParams } from "react-router-dom";
-import { Link } from "@/components/atoms/Links/Link.jsx";
+import { useParams, Link as RouterLink } from "react-router-dom";
+import { Link, LinkBase } from "@/components/atoms/Links/Link.jsx";
 import React, { useEffect, useState } from "react";
 import { getOneVeterinarians } from "@/api/clinic/Veterinarian.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
@@ -54,8 +54,9 @@ export default function Veterinarian() {
                     {veterinarian.specialties}
                   </p>
                   <div className="mt-4">
-                    <Link
-                      href={
+                    <LinkBase
+                      component={RouterLink}
+                      to={
                         isAuthenticated
                           ? `/booking-appointment/${uuid}`
                           : "/login"
@@ -63,7 +64,7 @@ export default function Veterinarian() {
                       className="rounded-md bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
                     >
                       Prendre un rendez-vous
-                    </Link>
+                    </LinkBase>
                   </div>
                 </div>
                 <img
