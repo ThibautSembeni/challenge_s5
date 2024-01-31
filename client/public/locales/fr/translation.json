@@ -8,6 +8,12 @@
         "fr": "Français"
       }
     },
+    "Footer": {
+      "h2": "Pied de page"
+    },
+    "Company": {
+      "h3": "Société"
+    },
     "newsletter": {
       "h3": "Inscrivez-vous à notre newsletter"
     }
