@@ -41,7 +41,7 @@ class ClinicComplementaryInformation
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'clinicComplementaryInformation')]
-    private ?Clinics $clinic_id = null;
+    private ?Clinics $clinic = null;
 
     public function getId(): ?int
     {
@@ -72,14 +72,14 @@ class ClinicComplementaryInformation
         return $this;
     }
 
-    public function getClinicId(): ?Clinics
+    public function getClinic(): ?Clinics
     {
-        return $this->clinic_id;
+        return $this->clinic;
     }
 
-    public function setClinicId(?Clinics $clinic_id): static
+    public function setClinic(?Clinics $clinic): static
     {
-        $this->clinic_id = $clinic_id;
+        $this->clinic = $clinic;
 
         return $this;
     }

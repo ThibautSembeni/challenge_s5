@@ -68,13 +68,13 @@ class Veterinarians
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
     private ?Clinics $clinic = null;
 
-    #[ORM\OneToMany(mappedBy: 'veterinarianID', targetEntity: Appointments::class)]
+    #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Appointments::class)]
     private Collection $appointments;
 
-    #[ORM\OneToMany(mappedBy: 'veterinarianID', targetEntity: AppointmentHistory::class)]
+    #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: AppointmentHistory::class)]
     private Collection $appointmentHistories;
 
-    #[ORM\OneToMany(mappedBy: 'veterinarianID', targetEntity: Schedules::class)]
+    #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Schedules::class)]
     private Collection $schedules;
 
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Services::class)]

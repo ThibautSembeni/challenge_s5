@@ -44,7 +44,7 @@ class TimeSlots
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $end_time = null;
 
-    #[ORM\OneToMany(mappedBy: 'timeslot_id', targetEntity: ClinicSchedules::class)]
+    #[ORM\OneToMany(mappedBy: 'timeslot', targetEntity: ClinicSchedules::class)]
     private Collection $clinicSchedules;
 
     #[Groups(['clinics:read', 'timeSlot:write:create', 'timeSlot:read:collection'])]
@@ -97,7 +97,7 @@ class TimeSlots
     {
         if (!$this->clinicSchedules->contains($clinicSchedule)) {
             $this->clinicSchedules->add($clinicSchedule);
-            $clinicSchedule->setTimeslotId($this);
+            $clinicSchedule->setTimeslot($this);
         }
 
         return $this;
@@ -107,8 +107,8 @@ class TimeSlots
     {
         if ($this->clinicSchedules->removeElement($clinicSchedule)) {
             // set the owning side to null (unless already changed)
-            if ($clinicSchedule->getTimeslotId() === $this) {
-                $clinicSchedule->setTimeslotId(null);
+            if ($clinicSchedule->getTimeslot() === $this) {
+                $clinicSchedule->setTimeslot(null);
             }
         }
 

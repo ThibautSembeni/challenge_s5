@@ -47,7 +47,7 @@ class Services
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $price = null;
 
-    #[ORM\OneToMany(mappedBy: 'serviceID', targetEntity: AppointmentServices::class)]
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: AppointmentServices::class)]
     private Collection $appointmentServices;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
@@ -99,7 +99,7 @@ class Services
     {
         if (!$this->appointmentServices->contains($appointmentService)) {
             $this->appointmentServices->add($appointmentService);
-            $appointmentService->setServiceID($this);
+            $appointmentService->setService($this);
         }
 
         return $this;
@@ -109,8 +109,8 @@ class Services
     {
         if ($this->appointmentServices->removeElement($appointmentService)) {
             // set the owning side to null (unless already changed)
-            if ($appointmentService->getServiceID() === $this) {
-                $appointmentService->setServiceID(null);
+            if ($appointmentService->getService() === $this) {
+                $appointmentService->setService(null);
             }
         }
 

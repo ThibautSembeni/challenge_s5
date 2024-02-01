@@ -26,7 +26,7 @@ class Feedbacks
     private ?\DateTimeInterface $datetime = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedbacks')]
-    private ?Appointments $appointmentID = null;
+    private ?Appointments $appointment = null;
 
     public function getId(): ?int
     {
@@ -69,14 +69,14 @@ class Feedbacks
         return $this;
     }
 
-    public function getAppointmentID(): ?Appointments
+    public function getAppointment(): ?Appointments
     {
-        return $this->appointmentID;
+        return $this->appointment;
     }
 
-    public function setAppointmentID(?Appointments $appointmentID): static
+    public function setAppointment(?Appointments $appointment): static
     {
-        $this->appointmentID = $appointmentID;
+        $this->appointment = $appointment;
 
         return $this;
     }

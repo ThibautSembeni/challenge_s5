@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
@@ -70,13 +71,13 @@ class Appointments
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?Pets $pet = null;
 
-    #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: AppointmentServices::class)]
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentServices::class)]
     private Collection $appointmentServices;
 
-    #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: Feedbacks::class)]
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: Feedbacks::class)]
     private Collection $feedbacks;
 
-    #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: AppointmentHistory::class)]
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentHistory::class)]
     private Collection $appointmentHistories;
 
     public function __construct()
@@ -179,7 +180,7 @@ class Appointments
     {
         if (!$this->appointmentServices->contains($appointmentService)) {
             $this->appointmentServices->add($appointmentService);
-            $appointmentService->setAppointmentID($this);
+            $appointmentService->setAppointment($this);
         }
 
         return $this;
@@ -189,8 +190,8 @@ class Appointments
     {
         if ($this->appointmentServices->removeElement($appointmentService)) {
             // set the owning side to null (unless already changed)
-            if ($appointmentService->getAppointmentID() === $this) {
-                $appointmentService->setAppointmentID(null);
+            if ($appointmentService->getAppointment() === $this) {
+                $appointmentService->setAppointment(null);
             }
         }
 
@@ -209,7 +210,7 @@ class Appointments
     {
         if (!$this->feedbacks->contains($feedback)) {
             $this->feedbacks->add($feedback);
-            $feedback->setAppointmentID($this);
+            $feedback->setAppointment($this);
         }
 
         return $this;
@@ -219,8 +220,8 @@ class Appointments
     {
         if ($this->feedbacks->removeElement($feedback)) {
             // set the owning side to null (unless already changed)
-            if ($feedback->getAppointmentID() === $this) {
-                $feedback->setAppointmentID(null);
+            if ($feedback->getAppointment() === $this) {
+                $feedback->setAppointment(null);
             }
         }
 
@@ -239,7 +240,7 @@ class Appointments
     {
         if (!$this->appointmentHistories->contains($appointmentHistory)) {
             $this->appointmentHistories->add($appointmentHistory);
-            $appointmentHistory->setAppointmentID($this);
+            $appointmentHistory->setAppointment($this);
         }
 
         return $this;
@@ -249,8 +250,8 @@ class Appointments
     {
         if ($this->appointmentHistories->removeElement($appointmentHistory)) {
             // set the owning side to null (unless already changed)
-            if ($appointmentHistory->getAppointmentID() === $this) {
-                $appointmentHistory->setAppointmentID(null);
+            if ($appointmentHistory->getAppointment() === $this) {
+                $appointmentHistory->setAppointment(null);
             }
         }
 

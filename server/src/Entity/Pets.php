@@ -69,7 +69,7 @@ class Pets
     #[ORM\ManyToOne(inversedBy: 'pets')]
     private ?User $userID = null;
 
-    #[ORM\OneToMany(mappedBy: 'petID', targetEntity: Appointments::class)]
+    #[ORM\OneToMany(mappedBy: 'pet', targetEntity: Appointments::class)]
     private Collection $appointments;
 
     public function __construct()
