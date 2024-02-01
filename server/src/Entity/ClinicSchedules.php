@@ -36,11 +36,11 @@ class ClinicSchedules
 
     #[Groups(['clinicSchedule:write:create', 'clinicSchedule:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'clinicSchedules')]
-    private ?Clinics $clinic_id = null;
+    private ?Clinics $clinic = null;
 
     #[Groups(['clinics:read', 'clinicSchedule:write:create', 'clinicSchedule:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'clinicSchedules')]
-    private ?TimeSlots $timeslot_id = null;
+    private ?TimeSlots $timeslot = null;
 
     #[Groups(['clinics:read', 'clinicSchedule:write:create', 'clinicSchedule:read:collection'])]
     #[ORM\Column(length: 20, nullable: true)]
@@ -51,26 +51,26 @@ class ClinicSchedules
         return $this->id;
     }
 
-    public function getClinicId(): ?Clinics
+    public function getClinic(): ?Clinics
     {
-        return $this->clinic_id;
+        return $this->clinic;
     }
 
-    public function setClinicId(?Clinics $clinic_id): static
+    public function setClinic(?Clinics $clinic): static
     {
-        $this->clinic_id = $clinic_id;
+        $this->clinic = $clinic;
 
         return $this;
     }
 
-    public function getTimeslotId(): ?TimeSlots
+    public function getTimeslot(): ?TimeSlots
     {
-        return $this->timeslot_id;
+        return $this->timeslot;
     }
 
-    public function setTimeslotId(?TimeSlots $timeslot_id): static
+    public function setTimeslot(?TimeSlots $timeslot): static
     {
-        $this->timeslot_id = $timeslot_id;
+        $this->timeslot = $timeslot;
 
         return $this;
     }

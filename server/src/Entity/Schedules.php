@@ -29,7 +29,7 @@ class Schedules
     private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
-    private ?Veterinarians $veterinarianID = null;
+    private ?Veterinarians $veterinarian = null;
 
     public function getId(): ?int
     {
@@ -84,14 +84,14 @@ class Schedules
         return $this;
     }
 
-    public function getVeterinarianID(): ?Veterinarians
+    public function getVeterinarian(): ?Veterinarians
     {
-        return $this->veterinarianID;
+        return $this->veterinarian;
     }
 
-    public function setVeterinarianID(?Veterinarians $veterinarianID): static
+    public function setVeterinarian(?Veterinarians $veterinarian): static
     {
-        $this->veterinarianID = $veterinarianID;
+        $this->veterinarian = $veterinarian;
 
         return $this;
     }

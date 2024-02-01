@@ -55,7 +55,7 @@ class ClinicComplementaryInformationVoter extends Voter
         }
 
         foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicComplementaryInformation->getClinicId()) {
+            if ($userClinic === $clinicComplementaryInformation->getClinic()) {
                 return true;
             }
         }
@@ -70,7 +70,7 @@ class ClinicComplementaryInformationVoter extends Voter
         }
 
         foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicComplementaryInformation->getClinicId()) {
+            if ($userClinic === $clinicComplementaryInformation->getClinic()) {
                 return true;
             }
         }
@@ -85,7 +85,7 @@ class ClinicComplementaryInformationVoter extends Voter
         }
 
         foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicComplementaryInformation->getClinicId()) {
+            if ($userClinic === $clinicComplementaryInformation->getClinic()) {
                 return true;
             }
         }

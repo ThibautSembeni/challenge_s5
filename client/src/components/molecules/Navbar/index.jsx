@@ -16,9 +16,16 @@ export default function Navbar() {
   const [navigation, setNavigation] = useState([
     {
       name: "Mon Compte",
-      iconName: "UserIcon",
+      iconName: "CogIcon",
       type: "link",
       to: "/mon-compte",
+      current: false,
+    },
+    {
+      name: "Mon Espace",
+      iconName: "UserIcon",
+      type: "link",
+      to: "/mon-espace",
       current: false,
     },
     {
@@ -29,7 +36,6 @@ export default function Navbar() {
     },
   ]);
 
-  console.log(user);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -64,7 +70,7 @@ export default function Navbar() {
                     >
                       Vous êtes vétérinaire ?
                     </Link>
-                    <Link to={"#"}>Mes rendez-vous</Link>
+                    <Link to={"/mes-rendez-vous"}>Mes rendez-vous</Link>
                     <RadiosButtonsWithIcons
                       placeholder={`${user.firstname} ${user.lastname}`}
                       className={
@@ -74,9 +80,18 @@ export default function Navbar() {
                         [
                           {
                             name: "Mon Compte",
-                            iconName: "UserIcon",
+                            iconName: "CogIcon",
                             type: "link",
                             to: "/mon-compte",
+                          },
+                        ],
+                        [
+                          {
+                            name: "Mon Espace",
+                            iconName: "UserIcon",
+                            type: "link",
+                            to: "/mon-espace",
+                            current: false,
                           },
                         ],
                         [

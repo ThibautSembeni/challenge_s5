@@ -10,6 +10,7 @@ import {
   TrashIcon,
   UserPlusIcon,
   ArrowLeftOnRectangleIcon,
+  CogIcon,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 
@@ -26,6 +27,7 @@ const ICONS = {
   HeartIcon: HeartIcon,
   TrashIcon: TrashIcon,
   ArrowLeftOnRectangleIcon: ArrowLeftOnRectangleIcon,
+  CogIcon: CogIcon,
 };
 
 // Usage:
