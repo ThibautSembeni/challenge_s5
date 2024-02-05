@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { postChatbot } from "@/api/chatbot";
 import imgProfile from "@/assets/images/profile.png";
 
 function Chatbot() {
@@ -22,12 +22,7 @@ function Chatbot() {
         if (input.trim() !== "") {
             setIsLoading(true);
             try {
-                const response = await axios.post(
-                    `http://localhost:8888/chatbot`,
-                    {
-                        message: input,
-                    }
-                );
+                const response = await postChatbot(input);
 
                 setResponses([
                     ...responses,
@@ -154,7 +149,7 @@ function Chatbot() {
                                 className="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                onKeyPress={handleKeyPress}
+                                onKeyUp={handleKeyPress}
                             />
                             <button
                                 onClick={sendMessage}

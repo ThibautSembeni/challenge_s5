@@ -12,6 +12,6 @@ api_token_invalidate:
     path: /api/logout
 
 chatbot:
-    path: /chatbot
+    path: /api/chatbot
     methods: [POST]
     controller: App\Controller\Front\ChatbotController
