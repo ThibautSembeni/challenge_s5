@@ -1,6 +1,6 @@
 security:
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
 
     firewalls:
         dev:
@@ -19,8 +19,8 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             stateless: true
             jwt: ~
-#            refresh_jwt:
-#                check_path: api_refresh_token
+            #            refresh_jwt:
+            #                check_path: api_refresh_token
             refresh_jwt:
                 check_path: /api/token/refresh
             logout:
@@ -30,8 +30,8 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]
 
     access_control:
-    # - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
@@ -41,7 +41,8 @@ security:
         - { path: ^/api/clinics, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs,       roles: PUBLIC_ACCESS }
-        - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/chatbot, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: PUBLIC_ACCESS }
 
     providers:
         # used to reload user from session & other features (e.g. switch_user)
