@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Auth\User;
+use App\Filters\ClinicByManagerFilter;
 use App\Filters\CustomSearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Delete;
@@ -25,15 +27,15 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
-        new Post(normalizationContext: ['groups' => ['clinics:write:create']], security: "is_granted('PUBLIC_ACCESS')"),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']]),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
-        new Put(),
-        new Delete(),
-        new Patch()
+        new Delete(security: "is_granted('DELETE_CLINIC', object)"),
+        new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)")
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
     paginationPartial: false,
 )]
+#[ApiFilter(ClinicByManagerFilter::class)]
 class Clinics
 {
     #[ORM\Id]
@@ -42,6 +44,7 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
+    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
@@ -51,7 +54,7 @@ class Clinics
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -67,24 +70,24 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Veterinarians::class)]
     private Collection $veterinarians;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
     #[ApiFilter(CustomSearchFilter::class)]
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(length: 15)]
     private ?string $postalCode = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'veterinarians:read', 'clinics:read'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -96,12 +99,24 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
+    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[ORM\ManyToOne(inversedBy: 'clinic')]
+    private ?User $manager = null;
+
+    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[ORM\Column(nullable: true)]
+    private ?bool $isActif = null;
+
+    #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Payments::class)]
+    private Collection $payments;
+
     public function __construct()
     {
         $this->veterinarians = new ArrayCollection();
         $this->uuid = Uuid::v4();
         $this->clinicSchedules = new ArrayCollection();
         $this->clinicComplementaryInformation = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -302,6 +317,60 @@ class Clinics
                 $clinicComplementaryInformation->setClinicId(null);
             }
         }
+        return $this;
+    }
+
+    public function getManager(): ?User
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?User $manager): static
+    {
+        $this->manager = $manager;
+
+        return $this;
+    }
+
+    public function isIsActif(): ?bool
+    {
+        return $this->isActif;
+    }
+
+    public function setIsActif(?bool $isActif): static
+    {
+        $this->isActif = $isActif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payments>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payments $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setClinic($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payments $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getClinic() === $this) {
+                $payment->setClinic(null);
+            }
+        }
+
         return $this;
     }
 }

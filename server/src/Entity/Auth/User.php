@@ -5,53 +5,55 @@ namespace App\Entity\Auth;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Appointments;
+use App\Entity\Clinics;
 use App\Entity\Notifications;
+use App\Entity\Payments;
 use App\Entity\Pets;
+use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AuthRepository;
+use App\State\UserPasswordHasher;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-
-#[ORM\Entity()]
+use Symfony\Component\Uid\Uuid;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
+#[ORM\Entity(repositoryClass: AuthRepository::class)]
+#[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Post(),
+        new Post(processor: UserPasswordHasher::class),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']]),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class),
         new Get(uriTemplate: '/me', openapiContext: ['summary' => 'Get current user'], normalizationContext: ['groups' => ['user:read:full']], security: 'is_granted("ROLE_USER")',),
-
+        new Delete()
         // new Put(), // I don't use PUT, only PATCH
-        // new Delete(), // Disable DELETE method, do soft delete instead
     ],
-
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use Auth;
+    use TimestampableTrait;
 
-    #[Groups(['user:read'])]
-    #[ApiFilter(DateFilter::class)]
-    #[ORM\Column]
-    private DateTimeImmutable $createdAt;
-
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
@@ -66,28 +68,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $addresse = null;
+    private ?string $address = null;
 
     #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
+    #[Groups(['user:read', 'user:write:update'])]
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $city = null;
+
+    #[Groups(['user:read', 'user:write:update'])]
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt = null;
+
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
+    #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Clinics::class)]
+    private Collection $clinic;
+
+    #[ORM\OneToMany(mappedBy: 'person', targetEntity: Payments::class)]
+    private Collection $payments;
+
     public function __construct()
     {
-        $this->createdAt = new DateTimeImmutable();
         $this->pets = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-    }
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $createdAt): void
-    {
-        $this->createdAt = $createdAt;
+        $this->uuid = Uuid::v4();
+        $this->clinic = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getFirstname(): ?string
@@ -204,14 +216,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAddresse(): ?string
+    public function getAddress(): ?string
     {
-        return $this->addresse;
+        return $this->address;
     }
 
-    public function setAddresse(?string $addresse): static
+    public function setAddress(?string $address): static
     {
-        $this->addresse = $addresse;
+        $this->address = $address;
 
         return $this;
     }
@@ -228,5 +240,116 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): static
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime|null $deletedAt
+     * @return self
+     */
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
+
+    public function delete(): self
+    {
+        $this->deletedAt = new \DateTime();
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Clinics>
+     */
+    public function getClinic(): Collection
+    {
+        return $this->clinic;
+    }
+
+    public function addClinic(Clinics $clinic): static
+    {
+        if (!$this->clinic->contains($clinic)) {
+            $this->clinic->add($clinic);
+            $clinic->setManager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClinic(Clinics $clinic): static
+    {
+        if ($this->clinic->removeElement($clinic)) {
+            // set the owning side to null (unless already changed)
+            if ($clinic->getManager() === $this) {
+                $clinic->setManager(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payments>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payments $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payments $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getPerson() === $this) {
+                $payment->setPerson(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

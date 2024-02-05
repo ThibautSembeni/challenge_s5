@@ -3,5 +3,4 @@ when@dev: &dev
         fixtures_path: fixtures
         root_dirs:
             - '%kernel.project_dir%'
-
 when@test: *dev

@@ -48,20 +48,20 @@ class CustomSearchFilter extends AbstractFilter
 
         switch ($type) {
             case self::SEARCH_START_WITH:
-                $condition = $expr->like($propertyWithAlias, ":$searchParameterName");
+                $condition = $expr->like($expr->lower($propertyWithAlias), $expr->lower(":$searchParameterName"));
                 $value =  "{$value}%";
                 break;
             case self::SEARCH_END_WITH:
-                $condition = $expr->like($propertyWithAlias, ":$searchParameterName");
+                $condition = $expr->like($expr->lower($propertyWithAlias), $expr->lower(":$searchParameterName"));
                 $value =  "%{$value}";
                 break;
             case self::SEARCH_CONTAINS:
-                $condition = $expr->like($propertyWithAlias, ":$searchParameterName");
+                $condition = $expr->like($expr->lower($propertyWithAlias), $expr->lower(":$searchParameterName"));
                 $value =  "%{$value}%";
                 break;
             case self::SEARCH_EXACT:
             default:
-                $condition = $expr->eq($propertyWithAlias, ":$searchParameterName");
+                $condition = $expr->eq($expr->lower($propertyWithAlias), $expr->lower(":$searchParameterName"));
                 $value = "'{$value}'";
                 break;
         }

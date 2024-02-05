@@ -3,11 +3,15 @@
 namespace App\Repository;
 
 use App\Entity\Auth\Auth;
+use App\Entity\Auth\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Auth>
@@ -19,11 +23,11 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method Auth[]    findAll()
  * @method Auth[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AuthRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class AuthRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Auth::class);
+        parent::__construct($registry, User::class);
     }
 
     /**
@@ -64,4 +68,20 @@ class AuthRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    /**
+     * Loads the user for the given user identifier (e.g. username or email).
+     *
+     * This method must return null if the user is not found.
+     */
+    public function loadUserByIdentifier(string $identifier): ?UserInterface
+    {
+        // TODO: Implement loadUserByIdentifier() method.
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.deletedAt IS NULL')
+            ->andWhere('u.email = :val')
+            ->setParameter('val', $identifier)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

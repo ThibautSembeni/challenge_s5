@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import RadiosButtonsWithIcons from "@/components/atoms/RadiosButtons/RadiosButtonsWithIcons.jsx";
+import logo from "@/assets/images/logo.png";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +28,8 @@ export default function Navbar() {
       onClick: () => logout(),
     },
   ]);
+
+  console.log(user);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -35,11 +38,9 @@ export default function Navbar() {
             <div className="flex h-16 justify-between items-center">
               <div className="flex px-2 lg:px-0">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
-                  />
+                  <Link to={"/"}>
+                    <img className="h-8 w-auto" src={logo} alt="Vetcare" />
+                  </Link>
                 </div>
               </div>
               <div className={"flex items-center justify-center text-sm gap-2"}>
@@ -57,6 +58,12 @@ export default function Navbar() {
                 </div>
                 {isAuthenticated ? (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
+                    <Link
+                      to={"/inscription/informations"}
+                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    >
+                      Vous êtes vétérinaire ?
+                    </Link>
                     <Link to={"#"}>Mes rendez-vous</Link>
                     <RadiosButtonsWithIcons
                       placeholder={`${user.firstname} ${user.lastname}`}
@@ -86,12 +93,6 @@ export default function Navbar() {
                 ) : (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
                     <Link
-                      to={"/practicien-register"}
-                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      Vous êtes vétérinaire ?
-                    </Link>
-                    <Link
                       to="/login"
                       className="text-sm font-semibold leading-6 text-gray-900"
                     >
@@ -111,7 +112,7 @@ export default function Navbar() {
                   <Fragment key={item.name}>
                     {item.type === "link" && (
                       <Link
-                        to={item.href}
+                        to={item.to}
                         className={classNames(
                           item.current
                             ? "bg-indigo-50 border-indigo-500 text-indigo-700"
@@ -119,7 +120,6 @@ export default function Navbar() {
                           "block border-l-4 py-2 pl-3 pr-4 text-base font-medium hover:bg-gray-50",
                         )}
                         onClick={(e) => {
-                          e.preventDefault();
                           setNavigation(
                             navigation.map((nav) => ({
                               ...nav,
@@ -150,13 +150,6 @@ export default function Navbar() {
             ) : (
               <>
                 <div className="py-4">
-                  <Link
-                    to={""}
-                    className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    Vous êtes vétérinaire ?
-                  </Link>
-
                   <Link
                     to="/login"
                     className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"

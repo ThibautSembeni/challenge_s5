@@ -1,3 +1,7 @@
+import logo from "@/assets/images/logo.png";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useTranslation } from "react-i18next";
+
 const navigation = {
   solutions: [
     { name: "Marketing", href: "#" },
@@ -26,18 +30,17 @@ const navigation = {
 };
 
 export default function Footer() {
+  const {
+    t,
+    i18n: { changeLanguage, language },
+  } = useTranslation();
   return (
     <footer className="bg-white mt-10" aria-labelledby="footer-heading">
-      <h2 id="footer-heading" className="sr-only">
-        Footer
+      <h2 id="footer-heading" className="sr-only"> <!-- TRANSLATION -->{t("footer.Footer.h2")}
       </h2>
       <div className="mx-auto max-w-7xl px-6 pb-8 pt-6 lg:px-8 ">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <img
-            className="h-7"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Company name"
-          />
+          <img className="h-12" src={logo} alt="VetCare" />
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
@@ -78,7 +81,8 @@ export default function Footer() {
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
                 <h3 className="text-sm font-semibold leading-6 text-gray-900">
-                  Company
+                  <!-- TRANSLATION -->
+                  {t("footer.company.h3")}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.company.map((item) => (
@@ -113,10 +117,45 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 lg:flex lg:items-center lg:justify-between">
+        <div className="mt-12 xl:mt-0">
+          <h3 className="text-base font-medium text-gray-900">
+            {t("footer.language.title.level3")}
+          </h3>
+          <div className="mt-4 sm:max-w-xs">
+            <fieldset className="w-full">
+              <label htmlFor="language" className="sr-only">
+                {t("footer.language.title.level3")}
+              </label>
+              <div className="relative">
+                <select
+                  id="language"
+                  name="language"
+                  className="block w-full appearance-none rounded-md border border-gray-300 bg-white bg-none py-2 pl-3 pr-10 text-base text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  defaultValue={language}
+                  onChange={(e) => {
+                    changeLanguage(e.target.value);
+                  }}
+                >
+                  <option value={"en"}>{t("footer.language.values.en")}</option>
+                  <option value={"fr"}>{t("footer.language.values.fr")}</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                  <ChevronDownIcon
+                    className="h-4 w-4 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div
+          id="newsletter"
+          className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 lg:flex lg:items-center lg:justify-between"
+        >
           <div>
             <h3 className="text-sm font-semibold leading-6 text-gray-900">
-              Subscribe to our newsletter
+              {t("footer.newsletter.h3")}
             </h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
               The latest news, articles, and resources, sent to your inbox

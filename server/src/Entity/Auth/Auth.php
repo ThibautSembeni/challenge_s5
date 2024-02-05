@@ -2,12 +2,14 @@
 
 namespace App\Entity\Auth;
 
+use ApiPlatform\Metadata\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\TokenExtractorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait Auth
@@ -15,7 +17,14 @@ trait Auth
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
+
+    #[Groups(['user:read', 'user:read:full'])]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ApiProperty(identifier: true)]
+    private Uuid $uuid;
 
     #[Groups(['user:read', 'user:write', 'user:read:full'])]
     #[Assert\Email()]
@@ -34,6 +43,12 @@ trait Auth
 
     #[Groups(['user:write', 'user:write:update'])]
     private ?string $plainPassword = null;
+
+    #[Groups(['user:write:update'])]
+    private ?string $oldPassword = null;
+
+    #[Groups(['user:write:update'])]
+    private ?string $newPassword = null;
 
     public function getId(): ?int
     {
@@ -109,4 +124,28 @@ trait Auth
         // $this->plainPassword = null;
     }
 
+    public function getUuid(): Uuid
+    {
+        return $this->uuid;
+    }
+
+    public function setOldPassword(?string $oldPassword): void
+    {
+        $this->oldPassword = $oldPassword;
+    }
+
+    public function getOldPassword(): ?string
+    {
+        return $this->oldPassword;
+    }
+
+    public function setNewPassword(?string $newPassword): void
+    {
+        $this->newPassword = $newPassword;
+    }
+
+    public function getNewPassword(): ?string
+    {
+        return $this->newPassword;
+    }
 }
