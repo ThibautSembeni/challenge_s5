@@ -10,6 +10,9 @@ import Teams from "@/pages/Admin/Clinic/Teams.jsx";
 import Pet from "@/pages/Admin/Clinic/Pet.jsx";
 import Information from "@/pages/Admin/Clinic/Information.jsx";
 import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
+import FullAdminHome from "@/pages/Admin/SuperAdmin/Home.jsx";
+import FullAdminVeterinarians from "@/pages/Admin/SuperAdmin/Veterinarians.jsx";
+import FullAdminClinics from "@/pages/Admin/SuperAdmin/Clinics.jsx";
 import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
 import InformationRegister from "@/pages/PracticienRegister/InformationRegister.jsx";
@@ -117,6 +120,28 @@ const list = [
         path: "informations-cabinet",
         element: <Information />,
         roles: ["ROLE_MANAGER"],
+      },
+    ],
+  },
+
+  ////// CLINIC SUPER ADMINISTRATION //////
+  {
+    path: "full-administration",
+    children: [
+      {
+        path: "accueil",
+        element: <FullAdminHome />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "veterinaires",
+        element: <FullAdminVeterinarians />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "cabinets",
+        element: <FullAdminClinics />,
+        roles: ["ROLE_ADMIN"],
       },
     ],
   },

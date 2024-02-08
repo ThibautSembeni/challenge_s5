@@ -50,7 +50,7 @@ class ClinicComplementaryInformationVoter extends Voter
 
     private function canCreate(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 
@@ -65,7 +65,7 @@ class ClinicComplementaryInformationVoter extends Voter
 
     private function canEdit(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 
@@ -80,7 +80,7 @@ class ClinicComplementaryInformationVoter extends Voter
 
     private function canDelete(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 

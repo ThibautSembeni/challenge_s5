@@ -49,7 +49,7 @@ class VeterinarianVoter extends Voter
 
     private function canCreate(Veterinarians $veterinarians, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 
@@ -64,7 +64,7 @@ class VeterinarianVoter extends Voter
 
     private function canEdit(Veterinarians $veterinarians, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 
@@ -79,7 +79,7 @@ class VeterinarianVoter extends Voter
 
     private function canDelete(Veterinarians $veterinarians, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 

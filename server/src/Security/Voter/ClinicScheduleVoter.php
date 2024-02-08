@@ -47,7 +47,7 @@ class ClinicScheduleVoter extends Voter
 
     private function canCreate(ClinicSchedules $clinicSchedule, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 
@@ -62,7 +62,7 @@ class ClinicScheduleVoter extends Voter
 
     private function canDelete(ClinicSchedules $clinicSchedule, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
         }
 
