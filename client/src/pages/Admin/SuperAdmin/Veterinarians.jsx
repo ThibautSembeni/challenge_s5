@@ -8,16 +8,14 @@ import {
   VideoCameraIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
-import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
+import {getAllVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {
-  CalendarDaysIcon,
-  IdentificationIcon,
+  CalendarDaysIcon, EyeIcon,
+  IdentificationIcon, TrashIcon,
 } from "@heroicons/react/24/outline/index.js";
-import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
 const stats = [
   {id: 1, name: "Nombre de rdv aujourd'hui", stat: "71", icon: UsersIcon},
@@ -45,6 +43,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [navigation, setNavigation] = useState([]);
+  const [veterinarians, setVeterinarians] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,12 +52,26 @@ export default function Home() {
         setNavigation([
           {name: "Tableau de bord", href: "/full-administration/accueil", icon: HomeIcon, current: false},
           {name: "Vétérinaires", href: "/full-administration/veterinaires", icon: IdentificationIcon, current: true},
-          {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false},
+          {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false, clinicStayValidation: 3},
         ]);
       }
     }
     setIsLoading(false);
   }, [user]);
+
+  useEffect(() => {
+    fetchVeterinarians().then(() => setIsLoading(false));
+  }, []);
+
+  const fetchVeterinarians = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getAllVeterinarians();
+      setVeterinarians(response.data["hydra:member"])
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  };
 
   return (
     <>
@@ -87,9 +100,9 @@ export default function Home() {
                     <div className="px-4 sm:px-6 lg:px-8">
                       <div className="sm:flex sm:items-center">
                         <div className="sm:flex-auto">
-                          <h1 className="text-base font-semibold leading-6 text-gray-900">Les vérinaires</h1>
+                          <h1 className="text-base font-semibold leading-6 text-gray-900">Les vétérinaires</h1>
                           <p className="mt-2 text-sm text-gray-700">
-                            Retrouvez ici la liste des vétérinaires de tous les cabinets.
+                            Retrouvez ici la liste des vétérinaires.
                           </p>
                         </div>
                         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -109,51 +122,51 @@ export default function Home() {
                               <tr>
                                 <th scope="col"
                                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                  Name
+                                  Nom
                                 </th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Title
+                                  Contact
                                 </th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Status
-                                </th>
-                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Role
+                                  Clinique
                                 </th>
                                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                                  <span className="sr-only">Edit</span>
+                                  <span className="sr-only">Modifier</span>
                                 </th>
                               </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-200 bg-white">
-                              {people.map((person) => (
-                                <tr key={person.email}>
+                              {veterinarians.map((veterinarian) => (
+                                <tr key={veterinarian.uuid}>
                                   <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                                     <div className="flex items-center">
-                                      <div className="h-11 w-11 flex-shrink-0">
-                                        <img className="h-11 w-11 rounded-full" src={person.image} alt=""/>
-                                      </div>
                                       <div className="ml-4">
-                                        <div className="font-medium text-gray-900">{person.name}</div>
-                                        <div className="mt-1 text-gray-500">{person.email}</div>
+                                        <div className="font-medium text-gray-900">{veterinarian.firstname} {veterinarian.lastname}</div>
                                       </div>
                                     </div>
                                   </td>
                                   <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <div className="text-gray-900">{person.title}</div>
-                                    <div className="mt-1 text-gray-500">{person.department}</div>
+                                    <div className="text-gray-900">{veterinarian.email}</div>
+                                    <div className="mt-1 text-gray-500">{veterinarian.phone}</div>
                                   </td>
                                   <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      <span
-                        className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                        Active
-                      </span>
+                                    <div className="text-gray-900">{veterinarian.clinic.name}</div>
                                   </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">{person.role}</td>
                                   <td
-                                    className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                      Edit<span className="sr-only">, {person.name}</span>
+                                    className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 flex items-center gap-2">
+                                    <a href="#" className="text-blue-600 hover:text-blue-900">
+                                      <EyeIcon className="h-5 w-5" aria-hidden="true"/>
+                                      <span className="sr-only">, {veterinarian.name}</span>
+                                    </a>
+
+                                    <a href="#" className="text-orange-600 hover:text-orange-900">
+                                      <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
+                                      <span className="sr-only">, {veterinarian.name}</span>
+                                    </a>
+
+                                    <a href="#" className="text-red-600 hover:text-red-900">
+                                      <TrashIcon className="h-5 w-5" aria-hidden="true"/>
+                                      <span className="sr-only">, {veterinarian.name}</span>
                                     </a>
                                   </td>
                                 </tr>

@@ -16,7 +16,6 @@ import {
   CalendarDaysIcon,
   IdentificationIcon,
 } from "@heroicons/react/24/outline/index.js";
-import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
 const stats = [
   {id: 1, name: "Nombre de rdv aujourd'hui", stat: "71", icon: UsersIcon},
