@@ -17,50 +17,6 @@ import {
 import { getAllPets } from "@/api/pets/index.jsx";
 import { Link } from "react-router-dom";
 
-const navigation = [
-  {
-    name: "Accueil",
-    href: "/administration/accueil",
-    icon: HomeIcon,
-    current: false,
-  },
-  {
-    name: "Équipe",
-    href: "/administration/equipe",
-    icon: UsersIcon,
-    current: false,
-  },
-  {
-    name: "Calendrier d'ouverture",
-    href: "/administration/calendrier-ouverture",
-    icon: CalendarIcon,
-    current: false,
-  },
-  {
-    name: "Rendez-vous",
-    href: "/administration/rendez-vous",
-    icon: CalendarDaysIcon,
-    current: false,
-  },
-  {
-    name: "Téléconsultation",
-    href: "/administration/animaux",
-    icon: VideoCameraIcon,
-    current: false,
-  },
-  {
-    name: "Animaux",
-    href: "/administration/animaux",
-    icon: IdentificationIcon,
-    current: true,
-  },
-  {
-    name: "Informations cabinet",
-    href: "/administration/informations-cabinet",
-    icon: PencilSquareIcon,
-    current: false,
-  },
-];
 const userNavigation = [{ name: "Déconnexion", href: "#" }];
 
 export default function Pet() {
@@ -73,6 +29,7 @@ export default function Pet() {
   const [pets, setPets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     Promise.all([getOneClinics(uuid), getAllPets()])
@@ -104,6 +61,59 @@ export default function Pet() {
         setIsLoading(false);
       });
   }, [uuid]);
+
+  useEffect(() => {
+    let newNavigation = [
+      {
+        name: "Accueil",
+        href: "/administration/accueil",
+        icon: HomeIcon,
+        current: false,
+      },
+      {
+        name: "Rendez-vous",
+        href: "/administration/rendez-vous",
+        icon: CalendarDaysIcon,
+        current: false,
+      },
+      {
+        name: "Téléconsultation",
+        href: "/administration/animaux",
+        icon: VideoCameraIcon,
+        current: false,
+      },
+      {
+        name: "Animaux",
+        href: "/administration/animaux",
+        icon: IdentificationIcon,
+        current: true,
+      },
+    ];
+
+    if (user.roles.includes("ROLE_MANAGER")) {
+      newNavigation.push(
+        {
+          name: "Équipe",
+          href: "/administration/equipe",
+          icon: UsersIcon,
+          current: false,
+        },
+        {
+          name: "Calendrier d'ouverture",
+          href: "/administration/calendrier-ouverture",
+          icon: CalendarIcon,
+          current: false,
+        },
+        {
+          name: "Informations cabinet",
+          href: "/administration/informations-cabinet",
+          icon: PencilSquareIcon,
+          current: false,
+        }
+      );
+    }
+    setNavigation(newNavigation);
+  }, [user.roles]);
 
   return (
     <>

@@ -25,50 +25,6 @@ const stats = [
   { id: 3, name: "Avg. Click Rate", stat: "24.57%", icon: CursorArrowRaysIcon },
 ];
 
-const navigation = [
-  {
-    name: "Accueil",
-    href: "/administration/accueil",
-    icon: HomeIcon,
-    current: true,
-  },
-  {
-    name: "Équipe",
-    href: "/administration/equipe",
-    icon: UsersIcon,
-    current: false,
-  },
-  {
-    name: "Calendrier d'ouverture",
-    href: "/administration/calendrier-ouverture",
-    icon: CalendarIcon,
-    current: false,
-  },
-  {
-    name: "Rendez-vous",
-    href: "/administration/rendez-vous",
-    icon: CalendarDaysIcon,
-    current: false,
-  },
-  {
-    name: "Téléconsultation",
-    href: "/administration/animaux",
-    icon: VideoCameraIcon,
-    current: false,
-  },
-  {
-    name: "Animaux",
-    href: "/administration/animaux",
-    icon: IdentificationIcon,
-    current: false,
-  },
-  {
-    name: "Informations cabinet",
-    href: "/administration/informations-cabinet",
-    icon: PencilSquareIcon,
-    current: false,
-  },
-];
 const userNavigation = [{ name: "Déconnexion", href: "#" }];
 
 const people = [
@@ -91,6 +47,7 @@ export default function Home() {
   const [veterinariansData, setVeterinariansData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     fetchAndSetClinicsData(user.uuid).then(() => setIsLoading(false));
@@ -142,6 +99,59 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    let newNavigation = [
+      {
+        name: "Accueil",
+        href: "/administration/accueil",
+        icon: HomeIcon,
+        current: true,
+      },
+      {
+        name: "Rendez-vous",
+        href: "/administration/rendez-vous",
+        icon: CalendarDaysIcon,
+        current: false,
+      },
+      {
+        name: "Téléconsultation",
+        href: "/administration/animaux",
+        icon: VideoCameraIcon,
+        current: false,
+      },
+      {
+        name: "Animaux",
+        href: "/administration/animaux",
+        icon: IdentificationIcon,
+        current: false,
+      },
+    ];
+
+    if (user.roles.includes("ROLE_MANAGER")) {
+      newNavigation.push(
+        {
+          name: "Équipe",
+          href: "/administration/equipe",
+          icon: UsersIcon,
+          current: false,
+        },
+        {
+          name: "Calendrier d'ouverture",
+          href: "/administration/calendrier-ouverture",
+          icon: CalendarIcon,
+          current: false,
+        },
+        {
+          name: "Informations cabinet",
+          href: "/administration/informations-cabinet",
+          icon: PencilSquareIcon,
+          current: false,
+        }
+      );
+    }
+    setNavigation(newNavigation);
+  }, [user.roles]);
+
   return (
     <>
       {isLoading ? (
@@ -166,47 +176,49 @@ export default function Home() {
 
               <main className="py-10">
                 <div className="px-4 sm:px-6 lg:px-8">
-                  <div className="mb-20">
-                    <h3 className="text-base font-semibold leading-6 text-gray-900">
-                      Statistiques
-                    </h3>
+                  {user.roles.includes("ROLE_MANAGER") && (
+                    <div className="mb-20">
+                      <h3 className="text-base font-semibold leading-6 text-gray-900">
+                        Statistiques
+                      </h3>
 
-                    <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                      {stats.map((item) => (
-                        <div
-                          key={item.id}
-                          className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
-                        >
-                          <dt>
-                            <div className="absolute rounded-md bg-indigo-500 p-3">
-                              <item.icon
-                                className="h-6 w-6 text-white"
-                                aria-hidden="true"
-                              />
-                            </div>
-                            <p className="ml-16 truncate text-sm font-medium text-gray-500">
-                              {item.name}
-                            </p>
-                          </dt>
-                          <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                            <p className="text-2xl font-semibold text-gray-900">
-                              {item.stat}
-                            </p>
-                            <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                              <div className="text-sm">
-                                <a
-                                  href="#"
-                                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                                >
-                                  Tout voir
-                                </a>
+                      <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        {stats.map((item) => (
+                          <div
+                            key={item.id}
+                            className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
+                          >
+                            <dt>
+                              <div className="absolute rounded-md bg-indigo-500 p-3">
+                                <item.icon
+                                  className="h-6 w-6 text-white"
+                                  aria-hidden="true"
+                                />
                               </div>
-                            </div>
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </div>
+                              <p className="ml-16 truncate text-sm font-medium text-gray-500">
+                                {item.name}
+                              </p>
+                            </dt>
+                            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                              <p className="text-2xl font-semibold text-gray-900">
+                                {item.stat}
+                              </p>
+                              <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
+                                <div className="text-sm">
+                                  <a
+                                    href="#"
+                                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                                  >
+                                    Tout voir
+                                  </a>
+                                </div>
+                              </div>
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </div>
+                  )}
 
                   <div className="mb-20">
                     <div className="sm:flex sm:items-center">
