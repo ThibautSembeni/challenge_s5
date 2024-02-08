@@ -91,7 +91,7 @@ const list = [
       {
         path: "accueil",
         element: <ClinicAdminHome />,
-        roles: ["ROLE_MANAGER"],
+        roles: ["ROLE_MANAGER", "ROLE_VETERINARIAN"],
       },
       {
         path: "equipe",
@@ -106,12 +106,12 @@ const list = [
       {
         path: "rendez-vous",
         element: <Appointment />,
-        roles: ["ROLE_MANAGER"],
+        roles: ["ROLE_MANAGER", "ROLE_VETERINARIAN"],
       },
       {
         path: "animaux",
         element: <Pet />,
-        roles: ["ROLE_MANAGER"],
+        roles: ["ROLE_MANAGER", "ROLE_VETERINARIAN"],
       },
       {
         path: "informations-cabinet",
