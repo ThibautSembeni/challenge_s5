@@ -45,4 +45,16 @@ class SchedulesRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function getLastSchedule($value): ?Schedules
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.veterinarian = :val')
+            ->setParameter('val', $value)
+            ->orderBy('s.startTime', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

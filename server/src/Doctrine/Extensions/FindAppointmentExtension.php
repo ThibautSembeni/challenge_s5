@@ -40,6 +40,7 @@ final class FindAppointmentExtension implements QueryCollectionExtensionInterfac
         if ($operation->getName() === 'getOneAppointment') {
             return;
         }
+
         $this->addWhere($queryBuilder, $resourceClass);
     }
 

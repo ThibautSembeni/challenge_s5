@@ -20,6 +20,7 @@ class AppointmentHistory
     private ?Appointments $appointment = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointmentHistories')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Veterinarians $veterinarian = null;
 
     #[ORM\Column]

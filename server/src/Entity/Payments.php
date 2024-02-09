@@ -29,6 +29,7 @@ class Payments
     private ?User $person = null;
 
     #[ORM\ManyToOne(inversedBy: 'payments')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
     public function getId(): ?int

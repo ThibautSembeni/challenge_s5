@@ -12,18 +12,18 @@ export const getOneAppointment = async (uuid) => {
 };
 
 export const createAppointment = async ({
-  name,
-  species,
-  breed,
-  birthdate,
-  medicalHistory,
+  date,
+  service,
+  veterinarian,
+  pet,
+  schedules,
 }) => {
   return axiosInstance.post(`/appointments`, {
-    name,
-    species,
-    breed,
-    birthdate,
-    medicalHistory,
+    date,
+    service,
+    veterinarian,
+    pet,
+    schedules,
   });
 };
 export const updateAppointment = async (
