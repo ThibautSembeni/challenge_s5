@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SchedulesRepository::class)]
 #[ApiResource(
     operations: [
+        // TODO: Add the get_free_schedules_by_veterinarian operation only for user
         new GetCollection(
             uriTemplate: '/veterinarians/{uuid}/schedules',
             uriVariables: [
@@ -21,7 +22,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             paginationEnabled: false,
             paginationClientEnabled: false,
             normalizationContext: ['groups' => ['schedules:read:collection']],
-            name: 'get_free_schedules_by_veterinarian')
+            name: 'get_free_schedules_by_veterinarian'
+        ),
+        new GetCollection(
+            normalizationContext: ['groups' => ['schedules:read:collection']],
+            security: 'is_granted("ROLE_VETERINARIAN")',
+            name: 'get_all_schedules'
+        )
     ]
 )]
 class Schedules

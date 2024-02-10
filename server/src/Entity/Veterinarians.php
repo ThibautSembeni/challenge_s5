@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
 use App\Controller\GenerateSchedulesController;
+use App\Entity\Auth\User;
 use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -90,6 +91,9 @@ class Veterinarians
 
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Services::class)]
     private Collection $services;
+
+    #[ORM\OneToOne(inversedBy: 'veterinarian', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -298,6 +302,18 @@ class Veterinarians
                 $service->setVeterinarian(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

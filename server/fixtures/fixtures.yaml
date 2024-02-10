@@ -11,7 +11,7 @@ App\Entity\Auth\User:
         phone: "<phoneNumber()>"
         postalCode: "<postcode()>"
         city: "<city()>"
-    user_{user, admin, manager}:
+    user_{user, admin, manager, veterinarian}:
         firstname: "<current()>"
         lastname: "<lastname()>"
         email: '<current()>\@user.fr'

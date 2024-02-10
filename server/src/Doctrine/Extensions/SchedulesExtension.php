@@ -14,7 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 final class SchedulesExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
-    public function __construct()
+    public function __construct(private readonly Security $security)
     {
     }
 
@@ -24,6 +24,11 @@ final class SchedulesExtension implements QueryCollectionExtensionInterface, Que
             $rootAlias = $queryBuilder->getRootAliases()[0];
             $queryBuilder->leftJoin(sprintf('%s.appointments', $rootAlias), 'appointments');
             $queryBuilder->andWhere(sprintf('appointments IS NULL'));
+        } else if ($operation->getName() === 'get_all_schedules') {
+            $user = $this->security->getUser();
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.veterinarian = :veterinarian', $rootAlias));
+            $queryBuilder->setParameter('veterinarian', $user->getVeterinarian());
         }
     }
 
