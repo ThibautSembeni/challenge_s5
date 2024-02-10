@@ -43,6 +43,7 @@ export default function BookingAppointment() {
     { id: "6", name: "Confirmation", href: "#", status: "upcoming" },
   ]);
   const [success, setSuccess] = useState("loading");
+  const [errorState, setErrorState] = useState(null);
 
   const handleSubmitCabinet = (event) => {
     event.preventDefault();
@@ -59,6 +60,17 @@ export default function BookingAppointment() {
     event.preventDefault();
     const dataInfo = new FormData(event.currentTarget);
     const data = Object.fromEntries(dataInfo.entries());
+    if (!data["schedule[id]"]) {
+      // No value selected, prevent form submission and show error message
+      setErrorState({
+        type: "error",
+        message: "Veuillez sélectionner un créneau de consultation",
+      });
+      return;
+    }
+    if (errorState) {
+      setErrorState(null);
+    }
     setSelectedSchedule(data);
     const newSteps = [...steps];
     newSteps[3].status = "complete";
@@ -282,6 +294,9 @@ export default function BookingAppointment() {
           )}{" "}
           {steps.find((step) => step.status === "current").id === "4" && (
             <form onSubmit={handleSubmitSchedule}>
+              {errorState && (
+                <Alert type={errorState.type} title={errorState.message} />
+              )}
               <Schedules schedules={schedules} />
               <div className="mt-6 flex items-center justify-end gap-x-6">
                 <button

@@ -103,6 +103,7 @@ export default function Schedules({ schedules }) {
                                       "flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold uppercase sm:flex-1",
                                     )
                                   }
+                                  required
                                 >
                                   <RadioGroup.Label as="span">
                                     {timeFormatter.format(date)}

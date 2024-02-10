@@ -34,9 +34,9 @@ final class AppointmentNotificationEventSubscriber implements EventSubscriberInt
         if (!$appointment instanceof Appointments || Request::METHOD_POST !== $method) {
             return;
         }
-
+        setlocale(LC_TIME, 'fr_FR.UTF-8');
         $this->notifier->sendMessage(
-            'Your appointment has been scheduled successfully!',
+            "Bonjour \n" . 'RDV ' . $appointment->getDate()->format('l d F \à H\h i') . ' avec ' . $appointment->getVeterinarian()->getFirstname() . ' ' . $appointment->getVeterinarian()->getLastname() . ' pour ' . $appointment->getPet()->getName() . " \n" . 'Motif: ' . $appointment->getService()->getDescription(),
             $appointment->getUserID()->getPhone()
         );
     }

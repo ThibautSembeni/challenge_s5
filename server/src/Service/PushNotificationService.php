@@ -13,7 +13,7 @@ class PushNotificationService
     {
         $sms = new SmsMessage(
             $phone,
-            "Vetcare \n " . $message,
+            "Vetcare \n" . $message,
             '+14345973473'
         );
 
