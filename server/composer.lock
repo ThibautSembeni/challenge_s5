@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "529119dfdd97687f1a65dcbd58f1823b",
+    "content-hash": "2454a4205fdad91a12b26c9a37b4d4b2",
     "packages": [
         {
             "name": "api-platform/core",
@@ -6795,6 +6795,84 @@
             "time": "2022-05-10T14:24:36+00:00"
         },
         {
+            "name": "symfony/notifier",
+            "version": "v6.3.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/notifier.git",
+                "reference": "18daf06a6d4f80af73edba30fa10cbc85c1db459"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/notifier/zipball/18daf06a6d4f80af73edba30fa10cbc85c1db459",
+                "reference": "18daf06a6d4f80af73edba30fa10cbc85c1db459",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/log": "^1|^2|^3"
+            },
+            "conflict": {
+                "symfony/event-dispatcher": "<5.4",
+                "symfony/event-dispatcher-contracts": "<2.5",
+                "symfony/http-client-contracts": "<2.5",
+                "symfony/http-kernel": "<5.4"
+            },
+            "require-dev": {
+                "symfony/event-dispatcher-contracts": "^2.5|^3",
+                "symfony/http-client-contracts": "^2.5|^3",
+                "symfony/http-foundation": "^5.4|^6.0",
+                "symfony/messenger": "^5.4|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Notifier\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Sends notifications via one or more channels (email, SMS, ...)",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "notification",
+                "notifier"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/notifier/tree/v6.3.12"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-01-23T14:35:58+00:00"
+        },
+        {
             "name": "symfony/password-hasher",
             "version": "v6.3.0",
             "source": {
@@ -8697,6 +8775,80 @@
                 }
             ],
             "time": "2023-05-06T09:53:41+00:00"
+        },
+        {
+            "name": "symfony/twilio-notifier",
+            "version": "v6.3.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/twilio-notifier.git",
+                "reference": "d80852fbf872db3e8e06404a6b6d12a867126cd4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/twilio-notifier/zipball/d80852fbf872db3e8e06404a6b6d12a867126cd4",
+                "reference": "d80852fbf872db3e8e06404a6b6d12a867126cd4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/http-client": "^5.4|^6.0",
+                "symfony/notifier": "^6.2.7"
+            },
+            "conflict": {
+                "symfony/http-foundation": "<6.2"
+            },
+            "require-dev": {
+                "symfony/webhook": "^6.3"
+            },
+            "type": "symfony-notifier-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Notifier\\Bridge\\Twilio\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Twilio Notifier Bridge",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "notifier",
+                "sms",
+                "twilio"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/twilio-notifier/tree/v6.3.12"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-01-23T14:35:58+00:00"
         },
         {
             "name": "symfony/uid",

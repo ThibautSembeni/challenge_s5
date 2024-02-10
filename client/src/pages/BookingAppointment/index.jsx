@@ -105,7 +105,7 @@ export default function BookingAppointment() {
     setSteps(newSteps);
     createAppointmentRequest({
       date: selectedSchedule[`schedule[startTime]`],
-      reason: selectedMotif[`motif[value]`],
+      service: selectedMotif[`motif[value]`],
       veterinarian: veterinarian["@id"],
       pet: data["complementInformations[value]"],
       schedules: selectedSchedule[`schedule[id]`],
@@ -157,7 +157,16 @@ export default function BookingAppointment() {
         }
       })
       .catch((err) => {
-        setSuccess("error");
+        console.log(err.response.data["hydra:description"]);
+        if (
+          err?.response?.data["hydra:description"]?.startsWith(
+            "Unable to send the SMS",
+          )
+        ) {
+          setSuccess("success");
+        } else {
+          setSuccess("error");
+        }
       });
   };
 
