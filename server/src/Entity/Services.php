@@ -39,7 +39,7 @@ class Services
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['services:read:collection', 'services:write:item'])]
+    #[Groups(['services:read:collection', 'services:write:item', 'appointments:read:collections', 'appointments:read:item'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 

@@ -87,6 +87,7 @@ class Appointments
     #[ORM\OneToOne(inversedBy: 'appointments', cascade: ['persist', 'remove'])]
     private ?Schedules $schedules = null;
 
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?Services $service = null;
 

@@ -6,6 +6,7 @@ namespace App\Normalizer;
 
 use App\Entity\Appointments;
 use App\Entity\Pets;
+use App\Entity\Services;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
@@ -33,6 +34,12 @@ class AppointmentsDenormalizer implements DenormalizerInterface
             $uuid = basename($data['pet']);
             $pet = $this->entityManager->getRepository(Pets::class)->find($uuid);
             $appointments->setPet($pet);
+        }
+
+        if (isset($data['service'])) {
+            $id = basename($data['service']);
+            $service = $this->entityManager->getRepository(Services::class)->find($id);
+            $appointments->setService($service);
         }
 
         return $appointments;
