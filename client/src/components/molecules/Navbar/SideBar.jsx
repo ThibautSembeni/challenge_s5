@@ -17,6 +17,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
   const [clinicsData, setClinicsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { selectedClinic, setSelectedClinic } = useClinic();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchAndSetClinicsData(uuid).then(() => setIsLoading(false));
@@ -101,7 +102,8 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                     />
                   </div>
                   <nav className="flex flex-1 flex-col">
-                    <div className="mb-4">
+                    {user.roles.includes("ROLE_MANAGER") && (
+                      <div className="mb-4">
                       <Listbox value={getNameClinic(selectedClinic)} onChange={(clinic) => {setSelectedClinic(clinic.uuid)}}>
                         {({ open }) => (
                           <>
@@ -189,6 +191,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                         )}
                       </Listbox>
                     </div>
+                    )}
 
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
@@ -217,20 +220,21 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                           ))}
                         </ul>
                       </li>
-                      <li>
-                        <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
-                        <ul role="list" className="-mx-2 mt-2 space-y-1">
-                          {teams.map((team) => (
-                            <li key={team.uuid}>
-                              <a
-                                href={team.href}
-                                className={classNames(
-                                  team.current
-                                    ? 'bg-gray-50 text-indigo-600'
-                                    : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                )}
-                              >
+                      {user.roles.includes("ROLE_MANAGER") && (
+                        <li>
+                          <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
+                          <ul role="list" className="-mx-2 mt-2 space-y-1">
+                            {teams.map((team) => (
+                              <li key={team.uuid}>
+                                <a
+                                  href={team.href}
+                                  className={classNames(
+                                    team.current
+                                      ? 'bg-gray-50 text-indigo-600'
+                                      : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                  )}
+                                >
                                   <span
                                     className={classNames(
                                       team.current
@@ -241,12 +245,13 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                                   >
                                     {team.initial}
                                   </span>
-                                <span className="truncate uppercase">{team.name}</span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
+                                  <span className="truncate uppercase">{team.name}</span>
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      )}
                     </ul>
                   </nav>
                 </div>
@@ -268,13 +273,18 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
             />
           </div>
           <nav className="flex flex-1 flex-col">
-            <div className="mb-4">
-              <Listbox value={getNameClinic(selectedClinic)} onChange={(clinic) => {setSelectedClinic(clinic)}}>
-                {({ open }) => (
+            {user.roles.includes("ROLE_MANAGER") && (
+              <div className="mb-4">
+              <Listbox value={getNameClinic(selectedClinic)} onChange={(clinic) => {
+                setSelectedClinic(clinic)
+              }}>
+                {({open}) => (
                   <>
-                    <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Cabinet :</Listbox.Label>
+                    <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Cabinet
+                      :</Listbox.Label>
                     <div className="relative mt-2">
-                      <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      <Listbox.Button
+                        className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         <span className="block truncate">{getNameClinic(selectedClinic)}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -357,6 +367,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                 )}
               </Listbox>
             </div>
+            )}
 
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
@@ -385,20 +396,21 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                   ))}
                 </ul>
               </li>
-              <li>
-                <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
-                <ul role="list" className="-mx-2 mt-2 space-y-1">
-                  {teams.map((team) => (
-                    <li key={team.uuid}>
-                      <a
-                        href={team.href}
-                        className={classNames(
-                          team.current
-                            ? 'bg-gray-50 text-indigo-600'
-                            : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                        )}
-                      >
+              {user.roles.includes("ROLE_MANAGER") && (
+                <li>
+                  <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
+                  <ul role="list" className="-mx-2 mt-2 space-y-1">
+                    {teams.map((team) => (
+                      <li key={team.uuid}>
+                        <a
+                          href={team.href}
+                          className={classNames(
+                            team.current
+                              ? 'bg-gray-50 text-indigo-600'
+                              : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                          )}
+                        >
                             <span
                               className={classNames(
                                 team.current
@@ -409,12 +421,13 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                             >
                               {team.initial}
                             </span>
-                        <span className="truncate uppercase">{team.name}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
+                          <span className="truncate uppercase">{team.name}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
@@ -423,29 +436,30 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
   );
 }
 
-export function TopSideBar ({ navigation, setSidebarOpen }) {
-  const { user, isAuthenticated } = useAuth();
+export function TopSideBar({navigation, setSidebarOpen}) {
+  const {user, isAuthenticated} = useAuth();
 
   return (
     <>
-      <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+      <div
+        className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
         <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
           <span className="sr-only">Open sidebar</span>
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
         </button>
 
         {/* Separator */}
-        <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
+        <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true"/>
 
         <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 justify-end">
           <div className="flex items-center gap-x-4 lg:gap-x-6">
             <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
               <span className="sr-only">Voir les notifications</span>
-              <BellIcon className="h-6 w-6" aria-hidden="true" />
+              <BellIcon className="h-6 w-6" aria-hidden="true"/>
             </button>
 
             {/* Separator */}
-            <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
+            <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"/>
 
             {/* Profile dropdown */}
             <Menu as="div" className="relative">

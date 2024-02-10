@@ -27,6 +27,14 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
+    App\EventListener\VeterinariansEventSubscriber:
+        arguments:
+            $mailer: '@mailer.mailer'
+            $passwordHasher: '@security.user_password_hasher'
+        tags:
+            - { name: 'doctrine.event_listener', event: 'postPersist' }
+            - { name: 'doctrine.event_listener', event: 'postRemove' }
+
     App\State\UserPasswordHasher:
         bind:
             $processor: '@api_platform.doctrine.orm.state.persist_processor'
