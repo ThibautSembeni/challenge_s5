@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use App\Repository\SchedulesRepository;
@@ -28,6 +29,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['schedules:read:collection']],
             security: 'is_granted("ROLE_VETERINARIAN")',
             name: 'get_all_schedules'
+        ),
+        new Delete(
+            // TODO: Not sure about my VeterinarianScheduleVoter
+            security: "is_granted('ROLE_VETERINARIAN') and object.getVeterinarian() === user.getVeterinarian()",
+            securityMessage: 'Only the veterinarian can delete the schedule.',
+            name: 'delete_schedule'
         )
     ]
 )]

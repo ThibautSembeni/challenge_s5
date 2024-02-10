@@ -18,6 +18,7 @@ import MonEspace from "@/pages/MonEspace/index.jsx";
 import Appointments from "@/pages/Appointment/index.jsx";
 import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
+import Logout from "@/pages/Auth/Logout.jsx";
 const list = [
   {
     path: "",
@@ -127,6 +128,10 @@ const list = [
   {
     path: "register",
     element: <Register />,
+  },
+  {
+    path: "logout",
+    element: <Logout />,
   },
   {
     path: "*",
