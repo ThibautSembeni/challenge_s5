@@ -7,13 +7,33 @@ import { useMemo } from "react";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
+// Helper function to get the number of days in a month
+function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+// Helper function to get the number of days in the previous month
+function getDaysInPrevMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+
+// Helper function to get the first day of the month
+function getFirstDayOfMonth(year, month) {
+  return new Date(year, month, 1).getDay();
+}
+
+// Helper function to get the last day of the month
+function getLastDayOfMonth(year, month) {
+  return new Date(year, month + 1, 0).getDay();
+}
 function getDays(date) {
   const year = date.getFullYear();
   const month = date.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const daysInPrevMonth = new Date(year, month, 0).getDate();
-  const firstDayOfMonth = new Date(year, month, 1).getDay();
-  const lastDayOfMonth = new Date(year, month + 1, 0).getDay();
+  const daysInMonth = getDaysInMonth(year, month);
+  const daysInPrevMonth = getDaysInPrevMonth(year, month);
+  const firstDayOfMonth = getFirstDayOfMonth(year, month);
+  const lastDayOfMonth = getLastDayOfMonth(year, month);
 
   const days = [];
   for (let i = 1; i <= firstDayOfMonth; i++) {
@@ -51,8 +71,19 @@ export default function MiniCalendar({
   date,
   setDate,
   canSwitchMonth = false,
+  locale = "fr-FR",
 }) {
   const days = useMemo(() => getDays(date), [date]);
+  const daysOfWeek = useMemo(
+    () =>
+      [...Array(7).keys()].map(
+        (_, i) =>
+          new Intl.DateTimeFormat(locale, { weekday: "long" }).format(
+            new Date(1970, 0, i + 4),
+          )[0],
+      ),
+    [],
+  );
   return useMemo(() => {
     return (
       <div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
@@ -74,7 +105,7 @@ export default function MiniCalendar({
             </button>
           )}
           <div className="flex-auto text-sm font-semibold">
-            {date.toLocaleDateString("fr-FR", {
+            {date.toLocaleDateString(locale, {
               month: "long",
               year: "numeric",
             })}
@@ -97,13 +128,9 @@ export default function MiniCalendar({
           )}
         </div>
         <div className="mt-6 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
-          <div>M</div>
-          <div>T</div>
-          <div>W</div>
-          <div>T</div>
-          <div>F</div>
-          <div>S</div>
-          <div>S</div>
+          {daysOfWeek.map((day, idx) => (
+            <div key={idx}>{day}</div>
+          ))}
         </div>
         <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
           {days.map((day, dayIdx) => (

@@ -41,66 +41,73 @@ Date.prototype.endOfWeek = function () {
   );
 };
 
-const getSelectedDateDisplayLabel = (date, view) => {
+const getSelectedDateDisplayLabel = (date, view, locale) => {
   switch (view) {
     case "day":
-      return date.toLocaleDateString("fr-FR", {
+      return date.toLocaleDateString(locale, {
         day: "numeric",
         month: "short",
       });
     case "week":
       const startOfWeek = date.startOfWeek();
       const endOfWeek = date.endOfWeek();
-      return `${startOfWeek.toLocaleDateString("fr-FR", {
+      return `${startOfWeek.toLocaleDateString(locale, {
         day: "numeric",
         month: "short",
-      })} - ${endOfWeek.toLocaleDateString("fr-FR", {
+      })} - ${endOfWeek.toLocaleDateString(locale, {
         day: "numeric",
         month: "short",
       })}`;
     case "month":
-      return date.toLocaleDateString("fr-FR", {
+      return date.toLocaleDateString(locale, {
         month: "long",
         year: "numeric",
       });
     case "year":
-      return date.toLocaleDateString("fr-FR", { year: "numeric" });
+      return date.toLocaleDateString(locale, { year: "numeric" });
     default:
       return "";
   }
 };
 
-const getDisplayLabel = (date, view) => {
+const getDisplayLabel = (date, view, locale) => {
   switch (view) {
     case "day":
-      return date.toLocaleDateString("fr-FR", {
+      return date.toLocaleDateString(locale, {
         day: "numeric",
         month: "long",
         year: "numeric",
       });
     case "week":
     case "month":
-      return date.toLocaleDateString("fr-FR", {
+      return date.toLocaleDateString(locale, {
         month: "long",
         year: "numeric",
       });
     case "year":
-      return date.toLocaleDateString("fr-FR", { year: "numeric" });
+      return date.toLocaleDateString(locale, { year: "numeric" });
     default:
       return "";
   }
 };
 
-export default function Header({ view, setView, date, setDate, addEvent }) {
+export default function Header({
+  view,
+  setView,
+  date,
+  setDate,
+  addEvent,
+  locale = "fr-FR",
+}) {
   const currentSelectedView = useMemo(() => selectViews[view], [view]);
   const currentSelectedDate = useMemo(() => selectDate[view], [view]);
   const currentSelectedDateDisplayLabel = useMemo(
-    () => getSelectedDateDisplayLabel(date, view),
-    [date, view],
+    () => getSelectedDateDisplayLabel(date, view, locale),
+    [date, view, locale],
   );
   const currentDisplayLabel = useMemo(
-    () => getDisplayLabel(date, view),
-    [date, view],
+    () => getDisplayLabel(date, view, locale),
+    [date, view, locale],
   );
   const changeDate = useCallback(
     (amount) => {
