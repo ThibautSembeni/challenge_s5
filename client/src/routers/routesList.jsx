@@ -19,6 +19,7 @@ import Appointments from "@/pages/Appointment/index.jsx";
 import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
 import Logout from "@/pages/Auth/Logout.jsx";
+import Manage from "@/pages/Manage/index.jsx";
 const list = [
   {
     path: "",
@@ -118,6 +119,23 @@ const list = [
         path: "informations-cabinet",
         element: <Information />,
         roles: ["ROLE_MANAGER"],
+      },
+    ],
+  },
+  {
+    path: "manage",
+    element: <Outlet />,
+    roles: ["ROLE_VETERINARIAN"],
+    children: [
+      {
+        path: "",
+        element: <Manage />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+      {
+        path: "calendar",
+        element: <Manage type={"calendar"} />,
+        roles: ["ROLE_VETERINARIAN"],
       },
     ],
   },
