@@ -60,10 +60,11 @@ class Appointments
     #[ORM\Column]
     private ?string $status = null;
 
-    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'feedbacks:read'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?Veterinarians $veterinarian = null;
 
+    #[Groups(['feedbacks:read'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 
