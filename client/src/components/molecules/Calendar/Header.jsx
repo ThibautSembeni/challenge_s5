@@ -41,7 +41,7 @@ Date.prototype.endOfWeek = function () {
   );
 };
 
-const getDisplayLabel = (date, view) => {
+const getSelectedDateDisplayLabel = (date, view) => {
   switch (view) {
     case "day":
       return date.toLocaleDateString("fr-FR", {
@@ -70,9 +70,34 @@ const getDisplayLabel = (date, view) => {
   }
 };
 
+const getDisplayLabel = (date, view) => {
+  switch (view) {
+    case "day":
+      return date.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    case "week":
+    case "month":
+      return date.toLocaleDateString("fr-FR", {
+        month: "long",
+        year: "numeric",
+      });
+    case "year":
+      return date.toLocaleDateString("fr-FR", { year: "numeric" });
+    default:
+      return "";
+  }
+};
+
 export default function Header({ view, setView, date, setDate, addEvent }) {
   const currentSelectedView = useMemo(() => selectViews[view], [view]);
   const currentSelectedDate = useMemo(() => selectDate[view], [view]);
+  const currentSelectedDateDisplayLabel = useMemo(
+    () => getSelectedDateDisplayLabel(date, view),
+    [date, view],
+  );
   const currentDisplayLabel = useMemo(
     () => getDisplayLabel(date, view),
     [date, view],
@@ -119,7 +144,7 @@ export default function Header({ view, setView, date, setDate, addEvent }) {
     <header className="flex flex-none items-center justify-between border-b border-gray-200 px-6 py-4">
       <h1 className="text-base font-semibold leading-6 text-gray-900">
         <time dateTime={date.toISOString().slice(0, 7)}>
-          {date.toLocaleString("fr-FR", { month: "long", year: "numeric" })}
+          {currentDisplayLabel}
         </time>{" "}
       </h1>
       <div className="flex items-center">
@@ -136,7 +161,7 @@ export default function Header({ view, setView, date, setDate, addEvent }) {
             type="button"
             className="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
           >
-            {currentDisplayLabel}
+            {currentSelectedDateDisplayLabel}
           </button>
           <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
           <button
