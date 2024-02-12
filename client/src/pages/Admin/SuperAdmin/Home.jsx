@@ -8,9 +8,8 @@ import {
   VideoCameraIcon,
   PencilSquareIcon, UserGroupIcon, TicketIcon, CurrencyEuroIcon,
 } from "@heroicons/react/24/outline";
-import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
+import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {
@@ -42,26 +41,9 @@ const people = [
 
 export default function Home() {
   const {user} = useAuth();
+  const { navigation } = useSuperAdmin();
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [navigation, setNavigation] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (user) {
-      if (user.roles.includes("ROLE_ADMIN")) {
-        setNavigation([
-          {name: "Tableau de bord", href: "/full-administration/accueil", icon: HomeIcon, current: true},
-          {name: "Vétérinaires", href: "/full-administration/veterinaires", icon: IdentificationIcon, current: false},
-          {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false, clinicStayValidation: 3},
-          {name: "Utilisateurs", href: "/full-administration/utilisateurs", icon: UserGroupIcon, current: false},
-          {name: "Animaux", href: "/full-administration/animaux", icon: TicketIcon, current: false},
-          {name: "Paiements", href: "/full-administration/paiements", icon: CurrencyEuroIcon, current: false},
-        ]);
-      }
-    }
-    setIsLoading(false);
-  }, [user]);
 
   return (
     <>

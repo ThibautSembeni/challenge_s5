@@ -12,7 +12,7 @@ function classNames(...classes) {
 }
 
 export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
-
+  console.log("navigation", navigation);
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>

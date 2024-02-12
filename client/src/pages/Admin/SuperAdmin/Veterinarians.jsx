@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {getAllVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
+import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {
@@ -34,27 +35,10 @@ const people = [
 
 export default function Veterinarians() {
   const {user} = useAuth();
+  const { navigation } = useSuperAdmin();
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [navigation, setNavigation] = useState([]);
   const [veterinarians, setVeterinarians] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (user) {
-      if (user.roles.includes("ROLE_ADMIN")) {
-        setNavigation([
-          {name: "Tableau de bord", href: "/full-administration/accueil", icon: HomeIcon, current: false},
-          {name: "Vétérinaires", href: "/full-administration/veterinaires", icon: IdentificationIcon, current: true},
-          {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false, clinicStayValidation: 3},
-          {name: "Utilisateurs", href: "/full-administration/utilisateurs", icon: UserGroupIcon, current: false},
-          {name: "Animaux", href: "/full-administration/animaux", icon: TicketIcon, current: false},
-          {name: "Paiements", href: "/full-administration/paiements", icon: CurrencyEuroIcon, current: false},
-        ]);
-      }
-    }
-    setIsLoading(false);
-  }, [user]);
 
   useEffect(() => {
     fetchVeterinarians().then(() => setIsLoading(false));
@@ -64,7 +48,7 @@ export default function Veterinarians() {
     try {
       setIsLoading(true);
       const response = await getAllVeterinarians();
-      setVeterinarians(response.data["hydra:member"])
+      setVeterinarians(response.data["hydra:member"]);
     } catch (error) {
       console.error("Erreur lors de la récupération des données : ", error);
     }

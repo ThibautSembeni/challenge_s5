@@ -24,6 +24,7 @@ import MonEspace from "@/pages/MonEspace/index.jsx";
 import Appointments from "@/pages/Appointment/index.jsx";
 import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
+
 const list = [
   {
     path: "",
@@ -93,6 +94,8 @@ const list = [
   ////// CLINIC ADMINISTRATION //////
   {
     path: "administration",
+    element: <Outlet />,
+    context: 'clinicAdmin',
     children: [
       {
         path: "accueil",
@@ -126,10 +129,11 @@ const list = [
       },
     ],
   },
-
   ////// CLINIC SUPER ADMINISTRATION //////
   {
     path: "full-administration",
+    element: <Outlet />,
+    context: 'superAdmin',
     children: [
       {
         path: "accueil",

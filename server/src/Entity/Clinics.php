@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 
+use ApiPlatform\Doctrine\Odm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Auth\User;

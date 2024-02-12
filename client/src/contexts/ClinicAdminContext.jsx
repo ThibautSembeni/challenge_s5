@@ -8,7 +8,7 @@ export const useClinic = () => {
 
 export const ClinicAdminProvider = ({ children }) => {
   const [selectedClinic, setSelectedClinic] = useState(localStorage.getItem('selectedClinic') || "all");
-  const [isLoaded, setIsLoaded] = useState(false); // Ajout d'un état pour le chargement
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
