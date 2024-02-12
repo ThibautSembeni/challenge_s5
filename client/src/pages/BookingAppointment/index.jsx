@@ -372,7 +372,53 @@ export default function BookingAppointment() {
                   title={
                     <span>
                       <strong>Rendez-vous annulé</strong>, impossible de valider
-                      votre rendez-vous, veuillez réessayer.
+                      votre rendez-vous,{" "}
+                      <span
+                        className={"cursor-pointer"}
+                        onClick={() => {
+                          setSteps([
+                            {
+                              id: "1",
+                              name: "Cabinet",
+                              href: "#",
+                              status: "current",
+                            },
+                            {
+                              id: "2",
+                              name: "Type de consultation",
+                              href: "#",
+                              status: "upcoming",
+                            },
+                            {
+                              id: "3",
+                              name: "Motif",
+                              href: "#",
+                              status: "upcoming",
+                            },
+                            {
+                              id: "4",
+                              name: "Date et heure",
+                              href: "#",
+                              status: "upcoming",
+                            },
+                            {
+                              id: "5",
+                              name: "Complément d'informations",
+                              href: "#",
+                              status: "upcoming",
+                            },
+                            {
+                              id: "6",
+                              name: "Confirmation",
+                              href: "#",
+                              status: "upcoming",
+                            },
+                          ]);
+                          setErrorState(null);
+                        }}
+                      >
+                        veuillez réessayer.
+                      </span>
                     </span>
                   }
                 />
