@@ -60,7 +60,15 @@ export default function Navbar() {
                 </div>
                 {isAuthenticated ? (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
-                    <Link to={"#"}>{t("components.molecules.navbar.index.isVeterinaire.link")}</Link>
+
+                    <Link
+                      to={"/inscription/informations"}
+                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    >
+                      {t("components.molecules.navbar.index.isVeterinaire.link")}
+                    </Link>
+                    <Link to={"#"}> {t("components.molecules.navbar.index.isAthenticated.link")}</Link>
+
                     <RadiosButtonsWithIcons
                       placeholder={`${user.firstname} ${user.lastname}`}
                       className={
@@ -89,12 +97,14 @@ export default function Navbar() {
                 ) : (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
                     <Link
+
                       to={"/practicien-register"}
                       className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
                       {t("components.molecules.navbar.index.isAthenticated.link")}
                     </Link>
                     <Link
+
                       to="/login"
                       className="text-sm font-semibold leading-6 text-gray-900"
                     >
@@ -153,13 +163,7 @@ export default function Navbar() {
               <>
                 <div className="py-4">
                   <Link
-                    to={""}
-                    className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    {t("components.molecules.navbar.index.isVeterinaire.link")}
-                  </Link>
 
-                  <Link
                     to="/login"
                     className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >

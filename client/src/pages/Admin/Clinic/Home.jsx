@@ -9,7 +9,7 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import { getOneClinics } from "@/api/clinic/Clinic.jsx";
+import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
 import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
@@ -17,8 +17,12 @@ import {
   CalendarDaysIcon,
   IdentificationIcon,
 } from "@heroicons/react/24/outline/index.js";
+
 //translation
 import { useTranslation } from "react-i18next";
+
+import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+
 
 const stats = [
   { id: 1, name: "Nombre de rdv aujourd'hui", stat: "71", icon: UsersIcon },
@@ -89,51 +93,61 @@ export default function Home() {
   //translation
   const { t } = useTranslation();
   const { user } = useAuth();
-  console.log(user);
-  const uuid = user.clinic.uuid;
-  const [clinicInfo, setClinicInfo] = useState({
-    clinic: null,
-    teams: [],
-    clinicSchedules: [],
-    earliestStart: 24,
-    latestEnd: 0,
-  });
+  const { selectedClinic } = useClinic();
+  const [clinicsData, setClinicsData] = useState([]);
+  const [veterinariansData, setVeterinariansData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    getOneClinics(uuid)
-      .then((clinicData) => {
-        const { data } = clinicData;
-        setClinicInfo((prev) => ({
-          ...prev,
-          clinic: data,
-          teams: data.veterinarians.map(
-            ({ firstname, lastname, specialties, uuid }) => ({
-              name: `${firstname} ${lastname}`,
-              initial: `${firstname[0]}`,
-              role: specialties,
-              uuid,
-              current: false,
-              imageUrl:
-                "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-              href: `/veterinaire/${uuid}`,
-            }),
-          ),
-          clinicSchedules: data.clinicSchedules.map((schedule) => ({
-            day: schedule.day,
-            startTime: new Date(schedule.timeslot_id.start_time),
-            endTime: new Date(schedule.timeslot_id.end_time),
-            isOpen: schedule.timeslot_id.isOpen,
-          })),
-        }));
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la récupération des données : ", error);
-        setIsLoading(false);
-      });
-  }, [uuid]);
+    fetchAndSetClinicsData(user.uuid).then(() => setIsLoading(false));
+  }, [user.uuid, selectedClinic]);
+
+  const fetchAndSetClinicsData = async (userUuid) => {
+    try {
+      setIsLoading(true);
+
+      let clinics;
+      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+        const response = await getAllClinicsByManager(userUuid);
+        clinics = response.data['hydra:member'];
+      } else {
+        const response = await getOneClinics(selectedClinic);
+        clinics = [response.data];
+      }
+
+      const transformedClinics = clinics.map(clinic => ({
+        clinicInfo: clinic,
+        teams: clinic.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
+          name: `${firstname} ${lastname}`,
+          initial: `${firstname[0]}`,
+          role: specialties,
+          uuid,
+          current: false,
+          imageUrl: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+          href: `/veterinaire/${uuid}`,
+        })),
+        clinicSchedules: clinic.clinicSchedules.map(schedule => ({
+          day: schedule.day,
+          startTime: new Date(schedule.timeslot_id.start_time),
+          endTime: new Date(schedule.timeslot_id.end_time),
+          isOpen: schedule.timeslot_id.isOpen,
+        })),
+        earliestStart: 24,
+        latestEnd: 0,
+      }));
+
+      setClinicsData(transformedClinics);
+
+      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+        setVeterinariansData(transformedClinics.flatMap(clinic => clinic.teams));
+      } else {
+        setVeterinariansData(transformedClinics[0].teams);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  };
 
   return (
     <>
@@ -144,9 +158,10 @@ export default function Home() {
           <div>
             <SideBar
               navigation={navigation}
-              teams={clinicInfo.teams}
+              teams={veterinariansData}
               sidebarOpen={sidebarOpen}
               setSidebarOpen={setSidebarOpen}
+              uuid={user.uuid}
             />
 
             <div className="lg:pl-72">
@@ -224,6 +239,7 @@ export default function Home() {
                         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                           <table className="min-w-full divide-y divide-gray-300">
                             <thead>
+
                               <tr>
                                 <th
                                   scope="col"
@@ -256,58 +272,59 @@ export default function Home() {
                                   <span className="sr-only">{t("pages.admin.clinic.home.thModifier")}</span>
                                 </th>
                               </tr>
+
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
-                              {people.map((person) => (
-                                <tr key={person.email}>
-                                  <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                                    <div className="flex items-center">
-                                      <div className="h-11 w-11 flex-shrink-0">
-                                        <img
-                                          className="h-11 w-11 rounded-full"
-                                          src={person.image}
-                                          alt=""
-                                        />
+                            {people.map((person) => (
+                              <tr key={person.email}>
+                                <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                  <div className="flex items-center">
+                                    <div className="h-11 w-11 flex-shrink-0">
+                                      <img
+                                        className="h-11 w-11 rounded-full"
+                                        src={person.image}
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div className="ml-4">
+                                      <div className="font-medium text-gray-900">
+                                        {person.name}
                                       </div>
-                                      <div className="ml-4">
-                                        <div className="font-medium text-gray-900">
-                                          {person.name}
-                                        </div>
-                                        <div className="mt-1 text-gray-500">
-                                          {person.email}
-                                        </div>
+                                      <div className="mt-1 text-gray-500">
+                                        {person.email}
                                       </div>
                                     </div>
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <div className="text-gray-900">
-                                      {person.title}
-                                    </div>
-                                    <div className="mt-1 text-gray-500">
-                                      {person.department}
-                                    </div>
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                      Actif
-                                    </span>
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    {person.role}
-                                  </td>
-                                  <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                    <a
-                                      href="#"
-                                      className="text-indigo-600 hover:text-indigo-900"
-                                    >
-                                      Modifier{" "}
-                                      <span className="sr-only">
-                                        , {person.name}
-                                      </span>
-                                    </a>
-                                  </td>
-                                </tr>
-                              ))}
+                                  </div>
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                  <div className="text-gray-900">
+                                    {person.title}
+                                  </div>
+                                  <div className="mt-1 text-gray-500">
+                                    {person.department}
+                                  </div>
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                  Actif
+                                </span>
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                  {person.role}
+                                </td>
+                                <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                  <a
+                                    href="#"
+                                    className="text-indigo-600 hover:text-indigo-900"
+                                  >
+                                    Modifier{" "}
+                                    <span className="sr-only">
+                                    , {person.name}
+                                  </span>
+                                  </a>
+                                </td>
+                              </tr>
+                            ))}
                             </tbody>
                           </table>
                         </div>
@@ -316,9 +333,14 @@ export default function Home() {
                   </div>
 
                   <div className="mb-20">
-                    <CalendarOpenCloseComponent
-                      clinicInformation={clinicInfo}
-                    />
+                    {clinicsData.map((clinic) => (
+                      <div key={clinic.clinicInfo.uuid}>
+                        <CalendarOpenCloseComponent
+                          clinicInformation={clinic}
+                          titleClinic={true}
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </main>

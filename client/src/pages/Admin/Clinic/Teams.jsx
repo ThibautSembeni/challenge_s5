@@ -4,7 +4,7 @@ import {
   HomeIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
-import {getOneClinics} from "@/api/clinic/Clinic.jsx";
+import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import TeamSectionComponent from "@/components/organisms/Veterinarian/TeamSectionComponent.jsx";
@@ -18,8 +18,12 @@ import {
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 import {createVeterinarianByClinic} from "@/api/clinic/Veterinarian.jsx";
+
 //translation
 import { useTranslation } from "react-i18next";
+
+import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
@@ -39,11 +43,10 @@ export default function Teams () {
   //translation
   const { t } = useTranslation();
   const { user } = useAuth();
-  const uuid = user.clinic.uuid;
-  const [clinicInfo, setClinicInfo] = useState({
-    clinic: null,
-    teams: [],
-  });
+  const { selectedClinic } = useClinic();
+  const [clinicsData, setClinicsData] = useState([]);
+  const [veterinariansData, setVeterinariansData] = useState([]);
+  const [inputClinic, setInputClinic] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,26 +55,56 @@ export default function Teams () {
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    loadClinicData().then(() => setIsLoading(false));
-  }, [uuid]);
+    if (user && user.uuid) {
+      fetchAndSetClinicsData(user.uuid).then(() => setIsLoading(false));
+    }
+  }, [user.uuid, selectedClinic]);
 
-  const loadClinicData = async () => {
+  useEffect(() => {
+    if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+      setInputClinic(true);
+    } else {
+      setInputClinic(false);
+    }
+  }, [selectedClinic]);
+
+  const fetchAndSetClinicsData = async (userUuid) => {
+    if (!userUuid) {
+      return;
+    }
+
     try {
-      const clinicData = await getOneClinics(uuid);
-      const { data } = clinicData;
-      setClinicInfo(prev => ({
-        ...prev,
-        clinic: data,
-        teams: data.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
+      setIsLoading(true);
+
+      let clinics;
+      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+        const response = await getAllClinicsByManager(userUuid);
+        clinics = response.data['hydra:member'];
+      } else {
+        const response = await getOneClinics(selectedClinic);
+        clinics = [response.data];
+      }
+
+      const transformedClinics = clinics.map(clinic => ({
+        clinicInfo: clinic,
+        teams: clinic.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
           name: `${firstname} ${lastname}`,
           initial: `${firstname[0]}`,
           role: specialties,
           uuid,
           current: false,
-          imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+          imageUrl: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
           href: `/veterinaire/${uuid}`,
         })),
       }));
+
+      setClinicsData(transformedClinics);
+
+      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+        setVeterinariansData(transformedClinics.flatMap(clinic => clinic.teams));
+      } else {
+        setVeterinariansData(transformedClinics[0].teams);
+      }
     } catch (error) {
       console.error("Erreur lors de la récupération des données : ", error);
     }
@@ -81,15 +114,26 @@ export default function Teams () {
   const closeModal = () => setIsModalOpen(false);
 
   const handleSubmit = async (event) => {
-    setIsLoading(true);
     event.preventDefault();
+
+    setIsLoading(true);
 
     const data = new FormData(event.currentTarget);
 
     const firstname = data.get("firstname");
     const lastname = data.get("lastname");
     const email = data.get("email");
-    const clinicId = clinicInfo.clinic['@id'];
+
+    let clinicId;
+    if (inputClinic) {
+      clinicId = `/api/clinics/${data.get("clinic")}`;
+    } else {
+      if (!selectedClinic || selectedClinic === "undefined") {
+        return;
+      }
+
+      clinicId = `/api/clinics/${selectedClinic}`;
+    }
 
     const createVeterinarianByClinicResponse = await createVeterinarianByClinic({
       firstname,
@@ -99,7 +143,7 @@ export default function Teams () {
     });
 
     if (createVeterinarianByClinicResponse.success) {
-      await loadClinicData().then(() => setIsLoading(false));
+      await fetchAndSetClinicsData(user.uuid);
 
       setIsLoading(false);
       setIsSuccess(true);
@@ -137,7 +181,7 @@ export default function Teams () {
               isSuccess={isSuccess}
             />
 
-            <SideBar navigation={navigation} teams={clinicInfo.teams} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <SideBar navigation={navigation} teams={veterinariansData} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} uuid={user.uuid} />
 
             <div className="lg:pl-72">
               <TopSideBar navigation={userNavigation} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -163,7 +207,28 @@ export default function Teams () {
                     <Modal isOpen={isModalOpen} onClose={closeModal} title="{t('pages.admin.clinic.teams.modalAttrTitle')}">
                       <form onSubmit={handleSubmit}>
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
+                          {inputClinic && (
+                            <div className="col-span-full">
+                              <label htmlFor="clinic" className="block text-sm font-medium leading-6 text-gray-900">
+                                Cabinet
+                              </label>
+                              <div className="mt-2">
+                                <select
+                                  id="clinic"
+                                  name="clinic"
+                                  autoComplete="clinic"
+                                  required={true}
+                                  className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                >
+                                  {clinicsData.map((clinic) => (
+                                    <Fragment key={clinic.clinicInfo.uuid}>
+                                      <option value={clinic.clinicInfo.uuid}>{clinic.clinicInfo.name}</option>
+                                    </Fragment>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          )}
                           <div className="sm:col-span-3">
                             <label htmlFor="firstname" className="block text-sm font-medium leading-6 text-gray-900">
                               {t("pages.admin.clinic.teams.labelFirstName")}
@@ -231,7 +296,7 @@ export default function Teams () {
                       </form>
                     </Modal>
 
-                    <TeamSectionComponent teamsProps={clinicInfo.teams} admin={true} />
+                    <TeamSectionComponent teamsProps={veterinariansData} admin={true} />
                   </div>
                 </div>
               </main>

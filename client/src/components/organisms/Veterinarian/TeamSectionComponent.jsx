@@ -29,6 +29,14 @@ function TeamSectionComponent({ teamsProps, admin = false }) {
       setTimeout(() => {
         setShowNotificationToast(false);
       }, 10000);
+    } else {
+      setIsSuccess(false);
+      setMessage(deleteItem.message);
+      setShowNotificationToast(true);
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
     }
   }
 

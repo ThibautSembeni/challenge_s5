@@ -199,7 +199,7 @@ export default function ClinicProfil() {
 
             {clinicInfo.complementaryInformations.length && (
               <ComplementaryInformationComponent
-                complementaryInformations={clinicInfo.complementaryInformations}
+                complementaryInformationsProps={clinicInfo.complementaryInformations}
               />
             )}
 

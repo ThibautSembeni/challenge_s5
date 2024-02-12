@@ -1,17 +1,53 @@
-import {Dialog, Menu, Transition} from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import React, {Fragment} from "react";
+import {Dialog, Menu, Transition, Listbox} from '@headlessui/react';
+import {ChevronUpDownIcon, XMarkIcon} from '@heroicons/react/24/outline';
+import React, {Fragment, useEffect, useState} from "react";
 import {Bars3Icon, BellIcon} from "@heroicons/react/24/outline/index.js";
 import dogImg from "@/assets/images/dog.jpg";
 import logo from "@/assets/images/logo.png";
-import {ChevronDownIcon} from "@heroicons/react/20/solid/index.js";
+import {CheckIcon, ChevronDownIcon} from "@heroicons/react/20/solid/index.js";
 import {useAuth} from "@/contexts/AuthContext.jsx";
+import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+import {getAllClinicsByManager} from "@/api/clinic/Clinic.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen }) {
+export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen, uuid }) {
+  const [clinicsData, setClinicsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { selectedClinic, setSelectedClinic } = useClinic();
+
+  useEffect(() => {
+    fetchAndSetClinicsData(uuid).then(() => setIsLoading(false));
+  }, [uuid, selectedClinic]);
+
+  const fetchAndSetClinicsData = async (userUuid) => {
+    try {
+      setIsLoading(true);
+
+      const response = await getAllClinicsByManager(userUuid);
+      const clinics = response.data['hydra:member'];
+
+      const transformedClinics = clinics.map(clinic => ({
+        clinicInfo: clinic,
+      }));
+
+      setClinicsData(transformedClinics);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  };
+
+  if (selectedClinic === "all" || selectedClinic === "default" || typeof selectedClinic === undefined) {
+    setSelectedClinic("Voir tous les cabinets");
+  }
+
+  const getNameClinic = (uuid) => {
+    const clinic = clinicsData.find((clinic) => clinic.clinicInfo.uuid === uuid);
+    return clinic ? clinic.clinicInfo.name : "Voir tous les cabinets";
+  }
+
   return (
     <>
 
@@ -66,6 +102,95 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                     />
                   </div>
                   <nav className="flex flex-1 flex-col">
+                    <div className="mb-4">
+                      <Listbox value={getNameClinic(selectedClinic)} onChange={(clinic) => {setSelectedClinic(clinic.uuid)}}>
+                        {({ open }) => (
+                          <>
+                            <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Cabinet :</Listbox.Label>
+                            <div className="relative mt-2">
+                              <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                <span className="block truncate">{getNameClinic(selectedClinic)}</span>
+                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                              </span>
+                              </Listbox.Button>
+
+                              <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                  <Listbox.Option
+                                    key="default"
+                                    className={({ active }) =>
+                                      classNames(
+                                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                                      )
+                                    }
+                                    value="Voir tous les cabinets"
+                                  >
+                                    {({ selected, active }) => (
+                                      <>
+                                  <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                    Voir tous les cabinets
+                                  </span>
+
+                                        {selected ? (
+                                          <span
+                                            className={classNames(
+                                              active ? 'text-white' : 'text-indigo-600',
+                                              'absolute inset-y-0 right-0 flex items-center pr-4'
+                                            )}
+                                          >
+                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                          </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                  {clinicsData.map((clinic) => (
+                                    <Listbox.Option
+                                      key={clinic.clinicInfo.uuid}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                                          'relative cursor-default select-none py-2 pl-3 pr-9'
+                                        )
+                                      }
+                                      value={clinic.clinicInfo.name}
+                                    >
+                                      {({ selected, active }) => (
+                                        <>
+                                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                          {clinic.clinicInfo.name}
+                                        </span>
+
+                                          {selected ? (
+                                            <span
+                                              className={classNames(
+                                                active ? 'text-white' : 'text-indigo-600',
+                                                'absolute inset-y-0 right-0 flex items-center pr-4'
+                                              )}
+                                            >
+                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                          </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </>
+                        )}
+                      </Listbox>
+                    </div>
+
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
@@ -144,6 +269,96 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
             />
           </div>
           <nav className="flex flex-1 flex-col">
+            <div className="mb-4">
+              <Listbox value={getNameClinic(selectedClinic)} onChange={(clinic) => {setSelectedClinic(clinic)}}>
+                {({ open }) => (
+                  <>
+                    <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Cabinet :</Listbox.Label>
+                    <div className="relative mt-2">
+                      <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <span className="block truncate">{getNameClinic(selectedClinic)}</span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                              </span>
+                      </Listbox.Button>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          <Listbox.Option
+                            key="default"
+                            className={({ active }) =>
+                              classNames(
+                                active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                                'relative cursor-default select-none py-2 pl-3 pr-9'
+                              )
+                            }
+                            value="Voir tous les cabinets"
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                  <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                    Voir tous les cabinets
+                                  </span>
+
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? 'text-white' : 'text-indigo-600',
+                                      'absolute inset-y-0 right-0 flex items-center pr-4'
+                                    )}
+                                  >
+                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                          </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+
+                          {clinicsData.map((clinic) => (
+                            <Listbox.Option
+                              key={clinic.clinicInfo.uuid}
+                              className={({ active }) =>
+                                classNames(
+                                  active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                                  'relative cursor-default select-none py-2 pl-3 pr-9'
+                                )
+                              }
+                              value={clinic.clinicInfo.uuid}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                    {clinic.clinicInfo.name}
+                                  </span>
+
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active ? 'text-white' : 'text-indigo-600',
+                                        'absolute inset-y-0 right-0 flex items-center pr-4'
+                                      )}
+                                    >
+                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                          </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
+            </div>
+
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
                 <ul role="list" className="-mx-2 space-y-1">
@@ -287,3 +502,4 @@ export function TopSideBar ({ navigation, setSidebarOpen }) {
     </>
   )
 }
+
