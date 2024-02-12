@@ -91,3 +91,9 @@ App\Entity\AppointmentServices:
     appointmentServices_{1..10}:
         appointment: "@appointments_*"
         service: "@services_*"
+
+App\Entity\Feedbacks:
+    feedbacks_{1..10}:
+        rating: "<numberBetween(0, 5)>"
+        comment: "<text(200)>"
+        appointment: "@appointments_*"

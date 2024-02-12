@@ -44,11 +44,11 @@ class Veterinarians
     #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item', 'feedbacks:read'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item', 'feedbacks:read'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
