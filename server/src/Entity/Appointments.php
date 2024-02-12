@@ -60,10 +60,11 @@ class Appointments
     #[ORM\Column]
     private ?string $status = null;
 
-    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'feedbacks:read'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?Veterinarians $veterinarian = null;
 
+    #[Groups(['feedbacks:read', 'appointments:read:item'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 
@@ -74,6 +75,7 @@ class Appointments
     #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentServices::class)]
     private Collection $appointmentServices;
 
+    #[Groups(['appointments:read:item'])]
     #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: Feedbacks::class)]
     private Collection $feedbacks;
 
