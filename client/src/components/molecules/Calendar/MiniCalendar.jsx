@@ -82,7 +82,7 @@ export default function MiniCalendar({
             new Date(1970, 0, i + 4),
           )[0],
       ),
-    [],
+    [locale],
   );
   return useMemo(() => {
     return (
@@ -174,5 +174,5 @@ export default function MiniCalendar({
         </div>
       </div>
     );
-  }, [date]);
+  }, [date, locale]);
 }

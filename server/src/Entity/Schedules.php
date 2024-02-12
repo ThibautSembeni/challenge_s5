@@ -26,9 +26,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             name: 'get_free_schedules_by_veterinarian'
         ),
         new GetCollection(
+            // TODO: Not sure about my VeterinarianScheduleVoter
+            paginationEnabled: false,
+            paginationClientEnabled: false,
             normalizationContext: ['groups' => ['schedules:read:collection']],
-            security: 'is_granted("ROLE_VETERINARIAN")',
-            name: 'get_all_schedules'
+            security: 'is_granted("ROLE_VETERINARIAN")', name: 'get_all_schedules'
         ),
         new Delete(
             // TODO: Not sure about my VeterinarianScheduleVoter
@@ -50,11 +52,11 @@ class Schedules
     #[ORM\Column(length: 255)]
     private ?string $day = null;
 
-    #[Groups(['schedules:read:collection'])]
+    #[Groups(['schedules:read:collection', 'appointments:read:collections'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $startTime = null;
 
-    #[Groups(['schedules:read:collection'])]
+    #[Groups(['schedules:read:collection', 'appointments:read:collections'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $endTime = null;
 

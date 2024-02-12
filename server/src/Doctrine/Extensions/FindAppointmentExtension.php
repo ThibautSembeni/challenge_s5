@@ -21,9 +21,7 @@ final class FindAppointmentExtension implements QueryCollectionExtensionInterfac
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
-        if ($operation->getName() !== 'get_appointments_history') {
-            $this->addWhere($queryBuilder, $resourceClass);
-        } else if (Appointments::class === $resourceClass && $operation->getName() === 'get_appointments_history') {
+        if (Appointments::class === $resourceClass && $operation->getName() === 'get_appointments_history') {
             $user = $this->security->getUser();
 
             $rootAlias = $queryBuilder->getRootAliases()[0];
@@ -32,6 +30,13 @@ final class FindAppointmentExtension implements QueryCollectionExtensionInterfac
             $queryBuilder->andWhere(sprintf('%s.status = :status', $rootAlias));
             $queryBuilder->setParameter('status', 'completed');
             $queryBuilder->orderBy(sprintf('%s.date', $rootAlias), 'DESC');
+        } else if (Appointments::class === $resourceClass && $operation->getName() === 'get_veterinarian_appointments') {
+            $user = $this->security->getUser();
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.veterinarian = :veterinarian', $rootAlias));
+            $queryBuilder->setParameter('veterinarian', $user->getVeterinarian());
+        } else if ($operation->getName() !== 'get_appointments_history') {
+            $this->addWhere($queryBuilder, $resourceClass);
         }
     }
 

@@ -65,3 +65,7 @@ export const downloadIcsFile = async (uuid) => {
     console.error("Erreur lors du téléchargement du fichier ICS", error);
   }
 };
+
+export const getAllAppointmentsOfVeterinarian = async (veterinarian) => {
+  return axiosInstance.get(`/veterinarians/${veterinarian}/appointments`);
+};

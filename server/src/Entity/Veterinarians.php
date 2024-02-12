@@ -48,7 +48,7 @@ class Veterinarians
 //    #[ApiProperty(identifier: false)]
 //    private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item', 'user:read', 'user:read:full'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]

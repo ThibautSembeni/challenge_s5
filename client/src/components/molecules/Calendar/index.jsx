@@ -5,7 +5,7 @@ import Week from "@/components/molecules/Calendar/Views/Week.jsx";
 import Year from "@/components/molecules/Calendar/Views/Year.jsx";
 import Day from "@/components/molecules/Calendar/Views/Day.jsx";
 
-export default function Calendar({ view = "week", addEvent }) {
+export default function Calendar({ view = "week", addEvent, schedules }) {
   const [currentView, setCurrentView] = useState(view);
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -20,18 +20,38 @@ export default function Calendar({ view = "week", addEvent }) {
           addEvent={addEvent}
         />
         {currentView === "day" && (
-          <Day date={currentDate} setDate={setCurrentDate} />
+          <Day
+            date={currentDate}
+            setDate={setCurrentDate}
+            locale={"fr-FR"}
+            schedules={schedules}
+          />
         )}
         {currentView === "week" && (
-          <Week date={currentDate} setDate={setCurrentDate} />
+          <Week
+            date={currentDate}
+            setDate={setCurrentDate}
+            locale={"fr-FR"}
+            schedules={schedules}
+          />
         )}
         {currentView === "month" && (
-          <Month date={currentDate} setDate={setCurrentDate} />
+          <Month
+            date={currentDate}
+            setDate={setCurrentDate}
+            locale={"fr-FR"}
+            schedules={schedules}
+          />
         )}
         {currentView === "year" && (
-          <Year date={currentDate} setDate={setCurrentDate} />
+          <Year
+            date={currentDate}
+            setDate={setCurrentDate}
+            locale={"fr-FR"}
+            schedules={schedules}
+          />
         )}
       </div>
     );
-  }, [currentView, currentDate]);
+  }, [currentView, currentDate, schedules]);
 }

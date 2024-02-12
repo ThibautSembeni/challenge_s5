@@ -3,7 +3,8 @@ import { CalendarIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 import Sidebar from "@/components/molecules/Sidebar/index.jsx";
 import { useLocation } from "react-router-dom";
-import Calendar from "@/components/molecules/Calendar/index.jsx";
+import Schedules from "@/components/organisms/Schedules/index.jsx";
+import { useAuth } from "@/contexts/AuthContext.jsx";
 
 const navigation = [
   { name: "Dashboard", href: "/manage", icon: HomeIcon, current: true },
@@ -18,7 +19,7 @@ const navigation = [
 const userNavigation = [{ name: "Sign out", href: "/logout" }];
 export default function Manage({ type = "dashboard" }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
+  const { user } = useAuth();
 
   return (
     <>
@@ -31,7 +32,9 @@ export default function Manage({ type = "dashboard" }) {
           setSidebarOpen={setSidebarOpen}
         >
           {type === "dashboard" && "Dashboard"}
-          {type === "calendar" && <Calendar view={"day"} />}
+          {type === "calendar" && (
+            <Schedules view={"day"} veterinarian={user.veterinarian} />
+          )}
         </Sidebar>
       </div>
     </>

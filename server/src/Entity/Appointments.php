@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use App\Controller\GenerateIcsFileFromAppointmentController;
 use App\Entity\Auth\User;
@@ -35,6 +36,17 @@ use Symfony\Component\Uid\Uuid;
         new Post(
             normalizationContext: ['groups' => ['appointments:write:create']],
             denormalizationContext: ['groups' => ['appointments:write:create']]
+        ),
+        new GetCollection(
+            uriTemplate: '/veterinarians/{uuid}/appointments',
+            uriVariables: [
+                'uuid' => new Link(toProperty: 'veterinarian', fromClass: Veterinarians::class)
+            ],
+            paginationEnabled: false,
+            paginationClientEnabled: false,
+            normalizationContext: ['groups' => ['appointments:read:collections']],
+            security: "is_granted('ROLE_VETERINARIAN')",
+            name: 'get_veterinarian_appointments'
         )
     ],
 )]
@@ -57,7 +69,7 @@ class Appointments
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'schedules:read:collection'])]
     #[ORM\Column]
     private ?string $status = AppointmentsStatusEnum::STATUS_SCHEDULED->value;
 
@@ -66,6 +78,7 @@ class Appointments
     #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Veterinarians $veterinarian = null;
 
+    #[Groups(['schedules:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 
@@ -83,11 +96,11 @@ class Appointments
     #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentHistory::class)]
     private Collection $appointmentHistories;
 
-    #[Groups(['appointments:write:create'])]
+    #[Groups(['appointments:write:create', 'appointments:read:collections'])]
     #[ORM\OneToOne(inversedBy: 'appointments', cascade: ['persist', 'remove'])]
     private ?Schedules $schedules = null;
 
-    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create'])]
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create', 'schedules:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?Services $service = null;
 
