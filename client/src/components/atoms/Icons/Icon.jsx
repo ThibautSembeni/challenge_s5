@@ -20,6 +20,7 @@ import {
   Move,
   OutlineSync,
   PencilOff,
+  Pets,
   Pin,
   Placeholder,
   Plus,
@@ -37,7 +38,7 @@ import { Logout } from "./Logout";
 import { Pencil } from "./Pencil";
 import { Unknown } from "./tags/_index";
 
-export function Icon({ width = 24, height = 24, icon, className }) {
+export function Icon({ width = 24, height = 24, icon, className, props }) {
   switch (icon) {
     case "check-circle":
       return (
@@ -122,6 +123,10 @@ export function Icon({ width = 24, height = 24, icon, className }) {
     case "database-remove":
       return (
         <DatabaseRemove width={width} height={height} className={className} />
+      );
+    case "pets":
+      return (
+        <Pets width={width} height={height} className={className} {...props} />
       );
     default:
       return (

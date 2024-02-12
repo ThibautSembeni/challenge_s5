@@ -27,6 +27,8 @@ services:
       - ./server/.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ~/server/.config/composer:/home/prod/.composer
       - ./server:/srv/app
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://app:password@database:5432/app?serverVersion=15&charset=utf8}
   database:
     container_name: database
     image: postgres:latest
@@ -38,6 +40,11 @@ services:
       - database_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   ###> symfony/mailer ###
   mailer:

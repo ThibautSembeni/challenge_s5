@@ -13,15 +13,6 @@ import {IdentificationIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/
 //translation
 import { useTranslation } from "react-i18next";
 
-const navigation = [
-  { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
-  { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: false },
-  { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
-  { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: true },
-  { name: 'Téléconsultation', href: '/administration/animaux', icon: VideoCameraIcon, current: false },
-  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
-  { name: 'Informations cabinet', href: '/administration/informations-cabinet', icon: PencilSquareIcon, current: false },
-]
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },
 ]
@@ -48,8 +39,9 @@ export default function Appointment() {
     clinic: null,
     teams: [],
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [navigation, setNavigation] = useState([])
 
   useEffect(() => {
     getOneClinics(uuid)
@@ -75,6 +67,59 @@ export default function Appointment() {
         setIsLoading(false);
       });
   }, [uuid]);
+
+  useEffect(() => {
+    let newNavigation = [
+      {
+        name: "Accueil",
+        href: "/administration/accueil",
+        icon: HomeIcon,
+        current: false,
+      },
+      {
+        name: "Rendez-vous",
+        href: "/administration/rendez-vous",
+        icon: CalendarDaysIcon,
+        current: true,
+      },
+      {
+        name: "Téléconsultation",
+        href: "/administration/animaux",
+        icon: VideoCameraIcon,
+        current: false,
+      },
+      {
+        name: "Animaux",
+        href: "/administration/animaux",
+        icon: IdentificationIcon,
+        current: false,
+      },
+    ];
+
+    if (user.roles.includes("ROLE_MANAGER")) {
+      newNavigation.push(
+        {
+          name: "Équipe",
+          href: "/administration/equipe",
+          icon: UsersIcon,
+          current: false,
+        },
+        {
+          name: "Calendrier d'ouverture",
+          href: "/administration/calendrier-ouverture",
+          icon: CalendarIcon,
+          current: false,
+        },
+        {
+          name: "Informations cabinet",
+          href: "/administration/informations-cabinet",
+          icon: PencilSquareIcon,
+          current: false,
+        }
+      );
+    }
+    setNavigation(newNavigation);
+  }, [user.roles]);
 
   return (
     <>

@@ -25,16 +25,6 @@ import { useTranslation } from "react-i18next";
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
 
-const navigation = [
-  { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
-  { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: true },
-  { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
-  { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
-  { name: 'Téléconsultation', href: '/administration/animaux', icon: VideoCameraIcon, current: false },
-  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
-  { name: 'Informations cabinet', href: '/administration/informations-cabinet', icon: PencilSquareIcon, current: false },
-]
-
 const userNavigation = [
   { name: 'Déconnexion', href: '#' },
 ]
@@ -53,6 +43,7 @@ export default function Teams () {
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
+  const [navigation, setNavigation] = useState([])
 
   useEffect(() => {
     if (user && user.uuid) {
@@ -67,6 +58,59 @@ export default function Teams () {
       setInputClinic(false);
     }
   }, [selectedClinic]);
+
+  useEffect(() => {
+    let newNavigation = [
+      {
+        name: "Accueil",
+        href: "/administration/accueil",
+        icon: HomeIcon,
+        current: false,
+      },
+      {
+        name: "Rendez-vous",
+        href: "/administration/rendez-vous",
+        icon: CalendarDaysIcon,
+        current: false,
+      },
+      {
+        name: "Téléconsultation",
+        href: "/administration/animaux",
+        icon: VideoCameraIcon,
+        current: false,
+      },
+      {
+        name: "Animaux",
+        href: "/administration/animaux",
+        icon: IdentificationIcon,
+        current: false,
+      },
+    ];
+
+    if (user.roles.includes("ROLE_MANAGER")) {
+      newNavigation.push(
+        {
+          name: "Équipe",
+          href: "/administration/equipe",
+          icon: UsersIcon,
+          current: true,
+        },
+        {
+          name: "Calendrier d'ouverture",
+          href: "/administration/calendrier-ouverture",
+          icon: CalendarIcon,
+          current: false,
+        },
+        {
+          name: "Informations cabinet",
+          href: "/administration/informations-cabinet",
+          icon: PencilSquareIcon,
+          current: false,
+        }
+      );
+    }
+    setNavigation(newNavigation);
+  }, [user.roles]);
 
   const fetchAndSetClinicsData = async (userUuid) => {
     if (!userUuid) {

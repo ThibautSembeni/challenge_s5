@@ -18,9 +18,16 @@ export default function Navbar() {
   const [navigation, setNavigation] = useState([
     {
       name: "Mon Compte",
-      iconName: "UserIcon",
+      iconName: "CogIcon",
       type: "link",
       to: "/mon-compte",
+      current: false,
+    },
+    {
+      name: "Mon Espace",
+      iconName: "UserIcon",
+      type: "link",
+      to: "/mon-espace",
       current: false,
     },
     {
@@ -31,7 +38,6 @@ export default function Navbar() {
     },
   ]);
 
-  console.log(user);
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -61,13 +67,26 @@ export default function Navbar() {
                 {isAuthenticated ? (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
 
-                    <Link
-                      to={"/inscription/informations"}
-                      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      {t("components.molecules.navbar.index.isVeterinaire.link")}
-                    </Link>
-                    <Link to={"#"}> {t("components.molecules.navbar.index.isAthenticated.link")}</Link>
+                    {user.roles.includes("ROLE_VETERINARIAN") || user.roles.includes("ROLE_MANAGER") ? (
+                      <Link
+                        to={"/administration/accueil"}
+                        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                      >
+                        Administration
+                      </Link>
+                    ) : (
+                      <>
+                        <Link
+                          to={"/inscription/informations"}
+                          className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >
+                          {t("components.molecules.navbar.index.isVeterinaire.link")}
+                        </Link>
+
+                        <Link to={"/mes-rendez-vous"}>{t("components.molecules.navbar.index.isAthenticated.link")}</Link>
+                      </>
+                    )}
+
 
                     <RadiosButtonsWithIcons
                       placeholder={`${user.firstname} ${user.lastname}`}
@@ -78,9 +97,18 @@ export default function Navbar() {
                         [
                           {
                             name: "Mon Compte",
-                            iconName: "UserIcon",
+                            iconName: "CogIcon",
                             type: "link",
                             to: "/mon-compte",
+                          },
+                        ],
+                        [
+                          {
+                            name: "Mon Espace",
+                            iconName: "UserIcon",
+                            type: "link",
+                            to: "/mon-espace",
+                            current: false,
                           },
                         ],
                         [

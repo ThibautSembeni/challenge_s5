@@ -10,12 +10,23 @@ use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken as BaseRefreshToken;
 
 #[ApiResource(
     operations: [
-        new Post(
+        new Get(
             uriTemplate: '/logout',
             openapiContext: [
                 'summary' => 'Revoke JWT tokens',
                 'description' => 'Refresh JWT token',
                 'tags' => ['Login Check'],
+                'parameters' => [
+                    [
+                        'name' => 'refresh_token',
+                        'in' => 'query',
+                        'description' => 'JWT refresh token',
+                        'required' => true,
+                        'schema' => [
+                            'type' => 'string',
+                        ],
+                    ],
+                ],
                 'responses' => [
                     '200' => [
                         'description' => 'Token refreshed successfully',

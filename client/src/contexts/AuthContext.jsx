@@ -95,7 +95,7 @@ const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        localStorage.removeItem('selectedClinic');
+        localStorage.removeItem("selectedClinic");
         setAccessToken(null);
         setRefreshToken(null);
       })
@@ -164,6 +164,10 @@ const AuthProvider = ({ children }) => {
       clearInterval(intervalId);
     };
   }, []);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <AuthContext.Provider

@@ -17,10 +17,10 @@ class AppointmentHistory
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointmentHistories')]
-    private ?Appointments $appointmentID = null;
+    private ?Appointments $appointment = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointmentHistories')]
-    private ?Veterinarians $veterinarianID = null;
+    private ?Veterinarians $veterinarian = null;
 
     #[ORM\Column]
     private array $status = [];
@@ -33,26 +33,26 @@ class AppointmentHistory
         return $this->id;
     }
 
-    public function getAppointmentID(): ?Appointments
+    public function getAppointment(): ?Appointments
     {
-        return $this->appointmentID;
+        return $this->appointment;
     }
 
-    public function setAppointmentID(?Appointments $appointmentID): static
+    public function setAppointment(?Appointments $appointment): static
     {
-        $this->appointmentID = $appointmentID;
+        $this->appointment = $appointment;
 
         return $this;
     }
 
-    public function getVeterinarianID(): ?Veterinarians
+    public function getVeterinarian(): ?Veterinarians
     {
-        return $this->veterinarianID;
+        return $this->veterinarian;
     }
 
-    public function setVeterinarianID(?Veterinarians $veterinarianID): static
+    public function setVeterinarian(?Veterinarians $veterinarian): static
     {
-        $this->veterinarianID = $veterinarianID;
+        $this->veterinarian = $veterinarian;
 
         return $this;
     }

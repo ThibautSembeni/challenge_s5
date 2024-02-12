@@ -1,5 +1,6 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link as RouterLink } from "react-router-dom";
+import { Link, LinkBase } from "@/components/atoms/Links/Link.jsx";
 import React, { useEffect, useState } from "react";
 import { getOneVeterinarians } from "@/api/clinic/Veterinarian.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
@@ -10,10 +11,15 @@ import MapInfo from "@/components/molecules/Map/MapInfo.jsx";
 //translation
 import { useTranslation } from "react-i18next";
 
+
+
 export default function Veterinarian() {
   const { uuid } = useParams();
+  const { isAuthenticated } = useAuth();
   //translation
-  const { t } = useTranslation();
+    const { t } = useTranslation();
+
+
   const [veterinarian, setVeterinarian] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -54,7 +60,19 @@ export default function Veterinarian() {
                     {veterinarian.specialties}
                   </p>
                   <div className="mt-4">
-                    <Button color="blue">{t("pages.clinic.vetenarian.buttonRDV")}</Button>
+
+                    <LinkBase
+                      component={RouterLink}
+                      to={
+                        isAuthenticated
+                          ? `/booking-appointment/${uuid}`
+                          : "/login"
+                      }
+                      className="rounded-md bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
+                    >
+                        {t("pages.clinic.vetenarian.buttonRDV")}
+                    </LinkBase>
+
                   </div>
                 </div>
                 <img

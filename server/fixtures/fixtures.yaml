@@ -28,7 +28,7 @@ App\Entity\Pets:
         breed: '<randomElement(["européen", "persan", "siamois", "sphynx", "chartreux", "sacré de Birmanie", "bengal"])>'
         birthdate: '<dateTimeBetween("-10 years", "now")>'
         medicalHistory: "<text(200)>"
-        userID: "@user_*->id"
+        userID: "@user_*"
 
 App\Entity\Services:
     services_{1..10}:
@@ -60,7 +60,7 @@ App\Entity\ClinicComplementaryInformation:
     clinicComplementaryInformation_{1..10}:
         name: "<company()>"
         description: "<text(200)>"
-        clinic_id: "@clinics_*->id"
+        clinic: "@clinics_*"
 
 App\Entity\TimeSlots:
     timeSlots_{1..10}:
@@ -69,24 +69,25 @@ App\Entity\TimeSlots:
 App\Entity\ClinicSchedules:
     clinicSchedules_{1..10}:
         day: '<randomElement(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"])>'
-        clinic_id: "@clinics_*->id"
-        timeslot_id: "@timeSlots_*->id"
+        clinic: "@clinics_*"
+        timeslot: "@timeSlots_*"
 
 App\Entity\Schedules:
     schedules_{1..10}:
         day: '<randomElement(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"])>'
         type: '<randomElement(["consult", "vaccin", "opération"])>'
-        veterinarianID: "@veterinarians_*->id"
+        veterinarian: "@veterinarians_*"
 
 App\Entity\Appointments:
     appointments_{1..10}:
         date: '<dateTimeBetween("-10 years", "now")>'
         reason: "<text(200)>"
-        userID: "@user_*->id"
-        veterinarianID: "@veterinarians_*->id"
-        petID: "@pets_*->id"
+        status: '<randomElement(["scheduled", "in progress", "completed", "cancelled"])>'
+        userID: "@user_*"
+        veterinarian: "@veterinarians_*"
+        pet: "@pets_*"
 
 App\Entity\AppointmentServices:
     appointmentServices_{1..10}:
-        appointmentID: "@appointments_*->id"
-        serviceID: "@services_*->id"
+        appointment: "@appointments_*"
+        service: "@services_*"
