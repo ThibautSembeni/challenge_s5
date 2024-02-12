@@ -41,13 +41,13 @@ class Feedbacks
 
     #[Assert\Range(min: 1, max: 5, groups: ['feedbacks:write:item'])]
     #[Assert\Range(min: 1, max: 5, groups: ['feedbacks:write:modify'])]
-    #[Groups(['feedbacks:read', 'feedbacks:write', 'feedbacks:update'])]
+    #[Groups(['feedbacks:read', 'feedbacks:write', 'feedbacks:update', 'appointments:read:item'])]
     #[ORM\Column]
     private ?int $rating = null;
 
     #[Assert\Length(max: 400, groups: ['feedbacks:write:item'])]
     #[Assert\Length(max: 400, groups: ['feedbacks:write:modify'])]
-    #[Groups(['feedbacks:read', 'feedbacks:write', 'feedbacks:update'])]
+    #[Groups(['feedbacks:read', 'feedbacks:write', 'feedbacks:update', 'appointments:read:item'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
 
@@ -56,7 +56,7 @@ class Feedbacks
     #[ORM\JoinColumn(nullable: false)]
     private ?Appointments $appointment = null;
 
-    #[Groups(['feedbacks:read', 'feedbacks:write', 'feedbacks:update'])]
+    #[Groups(['feedbacks:read', 'feedbacks:write', 'feedbacks:update', 'appointments:read:item'])]
     #[ORM\Column]
     private ?bool $verify = false;
 

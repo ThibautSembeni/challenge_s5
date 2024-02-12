@@ -3,9 +3,6 @@ import axios from "axios";
 export const getAllFeedbacks = async () => {
     return axios.get(`${import.meta.env.VITE_API_URL}/feedbacks`);
 };
-export const getOneFeedback = async (id) => {
-    return axios.get(`${import.meta.env.VITE_API_URL}/feedbacks/${id}`);
-};
 
 export const createFeedback = async ({
     rating,
