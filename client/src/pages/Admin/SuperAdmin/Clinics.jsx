@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {EyeIcon,} from "@heroicons/react/24/outline";
+import {EyeIcon, PencilSquareIcon, TrashIcon,} from "@heroicons/react/24/outline";
 import Table from "@/components/atoms/Table/Table.jsx";
 import {getAllClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
@@ -7,7 +7,9 @@ import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {CheckIcon} from "@heroicons/react/20/solid";
-import {checkClinic} from "../../../api/clinic/Clinic.jsx";
+import {checkClinic} from "@/api/clinic/Clinic.jsx";
+import Modal from "@/components/organisms/Modal/Modal.jsx";
+import MapInfo from "@/components/molecules/Map/MapInfo.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
 
@@ -31,6 +33,9 @@ export default function Clinics() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [clinics, setClinics] = useState([]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedClinic, setSelectedClinic] = useState(null);
+
   useEffect(() => {
     fetchClinics().then(() => setIsLoading(false));
   }, []);
@@ -43,6 +48,11 @@ export default function Clinics() {
     } catch (error) {
       console.error("Erreur lors de la récupération des données : ", error);
     }
+  };
+
+  const handleOpenModalWithClinicInfo = (clinic) => {
+    setSelectedClinic(clinic);
+    setIsModalOpen(true);
   };
 
   const columns = [
@@ -87,6 +97,23 @@ export default function Clinics() {
           <div className="mt-1 text-gray-500 uppercase">{row.postalCode} {row.city}</div>
         </>
       ),
+    },
+    {
+      Header: 'Actions',
+      Cell: (row) => (
+        <div className="flex items-center gap-2">
+          <button onClick={() => handleOpenModalWithClinicInfo(row)} className="text-blue-600 hover:text-blue-900">
+            <EyeIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-orange-600 hover:text-orange-900">
+            <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-red-600 hover:text-red-900">
+            <TrashIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+        </div>
+      ),
+      accessor: 'actions',
     },
   ];
 
@@ -138,6 +165,44 @@ export default function Clinics() {
                   </div>
                 </div>
               </main>
+
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Informations du cabinet"
+              >
+                {selectedClinic && (
+                  <div className="flex flex-col gap-2">
+                    <p><b>ID :</b> {selectedClinic.id}</p>
+                    <p><b>UUID :</b> {selectedClinic.uuid}</p>
+                    <p><b>Nom :</b> {selectedClinic.name}</p>
+                    <p><b>Adresse :</b> {selectedClinic.address}, {selectedClinic.postalCode}, {selectedClinic.city}</p>
+                    <p><b>Email :</b> {selectedClinic.email}</p>
+                    <p><b>Téléphone :</b> {selectedClinic.phone}</p>
+                    <p><b>Description :</b> {selectedClinic.description}</p>
+                    <p>
+                      <b className={"mr-4"}>Actif :</b>
+                      { selectedClinic.isActif ? (
+                        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700">Active</span>
+                      ) : (
+                        <span
+                          className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">En attente</span>
+                      )}
+                    </p>
+
+                    <div className={"mt-4"}>
+                      <MapInfo
+                        geocode={[
+                          selectedClinic.latitude,
+                          selectedClinic.longitude,
+                        ]}
+                        zoom={15}
+                        className={"w-full h-[20vh]"}
+                      />
+                    </div>
+                  </div>
+                )}
+              </Modal>
             </div>
           </div>
         </>

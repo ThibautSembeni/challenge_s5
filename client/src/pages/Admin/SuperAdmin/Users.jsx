@@ -1,78 +1,15 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-  CursorArrowRaysIcon,
-  EnvelopeOpenIcon,
-  VideoCameraIcon,
-  PencilSquareIcon,
-} from "@heroicons/react/24/outline";
+import {PencilSquareIcon,} from "@heroicons/react/24/outline";
 import {getAllUsers} from "@/api/auth/index.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import Table from "@/components/atoms/Table/Table.jsx";
-import {
-  CalendarDaysIcon, CurrencyEuroIcon, EyeIcon,
-  IdentificationIcon, TicketIcon, TrashIcon, UserGroupIcon,
-} from "@heroicons/react/24/outline/index.js";
+import {EyeIcon, TrashIcon,} from "@heroicons/react/24/outline/index.js";
+import Modal from "@/components/organisms/Modal/Modal.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
-
-const userColumns = [
-  {
-    Header: 'Nom',
-    accessor: 'user',
-    Cell: ( row ) => (
-      <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
-    ),
-  },
-  {
-    Header: 'Contact',
-    accessor: 'email',
-    Cell: ( row ) => (
-      <>
-        <div className="text-gray-900">{row.email}</div>
-        <div className="mt-1 text-gray-500">{row.phone}</div>
-      </>
-    ),
-  },
-  {
-    Header: 'Role',
-    accessor: 'roles',
-    Cell: ( row ) => row.roles.map(role => (
-      <div key={role} className="mt-1 text-gray-500">
-        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
-          {role}
-        </span>
-      </div>
-    )),
-  },
-  {
-    Header: 'Animaux',
-    accessor: 'pets',
-    Cell: ( row ) => row.pets.map(pet => (
-      <div key={pet.uuid} className="mt-1 text-gray-500">
-        <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-          {pet.name}
-        </span>
-      </div>
-    )),
-  },
-  {
-    Header: 'Adresse',
-    accessor: 'address',
-    Cell: ( row ) => (
-      <>
-        <div className="text-gray-900">{row.address}</div>
-        <div className="mt-1 text-gray-500">{row.postalCode}, {row.city}</div>
-      </>
-    ),
-  },
-];
-
 
 const people = [
   {
@@ -94,6 +31,9 @@ export default function Users() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [users, setUsers] = useState([]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   useEffect(() => {
     fetchUsers().then(() => setIsLoading(false));
   }, []);
@@ -107,6 +47,81 @@ export default function Users() {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
+
+  const handleOpenModalWithUserInfo = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const userColumns = [
+    {
+      Header: 'Nom',
+      accessor: 'user',
+      Cell: ( row ) => (
+        <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
+      ),
+    },
+    {
+      Header: 'Contact',
+      accessor: 'email',
+      Cell: ( row ) => (
+        <>
+          <div className="text-gray-900">{row.email}</div>
+          <div className="mt-1 text-gray-500">{row.phone}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Role',
+      accessor: 'roles',
+      Cell: ( row ) => row.roles.map(role => (
+        <div key={role} className="mt-1 text-gray-500">
+        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
+          {role}
+        </span>
+        </div>
+      )),
+    },
+    {
+      Header: 'Animaux',
+      accessor: 'pets',
+      Cell: ( row ) => row.pets.map(pet => (
+        <div key={pet.uuid} className="mt-1 text-gray-500">
+        <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+          {pet.name}
+        </span>
+        </div>
+      )),
+    },
+    {
+      Header: 'Adresse',
+      accessor: 'address',
+      Cell: ( row ) => (
+        <>
+          <div className="text-gray-900">{row.address}</div>
+          <div className="mt-1 text-gray-500">{row.postalCode}, {row.city}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Actions',
+      Cell: (row) => (
+        <div className="flex items-center gap-2">
+          <button onClick={() => handleOpenModalWithUserInfo(row)}
+                  className="text-blue-600 hover:text-blue-900">
+            <EyeIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-orange-600 hover:text-orange-900">
+            <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-red-600 hover:text-red-900">
+            <TrashIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+        </div>
+      ),
+      accessor: 'actions',
+    },
+  ];
 
   return (
     <>
@@ -156,6 +171,33 @@ export default function Users() {
                   </div>
                 </div>
               </main>
+
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Informations de l'utilisateur"
+              >
+                {selectedUser && (
+                  <div className="flex flex-col gap-2">
+                    <p><b>ID :</b> {selectedUser.id}</p>
+                    <p><b>UUID :</b> {selectedUser.uuid}</p>
+                    <p><b>Nom :</b> {selectedUser.firstname} {selectedUser.lastname}</p>
+                    <p><b>Email :</b> {selectedUser.email}</p>
+                    <p><b>Téléphone :</b> {selectedUser.phone}</p>
+                    <p><b>Adresse :</b> {selectedUser.address}, {selectedUser.postalCode}, {selectedUser.city}</p>
+                    <p><b>Role :</b> {selectedUser.roles.map(role => (
+                      <span key={role} className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
+                        {role}
+                      </span>
+                    ))}</p>
+                    <p><b>Animaux :</b> {selectedUser.pets.map(pet => (
+                      <span key={pet.uuid} className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                        {pet.name}
+                      </span>
+                    ))}</p>
+                  </div>
+                )}
+              </Modal>
             </div>
           </div>
         </>

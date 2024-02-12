@@ -17,10 +17,11 @@ trait Auth
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['users:read:collection'])]
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['user:read', 'user:read:full', 'payment:read:collection'])]
+    #[Groups(['user:read', 'user:read:full', 'payment:read:collection', 'users:read:collection'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]

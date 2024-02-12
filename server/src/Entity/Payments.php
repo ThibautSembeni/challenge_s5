@@ -25,6 +25,7 @@ class Payments
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['payment:read:collection'])]
     private ?int $id = null;
 
     #[Groups(['payment:read:collection'])]

@@ -1,56 +1,15 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-  CursorArrowRaysIcon,
-  EnvelopeOpenIcon,
-  VideoCameraIcon,
-  PencilSquareIcon,
-} from "@heroicons/react/24/outline";
+import {PencilSquareIcon,} from "@heroicons/react/24/outline";
 import {getAllVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import Table from "@/components/atoms/Table/Table.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {
-  CalendarDaysIcon, CurrencyEuroIcon, EyeIcon,
-  IdentificationIcon, TicketIcon, TrashIcon, UserGroupIcon,
-} from "@heroicons/react/24/outline/index.js";
+import {EyeIcon, TrashIcon,} from "@heroicons/react/24/outline/index.js";
+import Modal from "@/components/organisms/Modal/Modal.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
-
-const veterinarianColumns = [
-  {
-    Header: 'Nom',
-    accessor: 'fullname',
-    Cell: (row) => (
-      <>
-        <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
-      </>
-    ),
-  },
-  {
-    Header: 'Contact',
-    accessor: 'contact',
-    Cell: (row) => (
-      <>
-        <div className="text-gray-900">{row.email}</div>
-        <div className="mt-1 text-gray-500">{row.phone}</div>
-      </>
-    ),
-  },
-  {
-    Header: 'Cabinet',
-    accessor: 'clinic.name',
-    Cell: (row) => (
-      <>
-        <div className="text-gray-900">{row.clinic.name}</div>
-      </>
-    ),
-  },
-];
 
 const people = [
   {
@@ -72,6 +31,9 @@ export default function Veterinarians() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [veterinarians, setVeterinarians] = useState([]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedVeterinarian, setSelectedVeterinarian] = useState(null);
+
   useEffect(() => {
     fetchVeterinarians().then(() => setIsLoading(false));
   }, []);
@@ -90,6 +52,58 @@ export default function Veterinarians() {
     }
   };
 
+  const handleOpenModalWithVeterinarianInfo = (veterinarian) => {
+    setSelectedVeterinarian(veterinarian);
+    setIsModalOpen(true);
+  };
+
+  const veterinarianColumns = [
+    {
+      Header: 'Nom',
+      accessor: 'fullname',
+      Cell: (row) => (
+        <>
+          <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Contact',
+      accessor: 'contact',
+      Cell: (row) => (
+        <>
+          <div className="text-gray-900">{row.email}</div>
+          <div className="mt-1 text-gray-500">{row.phone}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Cabinet',
+      accessor: 'clinic.name',
+      Cell: (row) => (
+        <>
+          <div className="text-gray-900">{row.clinic.name}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Actions',
+      Cell: (row) => (
+        <div className="flex items-center gap-2">
+          <button onClick={() => handleOpenModalWithVeterinarianInfo(row)} className="text-blue-600 hover:text-blue-900">
+            <EyeIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-orange-600 hover:text-orange-900">
+            <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-red-600 hover:text-red-900">
+            <TrashIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+        </div>
+      ),
+      accessor: 'actions',
+    },
+  ];
 
   return (
     <>
@@ -139,6 +153,23 @@ export default function Veterinarians() {
                   </div>
                 </div>
               </main>
+
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Informations du vétérianaire"
+              >
+                {selectedVeterinarian && (
+                  <div className="flex flex-col gap-2">
+                    <p><b>ID :</b> {selectedVeterinarian.id}</p>
+                    <p><b>UUID :</b> {selectedVeterinarian.uuid}</p>
+                    <p><b>Cabinet :</b> {selectedVeterinarian.clinic.name}</p>
+                    <p><b>Nom :</b> {selectedVeterinarian.firstname} {selectedVeterinarian.lastname}</p>
+                    <p><b>Email :</b> {selectedVeterinarian.email}</p>
+                    <p><b>Téléphone :</b> {selectedVeterinarian.phone}</p>
+                  </div>
+                )}
+              </Modal>
             </div>
           </div>
         </>

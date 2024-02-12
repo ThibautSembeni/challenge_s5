@@ -43,6 +43,7 @@ class Clinics
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['clinics:read:collection'])]
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 

@@ -1,54 +1,15 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-  CursorArrowRaysIcon,
-  EnvelopeOpenIcon,
-  VideoCameraIcon,
-  PencilSquareIcon,
-} from "@heroicons/react/24/outline";
+import {PencilSquareIcon,} from "@heroicons/react/24/outline";
 import Table from "@/components/atoms/Table/Table.jsx";
 import {getAllPets} from "@/api/pets/index.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {
-  CalendarDaysIcon, CurrencyEuroIcon, EyeIcon,
-  IdentificationIcon, TicketIcon, TrashIcon, UserGroupIcon,
-} from "@heroicons/react/24/outline/index.js";
+import {EyeIcon, TrashIcon,} from "@heroicons/react/24/outline/index.js";
+import Modal from "@/components/organisms/Modal/Modal.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
-
-const paymentColumns = [
-  {
-    Header: 'Nom',
-    accessor: 'name',
-    Cell: (row) => (
-      <>
-        <div className="font-medium text-gray-900">{row.name}</div>
-      </>
-    ),
-  },
-  {
-    Header: 'Espèce',
-    accessor: 'species',
-  },
-  {
-    Header: 'Race',
-    accessor: 'breed',
-  },
-  {
-    Header: 'Utilisateur',
-    accessor: 'userID',
-    Cell: (row) => (
-      <>
-        <div className="font-medium text-gray-900">{row.userID.firstname} {row.userID.lastname}</div>
-      </>
-    ),
-  },
-];
 
 const people = [
   {
@@ -70,6 +31,9 @@ export default function Pets() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pets, setPets] = useState([]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPet, setSelectedPet] = useState(null);
+
   useEffect(() => {
     fetchPets().then(() => setIsLoading(false));
   }, []);
@@ -83,6 +47,58 @@ export default function Pets() {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
+
+  const handleOpenModalWithPetInfo = (pet) => {
+    setSelectedPet(pet);
+    setIsModalOpen(true);
+  };
+
+  const paymentColumns = [
+    {
+      Header: 'Nom',
+      accessor: 'name',
+      Cell: (row) => (
+        <>
+          <div className="font-medium text-gray-900">{row.name}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Espèce',
+      accessor: 'species',
+    },
+    {
+      Header: 'Race',
+      accessor: 'breed',
+    },
+    {
+      Header: 'Utilisateur',
+      accessor: 'userID',
+      Cell: (row) => (
+        <>
+          <div className="font-medium text-gray-900">{row.userID.firstname} {row.userID.lastname}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Actions',
+      Cell: (row) => (
+        <div className="flex items-center gap-2">
+          <button onClick={() => handleOpenModalWithPetInfo(row)}
+                  className="text-blue-600 hover:text-blue-900">
+            <EyeIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-orange-600 hover:text-orange-900">
+            <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+          <button className="text-red-600 hover:text-red-900">
+            <TrashIcon className="h-5 w-5" aria-hidden="true"/>
+          </button>
+        </div>
+      ),
+      accessor: 'actions',
+    },
+  ];
 
   return (
     <>
@@ -132,6 +148,22 @@ export default function Pets() {
                   </div>
                 </div>
               </main>
+
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Informations de l'animal"
+              >
+                {selectedPet && (
+                  <div className="flex flex-col gap-2">
+                    <p><b>ID :</b> {selectedPet.id}</p>
+                    <p><b>UUID :</b> {selectedPet.uuid}</p>
+                    <p><b>Nom :</b> {selectedPet.name}</p>
+                    <p><b>Espèce :</b> {selectedPet.species}</p>
+                    <p><b>Race :</b> {selectedPet.breed}</p>
+                  </div>
+                )}
+              </Modal>
             </div>
           </div>
         </>

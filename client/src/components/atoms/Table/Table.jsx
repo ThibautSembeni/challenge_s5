@@ -1,5 +1,4 @@
-import React from 'react';
-import { EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import React, {useState} from 'react';
 
 function Table({ data, columns }) {
   return (
@@ -30,17 +29,6 @@ function Table({ data, columns }) {
                   {typeof column.Cell === 'function' ? column.Cell(row) : row[column.accessor]}
                 </td>
               ))}
-              <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 flex items-center gap-2">
-                <a href="#" className="text-blue-600 hover:text-blue-900">
-                  <EyeIcon className="h-5 w-5" aria-hidden="true" />
-                </a>
-                <a href="#" className="text-orange-600 hover:text-orange-900">
-                  <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
-                </a>
-                <a href="#" className="text-red-600 hover:text-red-900">
-                  <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                </a>
-              </td>
             </tr>
           ))}
           </tbody>

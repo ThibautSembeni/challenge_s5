@@ -35,6 +35,7 @@ class Veterinarians
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['veterinarians:read'])]
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
