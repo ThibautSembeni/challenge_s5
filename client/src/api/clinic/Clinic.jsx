@@ -154,3 +154,19 @@ export const updateOneClinics = async (uuid, { name, phone, address, postalCode,
   }
 };
 
+export const checkClinic = async (uuid) => {
+  try {
+    const response = await axiosInstance.patch(`/clinics/${uuid}`, {
+      isActif: true,
+    }, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la récupération des données" };
+  }
+}
+

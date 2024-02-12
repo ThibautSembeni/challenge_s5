@@ -53,6 +53,10 @@ class VeterinarianVoter extends Voter
             return false;
         }
 
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
         foreach ($user->getClinic() as $userClinic) {
             if ($userClinic === $veterinarians->getClinic()) {
                 return true;
@@ -68,6 +72,10 @@ class VeterinarianVoter extends Voter
             return false;
         }
 
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
         foreach ($user->getClinic() as $userClinic) {
             if ($userClinic === $veterinarians->getClinic()) {
                 return true;
@@ -81,6 +89,10 @@ class VeterinarianVoter extends Voter
     {
         if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
         }
 
         foreach ($user->getClinic() as $userClinic) {

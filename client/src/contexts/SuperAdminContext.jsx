@@ -49,7 +49,7 @@ export const SuperAdminProvider = ({ children }) => {
       const response = await getAllClinics();
 
       setInactiveCount(
-        response.data["hydra:member"].filter(cabinet => cabinet.isActif).length
+        response.data["hydra:member"].filter(cabinet => cabinet.isActif !== true).length
       );
     } catch (error) {
       console.error("Erreur lors de la récupération des données : ", error);

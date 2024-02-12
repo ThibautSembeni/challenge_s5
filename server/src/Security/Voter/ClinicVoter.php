@@ -51,6 +51,10 @@ class ClinicVoter extends Voter
             return false;
         }
 
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
         foreach ($user->getClinic() as $userClinic) {
             if ($userClinic === $clinics) {
                 return true;

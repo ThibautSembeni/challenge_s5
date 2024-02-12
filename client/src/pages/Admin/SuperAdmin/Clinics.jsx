@@ -1,23 +1,13 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-  CursorArrowRaysIcon,
-  EnvelopeOpenIcon,
-  VideoCameraIcon,
-  PencilSquareIcon, EyeIcon, TrashIcon,
-} from "@heroicons/react/24/outline";
+import {EyeIcon,} from "@heroicons/react/24/outline";
 import Table from "@/components/atoms/Table/Table.jsx";
 import {getAllClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {
-  CalendarDaysIcon, CurrencyEuroIcon,
-  IdentificationIcon, TicketIcon, UserGroupIcon,
-} from "@heroicons/react/24/outline/index.js";
+import {CheckIcon} from "@heroicons/react/20/solid";
+import {checkClinic} from "../../../api/clinic/Clinic.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
 
@@ -32,44 +22,6 @@ const people = [
       "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
   // More people...
-];
-
-const columns = [
-  {
-    Header: 'Nom',
-    accessor: 'name',
-  },
-  {
-    Header: 'Contact',
-    accessor: 'email',
-    Cell: (row) => (
-      <>
-        <div className="text-gray-900">{row.email}</div>
-        <div className="mt-1 text-gray-500">{row.phone}</div>
-      </>
-    ),
-  },
-  {
-    Header: 'Statut',
-    accessor: 'isActif',
-    Cell: (row) => (
-      row.isActif ? (
-        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700">Active</span>
-      ) : (
-        <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">En attente</span>
-      )
-    ),
-  },
-  {
-    Header: 'Adresse',
-    accessor: 'address',
-    Cell: (row) => (
-      <>
-        <div className="text-gray-900">{row.address}</div>
-        <div className="mt-1 text-gray-500 uppercase">{row.postalCode} {row.city}</div>
-      </>
-    ),
-  },
 ];
 
 export default function Clinics() {
@@ -92,6 +44,51 @@ export default function Clinics() {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
+
+  const columns = [
+    {
+      Header: 'Nom',
+      accessor: 'name',
+    },
+    {
+      Header: 'Contact',
+      accessor: 'email',
+      Cell: (row) => (
+        <>
+          <div className="text-gray-900">{row.email}</div>
+          <div className="mt-1 text-gray-500">{row.phone}</div>
+        </>
+      ),
+    },
+    {
+      Header: 'Statut',
+      accessor: 'isActif',
+      Cell: (row) => (
+        row.isActif ? (
+          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700">Active</span>
+        ) : (
+          <div className="flex">
+          <span
+            className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">En attente</span>
+            <span className="ml-2 cursor-pointer hover:text-blue-500 transform duration-100 ease-in"><EyeIcon className="w-5 l-5"/></span>
+            <span className="ml-2 cursor-pointer hover:text-green-500 transform duration-100 ease-in" onClick={() => {
+              checkClinic(row.uuid).then(() => fetchClinics().then(() => setIsLoading(false)));
+            }}><CheckIcon className="w-5 l-5"/></span>
+          </div>
+        )
+      ),
+    },
+    {
+      Header: 'Adresse',
+      accessor: 'address',
+      Cell: (row) => (
+        <>
+          <div className="text-gray-900">{row.address}</div>
+          <div className="mt-1 text-gray-500 uppercase">{row.postalCode} {row.city}</div>
+        </>
+      ),
+    },
+  ];
 
   return (
     <>

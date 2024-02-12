@@ -12,7 +12,6 @@ function classNames(...classes) {
 }
 
 export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
-  console.log("navigation", navigation);
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -137,7 +136,7 @@ export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
                         />
                         {item.name}
 
-                        {item.clinicStayValidation && (
+                        {(item.clinicStayValidation) && (
                           <span
                             className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                             {item.clinicStayValidation}
