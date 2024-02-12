@@ -8,6 +8,29 @@
         "fr": "Français"
       }
     },
+    "solutions": {
+      "analitycs": "Analytique",
+      "commerce": "Commerce",
+      "insight": "Recherche"
+    },
+    "support": {
+      "pricing": "Tarification",
+      "Documentation": "Documentation",
+      "Guides": "Guides",
+      "ApiSatus": "Statut de l'API"
+    },
+    "company": {
+      "about": "À propos",
+      "blog": "Blog",
+      "jobs": "Emplois",
+      "press": "Presse",
+      "partners": "Partenaires"
+    },
+    "legal": {
+      "claim": "Revendications",
+      "privacy": "Confidentialité",
+        "terms": "Conditions"
+    },
     "Footer": {
       "h2": "Pied de page"
     },
@@ -41,6 +64,16 @@
       },
       "navbar": {
         "index": {
+          "navigation": {
+            "nameMonCompte": "Mon compte",
+            "nameMonEspace": "Mon espace",
+            "nameDeconnexion": "Déconnexion"
+          },
+          "options": {
+            "nameMonCompte": "Mon compte",
+            "nameMonEspace": "Mon espace",
+            "nameDeconnexion": "Déconnexion"
+          },
           "disclosureButton": {
             "span": "Ouvrir menu principal"
           },
@@ -56,11 +89,16 @@
         },
         "sidebar" : {
           "sidebar": {
-            "lesVeterinaires" : "Les vêterinaires"
+            "spanFermer": "Fermer",
+            "listboxCabinet": "Cabinet",
+            "lesVeterinaires" : "Les vêterinaires",
+            "spanVoirTousLesCabinets": "Voir tous les cabinets"
           },
           "topSidebar": {
+            "spanOpenSideBar": "Ouvrir le menu",
             "voirLesNotifications" : "Voir les notifications",
             "ouvrirMenuUtilisateurs" : "Ouvrir le menu utilisateurs"
+
           }
         }
       }

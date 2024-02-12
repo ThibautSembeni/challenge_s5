@@ -17,21 +17,21 @@ export default function Navbar() {
 
   const [navigation, setNavigation] = useState([
     {
-      name: "Mon Compte",
+      name: `${t("components.molecules.navbar.index.navigation.nameMonCompte")}`,
       iconName: "CogIcon",
       type: "link",
       to: "/mon-compte",
       current: false,
     },
     {
-      name: "Mon Espace",
+      name: `${t("components.molecules.navbar.index.navigation.nameMonEspace")}`,
       iconName: "UserIcon",
       type: "link",
       to: "/mon-espace",
       current: false,
     },
     {
-      name: "Déconnexion",
+      name: `${t("components.molecules.navbar.index.navigation.nameDeconnexion")}`,
       iconName: "ArrowLeftOnRectangleIcon",
       type: "button",
       onClick: () => logout(),
@@ -96,7 +96,7 @@ export default function Navbar() {
                       options={[
                         [
                           {
-                            name: "Mon Compte",
+                            name: `${t("components.molecules.navbar.index.options.nameMonCompte")}`,
                             iconName: "CogIcon",
                             type: "link",
                             to: "/mon-compte",
@@ -104,7 +104,7 @@ export default function Navbar() {
                         ],
                         [
                           {
-                            name: "Mon Espace",
+                            name: `${t("components.molecules.navbar.index.options.nameMonEspace")}`,
                             iconName: "UserIcon",
                             type: "link",
                             to: "/mon-espace",
@@ -113,7 +113,7 @@ export default function Navbar() {
                         ],
                         [
                           {
-                            name: "Déconnexion",
+                            name: `${t("components.molecules.navbar.index.options.nameDeconnexion")}`,
                             iconName: "ArrowLeftOnRectangleIcon",
                             type: "button",
                             onClick: () => logout(),

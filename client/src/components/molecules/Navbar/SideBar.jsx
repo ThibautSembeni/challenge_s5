@@ -88,7 +88,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                 >
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                     <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
-                      <span className="sr-only">Fermer</span>
+                      <span className="sr-only">{t("components.molecules.navbar.sidebar.sidebar.spanFermer")}</span>
                       <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                     </button>
                   </div>
@@ -108,7 +108,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                       <Listbox value={getNameClinic(selectedClinic)} onChange={(clinic) => {setSelectedClinic(clinic.uuid)}}>
                         {({ open }) => (
                           <>
-                            <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Cabinet :</Listbox.Label>
+                            <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">{t("components.molecules.navbar.sidebar.sidebar.listboxCabinet")} :</Listbox.Label>
                             <div className="relative mt-2">
                               <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                 <span className="block truncate">{getNameClinic(selectedClinic)}</span>
@@ -283,7 +283,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
               }}>
                 {({open}) => (
                   <>
-                    <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Cabinet
+                    <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">{t("components.molecules.navbar.sidebar.sidebar.listboxCabinet")}
                       :</Listbox.Label>
                     <div className="relative mt-2">
                       <Listbox.Button
@@ -315,7 +315,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                             {({ selected, active }) => (
                               <>
                                   <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                    Voir tous les cabinets
+                                    {t("components.molecules.navbar.sidebar.sidebar.spanVoirTousLesCabinets")}
                                   </span>
 
                                 {selected ? (
@@ -449,7 +449,7 @@ export function TopSideBar({navigation, setSidebarOpen}) {
       <div
         className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
         <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
-          <span className="sr-only">Open sidebar</span>
+          <span className="sr-only">{t("components.molecules.navbar.sidebar.topSidebar.spanOpenSideBar")}</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
         </button>
 

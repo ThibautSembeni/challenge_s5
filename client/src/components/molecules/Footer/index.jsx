@@ -2,38 +2,39 @@ import logo from "@/assets/images/logo.png";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useTranslation } from "react-i18next";
 
-const navigation = {
-  solutions: [
-    { name: "test", href: "#" },
-    { name: "Analytics", href: "#" },
-    { name: "Commerce", href: "#" },
-    { name: "Insights", href: "#" },
-  ],
-  support: [
-    { name: "Pricing", href: "#" },
-    { name: "Documentation", href: "#" },
-    { name: "Guides", href: "#" },
-    { name: "API Status", href: "#" },
-  ],
-  company: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Partners", href: "#" },
-  ],
-  legal: [
-    { name: "Claim", href: "#" },
-    { name: "Privacy", href: "#" },
-    { name: "Terms", href: "#" },
-  ],
-};
+
 
 export default function Footer() {
   const {
     t,
     i18n: { changeLanguage, language },
   } = useTranslation();
+  const navigation = {
+    solutions: [
+      { name: `${t("footer.solutions.analitycs")}`, href: "#" },
+      { name: `${t("footer.solutions.analitycs")}`, href: "#" },
+      { name: `${t("footer.solutions.commerce")}`, href: "#" },
+      { name: `${t("footer.solutions.insight")}`, href: "#" },
+    ],
+    support: [
+      { name: `${t("footer.support.pricing")}`, href: "#" },
+      { name: `${t("footer.support.Documentation")}`, href: "#" },
+      { name: `${t("footer.support.Guides")}`, href: "#" },
+      { name: `${t("footer.support.ApiSatus")}`, href: "#" },
+    ],
+    company: [
+      { name: `${t("footer.company.about")}`, href: "#" },
+      { name: `${t("footer.company.blog")}`, href: "#" },
+      { name: `${t("footer.company.jobs")}`, href: "#" },
+      { name: `${t("footer.company.press")}`, href: "#" },
+      { name: `${t("footer.company.partners")}`, href: "#" },
+    ],
+    legal: [
+      { name: `${t("footer.legal.claim")}`, href: "#" },
+      { name: `${t("footer.legal.privacy")}`, href: "#" },
+      { name: `${t("footer.legal.terms")}`, href: "#" },
+    ],
+  };
   return (
     <footer className="bg-white mt-10" aria-labelledby="footer-heading">
 

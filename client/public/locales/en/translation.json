@@ -8,6 +8,29 @@
         "fr": "French"
       }
     },
+    "solutions": {
+      "analitycs": "Analytics",
+      "commerce": "Commerce",
+      "insight": "Insights"
+    },
+    "support": {
+      "pricing": "Pricing",
+      "Documentation": "Documentation",
+      "Guides": "Documentation",
+      "ApiSatus": "API Status"
+    },
+    "company": {
+      "about": "About",
+      "blog": "Blog",
+      "jobs": "Jobs",
+      "press": "Press",
+      "partners": "Partners"
+    },
+    "legal": {
+      "claim": "Claim",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
     "Footer": {
       "h2": "Footer"
     },
@@ -41,6 +64,16 @@
       },
       "navbar": {
         "index": {
+          "navigation": {
+            "nameMonCompte": "My account",
+            "nameMonEspace": "My space",
+            "nameDeconnexion": "Log out"
+          },
+          "options": {
+            "nameMonCompte": "My account",
+            "nameMonEspace": "My space",
+            "nameDeconnexion": "Log out"
+          },
           "disclosureButton": {
             "span": "Open main menu"
           },
@@ -56,9 +89,14 @@
         },
         "sidebar" : {
           "sidebar": {
-            "lesVeterinaires" : "The vetenarians"
+            "spanFermer": "Close",
+            "listboxCabinet": "Clinic",
+            "lesVeterinaires" : "The vetenarians",
+            "spanVoirTousLesCabinets": "See all clinics"
+
           },
           "topSidebar": {
+            "spanOpenSideBar": "Open side bar",
             "voirLesNotifications" : "See notifications",
             "ouvrirMenuUtilisateurs" : "Open users menu"
           }
