@@ -19,6 +19,17 @@
     }
   },
   "components" : {
+    "atoms": {
+      "error": {
+        "buttonSpanDismiss": "Fermer"
+      },
+      "success": {
+        "buttonSpanDismiss": "Fermer"
+      },
+      "warning":  {
+        "buttonSpanDismiss": "Dismiss"
+      }
+    },
     "molecules" : {
       "errorbounderys" : {
         "erreur": "Erreur",

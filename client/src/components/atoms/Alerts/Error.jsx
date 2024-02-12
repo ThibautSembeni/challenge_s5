@@ -3,8 +3,10 @@ import {
   ExclamationTriangleIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
 export default function Error({ title, close }) {
+    const { t } = useTranslation();
   return (
     <div className="rounded-md bg-red-50 p-4">
       <div className="flex">
@@ -21,7 +23,7 @@ export default function Error({ title, close }) {
               className="inline-flex rounded-md bg-red-50 p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50"
               onClick={close}
             >
-              <span className="sr-only">Dismiss</span>
+              <span className="sr-only">{t("components.atoms.error.buttonSpanDismiss")}</span>
               <XMarkIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>

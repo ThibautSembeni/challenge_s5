@@ -1,7 +1,9 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
 export default function Warning({ title, close }) {
+    const { t } = useTranslation();
   return (
     <div className="rounded-md bg-yellow-50 p-4">
       <div className="flex">
@@ -21,7 +23,7 @@ export default function Warning({ title, close }) {
               className="inline-flex rounded-md bg-yellow-50 p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 focus:ring-offset-yellow-50"
               onClick={close}
             >
-              <span className="sr-only">Dismiss</span>
+              <span className="sr-only">{t("components.atoms.warning.buttonSpanDismiss")}</span>
               <XMarkIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>

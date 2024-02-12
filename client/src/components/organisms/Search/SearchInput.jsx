@@ -23,7 +23,7 @@ export default function SearchInput({ value, onChange }) {
         <input
           id="search"
           name="search"
-          placeholder="{t('components.organisms.search.searchInput.placeholder')}"
+          placeholder={t('components.organisms.search.searchInput.placeholder')}
           className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
           type="search"
           value={value}
