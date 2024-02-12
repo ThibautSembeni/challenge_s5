@@ -8,6 +8,9 @@ export default function List({
   setEditService,
   setCurrentUUID,
 }) {
+  if (services.length === 0) {
+    return <ListSkeleton />;
+  }
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -51,7 +54,7 @@ export default function List({
               </thead>
               <tbody>
                 {services.map((service, serviceIdx) => (
-                  <tr key={service.uuid}>
+                  <tr key={service["@id"]}>
                     <td
                       className={classNames(
                         serviceIdx !== services.length - 1
@@ -72,21 +75,48 @@ export default function List({
                       )}
                       onClick={() => {
                         setEditService(true);
-                        setCurrentUUID(service.uuid);
+                        setCurrentUUID(service["@id"].split("/")[3]);
                       }}
                     >
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
+                      <span className="text-indigo-600 hover:text-indigo-900 cursor-pointer">
                         Edit
                         <span className="sr-only">, {service.description}</span>
-                      </a>
+                      </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ListSkeleton() {
+  return (
+    <div className="px-4 sm:px-6 lg:px-8 animate-pulse">
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-base font-semibold leading-6 bg-gray-400 h-4 rounded-md"></h1>
+          <p className="mt-2 bg-gray-400 h-4 rounded-md"></p>
+        </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+          <button
+            type="button"
+            className="block rounded-md bg-gray-400 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm"
+          ></button>
+        </div>
+      </div>
+      <div className="mt-8 flow-root">
+        <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 align-middle">
+            <div className="min-w-full border-separate border-spacing-0">
+              {[...Array(5)].map((_, idx) => (
+                <p className="mt-2 bg-gray-400 h-4 rounded-md"></p>
+              ))}
+            </div>
           </div>
         </div>
       </div>
