@@ -137,6 +137,11 @@ const list = [
         element: <Manage type={"calendar"} />,
         roles: ["ROLE_VETERINARIAN"],
       },
+      {
+        path: "services",
+        element: <Manage type={"services"} />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
     ],
   },
   {

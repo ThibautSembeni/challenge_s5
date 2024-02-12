@@ -8,12 +8,19 @@ import { useAuth } from "@/contexts/AuthContext.jsx";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import { generateSchedules } from "@/api/schedules/index.jsx";
 import Alert from "@/components/atoms/Alerts/index.jsx";
+import MyServices from "@/pages/Manage/services/index.jsx";
 
 const navigation = [
   { name: "Dashboard", href: "/manage", icon: HomeIcon, current: true },
   {
     name: "Calendar",
     href: "/manage/calendar",
+    icon: CalendarIcon,
+    current: false,
+  },
+  {
+    name: "Services",
+    href: "/manage/services",
     icon: CalendarIcon,
     current: false,
   },
@@ -155,6 +162,7 @@ export default function Manage({ type = "dashboard" }) {
               </Modal>
             </>
           )}
+          {type === "services" && <MyServices />}
         </Sidebar>
       </div>
     </>

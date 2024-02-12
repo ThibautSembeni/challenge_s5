@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Controller\GetVeterinarianServices;
 use App\Entity\Auth\User;
 use App\Repository\ServicesRepository;
@@ -27,10 +29,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['services:read:collection']]
         ),
         new Post(
-            normalizationContext: ['groups' => ['services:write:item']]
-            // TODO: Add security on Veterinarian ROLE
+            normalizationContext: ['groups' => ['services:write:item']],
+            security: 'is_granted("ROLE_VETERINARIAN")'
         ),
-    ]
+        new GetCollection(normalizationContext: ['groups' => ['services:read:collection']], name: 'get_services_for_veterinarian'),
+        new Get(normalizationContext: ['groups' => ['services:read:collection']], name: 'get_one_services_for_veterinarian'),
+        new Put(
+            normalizationContext: ['groups' => ['services:write:item']],
+            security: 'is_granted("UPDATE_SERVICE", object)',
+        ),
+        new Delete(
+            security: 'is_granted("DELETE_SERVICE", object)',
+        )
+    ],
 )]
 class Services
 {
