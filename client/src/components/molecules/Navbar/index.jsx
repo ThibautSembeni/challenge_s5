@@ -5,12 +5,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import RadiosButtonsWithIcons from "@/components/atoms/RadiosButtons/RadiosButtonsWithIcons.jsx";
 import logo from "@/assets/images/logo.png";
+import { useTranslation } from "react-i18next";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
+  const { t } = useTranslation();
   const { user, isAuthenticated, logout } = useAuth();
 
   const [navigation, setNavigation] = useState([
@@ -48,7 +50,7 @@ export default function Navbar() {
                   {/* Mobile menu button */}
                   <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <span className="absolute -inset-0.5" />
-                    <span className="sr-only">Open main menu</span>
+                    <span className="sr-only">{t("components.molecules.navbar.index.disclosureButton.span")}</span>
                     {open ? (
                       <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                     ) : (
@@ -58,7 +60,7 @@ export default function Navbar() {
                 </div>
                 {isAuthenticated ? (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
-                    <Link to={"#"}>Mes rendez-vous</Link>
+                    <Link to={"#"}>{t("components.molecules.navbar.index.isVeterinaire.link")}</Link>
                     <RadiosButtonsWithIcons
                       placeholder={`${user.firstname} ${user.lastname}`}
                       className={
@@ -90,13 +92,13 @@ export default function Navbar() {
                       to={"/practicien-register"}
                       className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
-                      Vous êtes vétérinaire ?
+                      {t("components.molecules.navbar.index.isAthenticated.link")}
                     </Link>
                     <Link
                       to="/login"
                       className="text-sm font-semibold leading-6 text-gray-900"
                     >
-                      Se connecter <span aria-hidden="true">&rarr;</span>
+                      {t("components.molecules.navbar.index.seConnecter.link")}<span aria-hidden="true">&rarr;</span>
                     </Link>
                   </div>
                 )}
@@ -154,14 +156,14 @@ export default function Navbar() {
                     to={""}
                     className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Vous êtes vétérinaire ?
+                    {t("components.molecules.navbar.index.isVeterinaire.link")}
                   </Link>
 
                   <Link
                     to="/login"
                     className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Log in
+                    {t("components.molecules.navbar.index.seConnecter.link")}
                   </Link>
                 </div>
               </>

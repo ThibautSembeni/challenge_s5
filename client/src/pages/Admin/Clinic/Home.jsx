@@ -17,6 +17,8 @@ import {
   CalendarDaysIcon,
   IdentificationIcon,
 } from "@heroicons/react/24/outline/index.js";
+//translation
+import { useTranslation } from "react-i18next";
 
 const stats = [
   { id: 1, name: "Nombre de rdv aujourd'hui", stat: "71", icon: UsersIcon },
@@ -84,6 +86,8 @@ const people = [
 ];
 
 export default function Home() {
+  //translation
+  const { t } = useTranslation();
   const { user } = useAuth();
   console.log(user);
   const uuid = user.clinic.uuid;
@@ -156,7 +160,7 @@ export default function Home() {
                 <div className="px-4 sm:px-6 lg:px-8">
                   <div className="mb-20">
                     <h3 className="text-base font-semibold leading-6 text-gray-900">
-                      Statistiques
+                      {t("pages.admin.clinic.home.h3")}
                     </h3>
 
                     <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -186,7 +190,7 @@ export default function Home() {
                                   href="#"
                                   className="font-medium text-indigo-600 hover:text-indigo-500"
                                 >
-                                  Tout voir
+                                  {t("pages.admin.clinic.home.divHrefTTVoir")}
                                 </a>
                               </div>
                             </div>
@@ -200,11 +204,10 @@ export default function Home() {
                     <div className="sm:flex sm:items-center">
                       <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                          Les prochains rendez-vous
+                          {t("pages.admin.clinic.home.h1")}
                         </h1>
                         <p className="mt-2 text-sm text-gray-700">
-                          Retrouvez ici les prochains rendez-vous de la
-                          clinique.
+                          {t("pages.admin.clinic.home.p")}
                         </p>
                       </div>
                       <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -212,7 +215,7 @@ export default function Home() {
                           href={"/administration/ajouter-rdv"}
                           className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                          Ajouter un rdv
+                          {t("pages.admin.clinic.home.divHrefAjouter")}
                         </a>
                       </div>
                     </div>
@@ -226,31 +229,31 @@ export default function Home() {
                                   scope="col"
                                   className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                                 >
-                                  Nom
+                                  {t("pages.admin.clinic.home.thNom")}
                                 </th>
                                 <th
                                   scope="col"
                                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                 >
-                                  Type
+                                  {t("pages.admin.clinic.home.thType")}
                                 </th>
                                 <th
                                   scope="col"
                                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                 >
-                                  Status
+                                  {t("pages.admin.clinic.home.thStatus")}
                                 </th>
                                 <th
                                   scope="col"
                                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                 >
-                                  Animal
+                                  {t("pages.admin.clinic.home.thAnimal")}
                                 </th>
                                 <th
                                   scope="col"
                                   className="relative py-3.5 pl-3 pr-4 sm:pr-0"
                                 >
-                                  <span className="sr-only">Modifier</span>
+                                  <span className="sr-only">{t("pages.admin.clinic.home.thModifier")}</span>
                                 </th>
                               </tr>
                             </thead>

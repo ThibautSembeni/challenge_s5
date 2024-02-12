@@ -10,6 +10,8 @@ import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {IdentificationIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
+//translation
+import { useTranslation } from "react-i18next";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
@@ -38,6 +40,8 @@ const people = [
 ]
 
 export default function Appointment() {
+  //translation
+  const { t } = useTranslation();
   const { user } = useAuth();
   const uuid = user.clinic.uuid;
   const [clinicInfo, setClinicInfo] = useState({
@@ -88,7 +92,7 @@ export default function Appointment() {
                 <div className="px-4 sm:px-6 lg:px-8">
                   <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
-                      <h1 className="text-base font-semibold leading-6 text-gray-900">Les rendez-vous</h1>
+                      <h1 className="text-base font-semibold leading-6 text-gray-900">{t("pages.admin.clinic.appointment.h1")}</h1>
                     </div>
                   </div>
 
@@ -99,19 +103,19 @@ export default function Appointment() {
                           <thead>
                           <tr>
                             <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                              Nom
+                              {t("pages.admin.clinic.appointment.thNom")}
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Type
+                              {t("pages.admin.clinic.appointment.thType")}
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Status
+                              {t("pages.admin.clinic.appointment.thStatus")}
                             </th>
                             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                              Animal
+                              {t("pages.admin.clinic.appointment.thAnimal")}
                             </th>
                             <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                              <span className="sr-only">Modifier</span>
+                              <span className="sr-only">{t("pages.admin.clinic.appointment.thSpanModifier")}</span>
                             </th>
                           </tr>
                           </thead>
@@ -135,13 +139,13 @@ export default function Appointment() {
                               </td>
                               <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                               <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                Actif
+                                {t("pages.admin.clinic.appointment.tdSpanActif")}
                               </span>
                               </td>
                               <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">{person.role}</td>
                               <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                 <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                  Modifier <span className="sr-only">, {person.name}</span>
+                                  {t("pages.admin.clinic.appointment.tdHrefModifier")} <span className="sr-only">, {person.name}</span>
                                 </a>
                               </td>
                             </tr>

@@ -3,8 +3,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/molecules/Loading";
 import { Link } from "react-router-dom";
 import Input from "@/components/atoms/Inputs/Input.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 export default function Page() {
+  //translation
+  const { t } = useTranslation();
   const { register, isLoading, error } = useAuth();
 
   const handleSubmit = async (event) => {
@@ -27,7 +31,7 @@ export default function Page() {
             alt="Your Company"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Créez votre compte
+            {t("pages.auth.register.h2")}
           </h2>
         </div>
 
@@ -41,7 +45,7 @@ export default function Page() {
                     htmlFor="firstname"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Prénom
+                    {t("pages.auth.register.labelFirstname")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -59,7 +63,7 @@ export default function Page() {
                     htmlFor="lastname"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Nom de famille
+                    {t("pages.auth.register.labelLastname")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -79,7 +83,7 @@ export default function Page() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Adresse email
+                  {t("pages.auth.register.labelEmail")}
                 </label>
                 <div className="mt-2">
                   <input
@@ -98,7 +102,7 @@ export default function Page() {
                   htmlFor="password"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Mot de passe
+                  {t("pages.auth.register.labelPassword")}
                 </label>
 
                 <div className="mt-2">
@@ -121,21 +125,21 @@ export default function Page() {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  S'inscrire
+                  {t("pages.auth.register.buttonSubmit")}
                 </button>
               </div>
             </form>
           </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Déjà membre ?{" "}
+            {t("pages.auth.register.pDejaMembre")}{" "}
             <Link
               className={
                 "font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               }
               to="/login"
             >
-              Se connecter
+              {t("pages.auth.register.linkLogin")}
             </Link>
           </p>
         </div>

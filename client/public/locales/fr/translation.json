@@ -17,5 +17,232 @@
     "newsletter": {
       "h3": "Inscrivez-vous à notre newsletter"
     }
+  },
+  "components" : {
+    "molecules" : {
+      "errorbounderys" : {
+        "erreur": "Erreur",
+        "h1": "Oupsi, une erreur est survenue",
+        "p": "Désolé, une erreur est survenue. Veuillez réessayer plus tard.",
+        "link": {
+          "span": "Retour à l'accueil"
+        }
+      },
+      "navbar": {
+        "index": {
+          "disclosureButton": {
+            "span": "Ouvrir menu principal"
+          },
+          "isAthenticated": {
+            "link": "Mes rendez-vous"
+          },
+          "isVeterinaire": {
+            "link": "Vous êtes vétérinaire ?"
+          },
+          "seConnecter": {
+            "link": "Se connecter"
+          }
+        },
+        "sidebar" : {
+          "sidebar": {
+            "lesVeterinaires" : "Les vêterinaires"
+          },
+          "topSidebar": {
+            "voirLesNotifications" : "Voir les notifications",
+            "ouvrirMenuUtilisateurs" : "Ouvrir le menu utilisateurs"
+          }
+        }
+      }
+
+    },
+    "organisms": {
+      "account" : {
+        "deletedAccount" : {
+          "title" : "Supprimer votre compte",
+          "body": "Êtes-vous sûr de vouloir désactiver votre compte ? Toutes vos données seront définitivement supprimées. Cette action ne peut être annulée.\n",
+          "annuler" : "Annuler",
+          "supprimer" : "Supprimer",
+          "h2" : "Supprimer votre compte",
+          "p" : "Attention, cette action est irréversible.",
+          "button": "Oui, je souhaite supprimer mon compte"
+        },
+        "updatedAccount": {
+          "h2": "Modifier votre mot de passe",
+          "p": "Les mots de passe ne correspondent pas",
+          "labelCurrentPassword": "Mot de passe actuel",
+          "labelNewPassword": "Nouveau mot de passe",
+          "labelConfirmPassword": "Confirmez le nouveau mot de passe",
+          "buttonEnregistrer": "Enregistrer"
+        },
+        "updatedUserInfo": {
+          "h2": "Informations personnelles",
+          "button": "Sauvegarder"
+        }
+      },
+      "home": {
+        "featureSections": {
+          "h2": "Au service de ceux qui vous sont chers"
+        },
+        "heroSection": {
+          "h1": "Trouvez un vêterinaire",
+          "p": "Trouvez les vêterinaires proches de chez vous."
+        },
+        "veterinaireSection": {
+          "h2": "Vous êtes vétérinaire ?",
+          "p": " Équipez-vous du logiciel Vetolib pour gagner en confort de votre travail."
+        }
+      },
+      "search": {
+        "praticienSection": {
+          "p": "Spécialité :"
+        },
+        "resultSection": {
+            "h2": "Vétérinaires à : ",
+            "pTrouvez": "Trouvez à ",
+            "pVet": "un vétérinaire proposant la prise de rendez-vous en ligne",
+            "pResultat": "Résultats",
+            "pAucunResultat": "Aucun résultat"
+        },
+        "searchInput": {
+          "label": "Rechercher",
+          "placeholder": "rechercher par adresse ou vêterinaire",
+          "button": "Rechercher"
+        }
+      },
+      "vetenarian": {
+        "calendarOpenClose": {
+          "h2": "Horaires d'ouverture",
+          "p": "Attention, ces horaires peuvent varier en fonction des jours fériés.",
+          "buttonLundi": "L",
+          "buttonMardi": "M",
+          "buttonMercredi": "M",
+          "buttonJeudi": "J",
+          "buttonVendredi": "V",
+          "buttonSamedi": "S",
+          "buttonDimanche": "D",
+          "Lundi": "Lundi",
+          "Mardi": "Mardi",
+          "Mercredi": "Mercredi",
+          "Jeudi": "Jeudi",
+          "Vendredi": "Vendredi",
+          "Samedi": "Samedi",
+          "Dimanche": "Dimanche"
+        },
+        "complementaryInformation": {
+          "h2": "Informations complémentaires"
+        },
+        "informationComponent": {
+          "h2": "À propos"
+        },
+        "teamSectionComponent": {
+          "h2": "Notre équipe"
+        },
+        "testimonialComponent": {
+          "h2": "Avis",
+          "p": "Avis clients"
+        }
+      }
+    }
+  },
+  "pages": {
+    "admin": {
+      "clinic": {
+        "appointment": {
+          "h1": "Les rendez-vous",
+          "thNom": "Nom",
+          "thType": "Type",
+          "thStatus": "Status",
+          "thAnimal": "Animal",
+          "thSpanModifier": "Modifier",
+          "tdSpanActif": "Actif",
+          "tdHrefModifier": "Modifier"
+        },
+        "home": {
+          "h3": "Statistiques",
+          "divHrefTTVoir": "Tout voir",
+          "h1": " Les prochains rendez-vous",
+          "p": "Retrouvez ici les prochains rendez-vous de la clinique.",
+          "divHrefAjouter": "Ajouter un rdv",
+          "thNom": "Nom",
+          "thType": "Type",
+          "thStatus": "Status",
+          "thAnimal": "Animal",
+          "thModifier": "Modifier"
+        },
+        "pet": {
+          "h1": "Animaux",
+          "h2": "Animaux"
+        },
+        "schedule": {
+          "labelStartTime": "Horaire de début",
+          "labelEndTime": "Horaire de fin",
+          "h1": "Les horaires d'ouverture",
+          "buttonAddHoraireOuverture": "Ajouter des horaires d'ouverture",
+          "modalAttrTitle": "Ajouter des horaires d'ouverture",
+          "labelDay": "Jour",
+          "labelIsOpen": "Ouverture",
+          "buttonSubmit": "Enregistrer",
+          "buttonCancel": "Annuler"
+        },
+        "teams": {
+          "h1": "Vétérinaires",
+          "buttonAddVeterinaire": "Ajouter un vêterinaire",
+          "modalAttrTitle": "Ajouter des vétérinaires au cabinet",
+          "labelFirstName": "Prénom",
+          "labelLastName": "Nom",
+          "labelEmail": "Email",
+          "buttonSubmit": "Enregistrer",
+          "buttonCancel": "Annuler"
+        }
+      }
+
+    },
+    "auth": {
+      "login": {
+        "h2": "Se connecter à votre compte",
+        "labelEmail": "Adresse email",
+        "labelPassword": "Mot de passe",
+        "divHrefMotDePasseOublie": "Mot de passe oublie ?",
+        "buttonSubmit": "Se connecter",
+        "pNouveau": "Nouveau sur VetCare ?",
+        "linkRegister": "S'inscrire"
+      },
+      "register": {
+        "h2": "Créez votre compte",
+        "labelFirstName": "Prénom",
+        "labelLastName": "Nom de famille",
+        "labelEmail": "Adresse email",
+        "labelPassword": "Mot de passe",
+        "buttonSubmit": "S'inscrire",
+        "pDejaMembre": "Deja membre ?",
+        "linkLogin": "Se connecter"
+      }
+    },
+    "clinic": {
+      "clinicFile": {
+        "h2": "Trouver nous"
+      },
+      "vetenarian": {
+        "buttonRDV": "Prendre RDV",
+        "h2": "Nous trouver"
+      }
+    },
+    "praticienRegister": {
+      "index": {
+        "h2": "La nouvelle génération de solutions pour les vétérinaires",
+        "p": "  Équipez vous de VétoLib et gagnez du temps au quotidien, gagnez en confort de travail et renforcez la communication avec vos patients !",
+        "li1": "Des solutions tout-en-un, conçues avec vous",
+        "li2": " L'innovation au coeur de notre ADN Un service client haut de gamme",
+        "li3": "Le plus haut niveau de protection des données de santé",
+        "button": "Sauvegarder"
+      }
+    },
+    "notFound404": {
+      "h1": "Page introuvable",
+      "p": "La page que vous recherchez n'existe pas.",
+      "aSpan": "Retour à l'accueil"
+    }
   }
 }
+
+

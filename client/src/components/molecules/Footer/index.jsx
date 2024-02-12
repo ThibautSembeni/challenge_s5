@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const navigation = {
   solutions: [
-    { name: "Marketing", href: "#" },
+    { name: "test", href: "#" },
     { name: "Analytics", href: "#" },
     { name: "Commerce", href: "#" },
     { name: "Insights", href: "#" },
@@ -36,7 +36,8 @@ export default function Footer() {
   } = useTranslation();
   return (
     <footer className="bg-white mt-10" aria-labelledby="footer-heading">
-      <h2 id="footer-heading" className="sr-only"> <!-- TRANSLATION -->{t("footer.Footer.h2")}
+
+      <h2 id="footer-heading" className="sr-only"> {t("footer.Footer.h2")}
       </h2>
       <div className="mx-auto max-w-7xl px-6 pb-8 pt-6 lg:px-8 ">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
@@ -81,8 +82,8 @@ export default function Footer() {
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
                 <h3 className="text-sm font-semibold leading-6 text-gray-900">
-                  <!-- TRANSLATION -->
-                  {t("footer.company.h3")}
+
+                  {t("footer.Company.h3")}
                 </h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.company.map((item) => (

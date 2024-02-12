@@ -12,6 +12,8 @@ import Loading from "@/components/molecules/Loading.jsx";
 import {IdentificationIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
 import {getAllPets} from "@/api/clinic/Pet.jsx";
 import {Link} from "react-router-dom";
+//translation
+import { useTranslation } from "react-i18next";
 
 const navigation = [
   {name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false},
@@ -27,6 +29,8 @@ const userNavigation = [
 ]
 
 export default function Pet() {
+  //translation
+  const { t } = useTranslation();
   const {user} = useAuth();
   const uuid = user.clinic.uuid;
   const [clinicInfo, setClinicInfo] = useState({
@@ -85,13 +89,13 @@ export default function Pet() {
                     <div className="px-4 sm:px-6 lg:px-8">
                       <div className="sm:flex sm:items-center">
                         <div className="sm:flex-auto">
-                          <h1 className="text-base font-semibold leading-6 text-gray-900">Animaux</h1>
+                          <h1 className="text-base font-semibold leading-6 text-gray-900">{t("pages.admin.clinic.pet.h1")}</h1>
                         </div>
                       </div>
 
                       <div className="bg-white">
                         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-                          <h2 className="sr-only">Animaux</h2>
+                          <h2 className="sr-only">{t("pages.admin.clinic.pet.h2")}</h2>
 
                           <div
                               className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">

@@ -13,6 +13,8 @@ import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/Cale
 import {CalendarDaysIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 const navigation = [
   { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
@@ -28,6 +30,8 @@ const userNavigation = [
 ]
 
 export default function Schedule () {
+  //translation
+  const { t } = useTranslation();
   const { user } = useAuth();
   const uuid = user.clinic.uuid;
   const [clinicInfo, setClinicInfo] = useState({
@@ -148,7 +152,7 @@ export default function Schedule () {
       <>
         <div className="sm:col-span-3">
           <label htmlFor="startTime" className="block text-sm font-medium leading-6 text-gray-900">
-            Horaire de début
+            {t("pages.admin.clinic.schedule.labelStartTime")}
           </label>
           <div className="mt-2">
             <select
@@ -165,7 +169,7 @@ export default function Schedule () {
 
         <div className="sm:col-span-3">
           <label htmlFor="endTime" className="block text-sm font-medium leading-6 text-gray-900">
-            Horaire de fin
+            {t("pages.admin.clinic.schedule.labelEndTime")}
           </label>
           <div className="mt-2">
             <select
@@ -206,7 +210,7 @@ export default function Schedule () {
                 <div className="px-4 sm:px-6 lg:px-8">
                   <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
-                      <h1 className="text-base font-semibold leading-6 text-gray-900">Les horaires d'ouverture</h1>
+                      <h1 className="text-base font-semibold leading-6 text-gray-900">{t("pages.admin.clinic.schedule.h1")}</h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                       <button
@@ -214,17 +218,17 @@ export default function Schedule () {
                         onClick={openModal}
                         className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
-                        Ajouter des horaires d'ouverture
+                        {t("pages.admin.clinic.schedule.buttonAddHoraireOuverture")}
                       </button>
                     </div>
                   </div>
 
-                  <Modal isOpen={isModalOpen} onClose={closeModal} title="Ajouter des horaires d'ouverture">
+                  <Modal isOpen={isModalOpen} onClose={closeModal} title="{t('pages.admin.clinic.schedule.modalAttrTitle')}">
                     <form onSubmit={handleSubmit}>
                       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-3">
                           <label htmlFor="day" className="block text-sm font-medium leading-6 text-gray-900">
-                            Jour
+                            {t("pages.admin.clinic.schedule.labelDay")}
                           </label>
                           <div className="mt-2">
                             <select
@@ -241,7 +245,7 @@ export default function Schedule () {
 
                         <div className="sm:col-span-3">
                           <label htmlFor="isOpen" className="block text-sm font-medium leading-6 text-gray-900">
-                            Ouverture
+                            {t("pages.admin.clinic.schedule.labelIsOpen")}
                           </label>
                           <div className="mt-2">
                             <select
@@ -263,14 +267,14 @@ export default function Schedule () {
                           className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
 
                         >
-                          Enregistrer
+                          {t("pages.admin.clinic.schedule.buttonSubmit")}
                         </button>
                         <button
                           type="button"
                           className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                           onClick={closeModal}
                         >
-                          Annuler
+                          {t("pages.admin.clinic.schedule.buttonCancel")}
                         </button>
                       </div>
                     </form>

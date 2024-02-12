@@ -14,6 +14,7 @@ function classNames(...classes) {
 export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen }) {
   return (
     <>
+
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
           <Transition.Child
@@ -93,7 +94,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                         </ul>
                       </li>
                       <li>
-                        <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
+                        <div className="text-xs font-semibold leading-6 text-gray-400">{t("components.molecules.navbar.sidebar.sidebar.lesveterinaires")}</div>
                         <ul role="list" className="-mx-2 mt-2 space-y-1">
                           {teams.map((team) => (
                             <li key={team.uuid}>
@@ -171,7 +172,7 @@ export default function Sidebar({ navigation, teams, sidebarOpen, setSidebarOpen
                 </ul>
               </li>
               <li>
-                <div className="text-xs font-semibold leading-6 text-gray-400">Les vétérinaires</div>
+                <div className="text-xs font-semibold leading-6 text-gray-400">{t("components.molecules.navbar.sidebar.sidebar.lesveterinaires")}</div>
                 <ul role="list" className="-mx-2 mt-2 space-y-1">
                   {teams.map((team) => (
                     <li key={team.uuid}>
@@ -225,7 +226,7 @@ export function TopSideBar ({ navigation, setSidebarOpen }) {
         <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 justify-end">
           <div className="flex items-center gap-x-4 lg:gap-x-6">
             <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-              <span className="sr-only">Voir les notifications</span>
+              <span className="sr-only">{t("components.molecules.navbar.sidebar.topSidebar.voirLesNotifications")}</span>
               <BellIcon className="h-6 w-6" aria-hidden="true" />
             </button>
 
@@ -235,7 +236,7 @@ export function TopSideBar ({ navigation, setSidebarOpen }) {
             {/* Profile dropdown */}
             <Menu as="div" className="relative">
               <Menu.Button className="-m-1.5 flex items-center p-1.5">
-                <span className="sr-only">Ouvrir le menu utilisateur</span>
+                <span className="sr-only">{t("components.molecules.navbar.sidebar.topSidebar.ouvrirMenuUtilisateurs")}</span>
                 <img
                   className="h-8 w-8 rounded-full bg-gray-50"
                   src={dogImg}

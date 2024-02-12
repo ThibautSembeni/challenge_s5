@@ -2,12 +2,17 @@ import React, {useState} from 'react';
 import {deleteVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 import {TrashIcon} from "@heroicons/react/24/outline/index.js";
+//translation
+import { useTranslation } from "react-i18next";
 
 function TeamSectionComponent({ teamsProps, admin = false }) {
+
   const [teams, setTeams] = useState(teamsProps);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
+  //translation
+  const { t } = useTranslation();
 
   const deleteVeterinarianByAdmin = async (uuid) => {
     const deleteItem = await deleteVeterinarians(uuid);
@@ -65,7 +70,7 @@ function TeamSectionComponent({ teamsProps, admin = false }) {
       {/* Team section */}
       <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-48 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Notre équipe</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t("components.organisms.vetenarian.teamSectionComponent.h2")}</h2>
         </div>
         <ul
           role="list"

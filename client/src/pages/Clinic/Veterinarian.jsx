@@ -7,10 +7,13 @@ import imgDog from "@/assets/images/dogVeterinary.jpg";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import Footer from "@/components/molecules/Footer/index.jsx";
 import MapInfo from "@/components/molecules/Map/MapInfo.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 export default function Veterinarian() {
   const { uuid } = useParams();
-
+  //translation
+  const { t } = useTranslation();
   const [veterinarian, setVeterinarian] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +54,7 @@ export default function Veterinarian() {
                     {veterinarian.specialties}
                   </p>
                   <div className="mt-4">
-                    <Button color="blue">Prendre RDV</Button>
+                    <Button color="blue">{t("pages.clinic.vetenarian.buttonRDV")}</Button>
                   </div>
                 </div>
                 <img
@@ -68,7 +71,7 @@ export default function Veterinarian() {
           <div className="mx-auto mt-12 max-w-7xl px-6 lg:px-8 h-[50vh]">
             <div className="mx-auto max-w-2xl lg:mx-0 mb-4">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Nous trouver
+                {t("pages.clinic.vetenarian.h2")}
               </h2>
             </div>
             <div className="w-full flex border-2 border-gray-900/5 rounded-3xl">
