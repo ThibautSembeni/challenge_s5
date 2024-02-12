@@ -7,6 +7,7 @@ import {
   generateDaysOfWeek,
   getDaysOfMonth,
 } from "@/components/molecules/Calendar/Helper/index.jsx";
+import "@/utils/date";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -18,6 +19,8 @@ export default function MiniCalendar({
   canSwitchMonth = false,
   locale = "fr-FR",
   className,
+  schedules,
+  onClick,
 }) {
   const days = useMemo(() => getDaysOfMonth(date), [date]);
   const daysOfWeek = useMemo(
@@ -77,7 +80,7 @@ export default function MiniCalendar({
         <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
           {days.map((day, dayIdx) => (
             <button
-              key={day.date}
+              key={dayIdx}
               type="button"
               className={classNames(
                 "py-1.5 hover:bg-gray-100 focus:z-10",
@@ -99,7 +102,10 @@ export default function MiniCalendar({
                 dayIdx === days.length - 1 && "rounded-br-lg",
               )}
               disabled={!canSwitchMonth && !day.isCurrentMonth}
-              onClick={() => setDate(new Date(day.date))}
+              onClick={() => {
+                setDate(new Date(day.date));
+                onClick && onClick();
+              }}
             >
               <time
                 dateTime={day.date}

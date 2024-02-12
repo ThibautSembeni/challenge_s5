@@ -7,6 +7,7 @@ import {
   getTimeLabels,
   EventItem,
 } from "@/components/molecules/Calendar/Helper/index.jsx";
+import "@/utils/date";
 
 function DayButton({ day, date, locale, onClick }) {
   const dayNames = [...Array(7).keys()].map(
@@ -146,6 +147,7 @@ export default function Day({ date, setDate, locale = "fr-FR", schedules }) {
         setDate={setDate}
         canSwitchMonth={true}
         locale={locale}
+        schedules={schedules}
       />
     </div>
   );

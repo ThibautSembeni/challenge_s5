@@ -1,19 +1,5 @@
 import Event from "@/components/molecules/Calendar/Events/index.jsx";
-
-Date.prototype.startOfWeek = function () {
-  const diff = (this.getDay() + 6) % 7; // Ajuster le jour de la semaine (0 = Dimanche, 1 = Lundi, ..., 6 = Samedi)
-  return new Date(this.getFullYear(), this.getMonth(), this.getDate() - diff);
-};
-
-Date.prototype.endOfWeek = function () {
-  const startOfWeek = this.startOfWeek();
-  return new Date(
-    startOfWeek.getFullYear(),
-    startOfWeek.getMonth(),
-    startOfWeek.getDate() + 6,
-  );
-};
-
+import "@/utils/date";
 export function getTimeLabels(locale) {
   const timeLabels = [];
   for (let i = 0; i < 24; i++) {

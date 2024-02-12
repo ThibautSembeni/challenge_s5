@@ -47,7 +47,7 @@ class GenerateSchedulesController extends AbstractController
         $schedulesRepository = $this->entityManager->getRepository(Schedules::class);
         $lastSchedule = $schedulesRepository->getLastSchedule($data);
         if ($lastSchedule && $payload['start_date'] < $lastSchedule->getEndTime()) {
-            throw $this->createNotFoundException('You have already generated schedules for this date range. Please choose a different date range.');
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(422, 'You have already generated schedules for this date range. Please choose a different date range.');
         }
 
         $interval = new \DateInterval('P1D');
@@ -55,19 +55,21 @@ class GenerateSchedulesController extends AbstractController
         $endDate = $payload['end_date'];
         $datePeriod = new \DatePeriod($startDate, $interval, $endDate);
 
+        $generatedSchedules = [];
+
         foreach ($datePeriod as $date) {
             $dayOfWeek = $date->format('l');
             foreach ($clinicSchedules as $clinicSchedule) {
                 if ($clinicSchedule->getDay() === $dayOfWeek && $clinicSchedule->getTimeslot()->isIsOpen()) {
-                    $this->generateTimeSlots($date, $clinicSchedule, $data);
+                    $this->generateTimeSlots($date, $clinicSchedule, $data, $generatedSchedules);
                 }
             }
         }
 
-        return new Response('', Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return new Response(json_encode($generatedSchedules), Response::HTTP_CREATED, ['Content-Type' => 'application/json']);
     }
 
-    private function generateTimeSlots(\DateTime $date, ClinicSchedules $clinicSchedule, Veterinarians $veterinarian): void
+    private function generateTimeSlots(\DateTime $date, ClinicSchedules $clinicSchedule, Veterinarians $veterinarian, array &$generatedSchedules): void
     {
         $startTime = clone $clinicSchedule->getTimeslot()->getStartTime();
         $endTime = $clinicSchedule->getTimeslot()->getEndTime();
@@ -81,7 +83,12 @@ class GenerateSchedulesController extends AbstractController
             $schedule->setEndTime((clone $date)->modify('+30 minutes'));
 
             $this->entityManager->persist($schedule);
-
+            $generatedSchedules[] = [
+                'veterinarian' => $veterinarian->getUuid(),
+                'day' => $date->format('l'),
+                'start_time' => $date->format('H:i'),
+                'end_time' => (clone $date)->modify('+30 minutes')->format('H:i'),
+            ];
             $startTime->modify('+30 minutes');
             $date->modify('+30 minutes');
         }

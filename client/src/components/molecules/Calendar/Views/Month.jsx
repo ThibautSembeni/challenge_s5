@@ -5,12 +5,19 @@ import {
   generateDaysOfWeek,
   getDaysOfMonth,
 } from "@/components/molecules/Calendar/Helper/index.jsx";
+import "@/utils/date";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Month({ date, setDate, locale = "fr-FR", schedules }) {
+export default function Month({
+  date,
+  setDate,
+  locale = "fr-FR",
+  schedules,
+  setView,
+}) {
   const days = useMemo(() => getDaysOfMonth(date), [date]);
   const daysOfWeek = useMemo(
     () => generateDaysOfWeek(locale, "long"),
@@ -42,6 +49,10 @@ export default function Month({ date, setDate, locale = "fr-FR", schedules }) {
                   day.isCurrentMonth ? "bg-white" : "bg-gray-50 text-gray-500",
                   "relative px-3 py-2",
                 )}
+                onClick={() => {
+                  setDate(new Date(day.date));
+                  setView("week");
+                }}
               >
                 <time
                   dateTime={day.date}

@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/20/solid/index.js";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useEffect, useMemo } from "react";
+import "@/utils/date";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,21 +28,8 @@ const selectDate = {
   year: { before: "Previous year", next: "Next year" },
 };
 
-Date.prototype.startOfWeek = function () {
-  const diff = (this.getDay() + 6) % 7; // Ajuster le jour de la semaine (0 = Dimanche, 1 = Lundi, ..., 6 = Samedi)
-  return new Date(this.getFullYear(), this.getMonth(), this.getDate() - diff);
-};
-
-Date.prototype.endOfWeek = function () {
-  const startOfWeek = this.startOfWeek();
-  return new Date(
-    startOfWeek.getFullYear(),
-    startOfWeek.getMonth(),
-    startOfWeek.getDate() + 6,
-  );
-};
-
 const getSelectedDateDisplayLabel = (date, view, locale) => {
+  date = new Date(date);
   switch (view) {
     case "day":
       return date.toLocaleDateString(locale, {
@@ -71,6 +59,7 @@ const getSelectedDateDisplayLabel = (date, view, locale) => {
 };
 
 const getDisplayLabel = (date, view, locale) => {
+  date = new Date(date);
   switch (view) {
     case "day":
       return date.toLocaleDateString(locale, {
@@ -150,9 +139,7 @@ export default function Header({
   return (
     <header className="flex flex-none items-center justify-between border-b border-gray-200 px-6 py-4">
       <h1 className="text-base font-semibold leading-6 text-gray-900">
-        <time dateTime={date.toISOString().slice(0, 7)}>
-          {currentDisplayLabel}
-        </time>{" "}
+        <time dateTime={date}>{currentDisplayLabel}</time>{" "}
       </h1>
       <div className="flex items-center">
         <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">

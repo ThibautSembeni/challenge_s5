@@ -4,6 +4,7 @@ import {
   filterSchedules,
   getTimeLabels,
 } from "@/components/molecules/Calendar/Helper/index.jsx";
+import "@/utils/date";
 
 function getDaysBetweenDates(start, end, locale) {
   const startDate = new Date(start);
@@ -32,11 +33,18 @@ function getDaysBetweenDates(start, end, locale) {
   return days;
 }
 
-export default function Week({ date, setDate, locale = "fr-FR", schedules }) {
+export default function Week({
+  date,
+  setDate,
+  locale = "fr-FR",
+  schedules,
+  setView,
+}) {
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
   const days = useMemo(() => {
+    date = new Date(date);
     return getDaysBetweenDates(date.startOfWeek(), date.endOfWeek(), locale);
   }, [date]);
   const timeLabels = useMemo(() => getTimeLabels(locale), [locale]);
@@ -76,6 +84,10 @@ export default function Week({ date, setDate, locale = "fr-FR", schedules }) {
                 key={i}
                 type="button"
                 className="flex flex-col items-center pb-3 pt-2"
+                onClick={() => {
+                  setDate(new Date(day.date));
+                  setView("day");
+                }}
               >
                 {day.label}{" "}
                 <span
@@ -94,7 +106,14 @@ export default function Week({ date, setDate, locale = "fr-FR", schedules }) {
           <div className="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
             <div className="col-end-1 w-14" />
             {days.map((day, i) => (
-              <div className="flex items-center justify-center py-3" key={i}>
+              <div
+                className="flex items-center justify-center py-3 cursor-pointer"
+                key={i}
+                onClick={() => {
+                  setDate(new Date(day.date));
+                  setView("day");
+                }}
+              >
                 <span className={`${day.isToday && "flex items-baseline"}`}>
                   {day.label}{" "}
                   <span

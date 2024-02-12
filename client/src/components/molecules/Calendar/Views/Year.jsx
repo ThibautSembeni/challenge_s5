@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
 import MiniCalendar from "@/components/molecules/Calendar/MiniCalendar.jsx";
+import "@/utils/date";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -22,8 +23,15 @@ function getAllMonthsInYear(year, locale) {
   return months;
 }
 
-export default function Year({ date, setDate, locale = "fr-FR", schedules }) {
+export default function Year({
+  date,
+  setDate,
+  locale = "fr-FR",
+  schedules,
+  setView,
+}) {
   const months = useMemo(() => {
+    date = new Date(date);
     return getAllMonthsInYear(date.getFullYear(), locale);
   }, [date]);
 
@@ -37,6 +45,9 @@ export default function Year({ date, setDate, locale = "fr-FR", schedules }) {
             canSwitchMonth={false}
             locale={locale}
             className={"w-full"}
+            onClick={() => {
+              setView("month");
+            }}
           />
         ))}
       </div>
