@@ -45,6 +45,14 @@ export function filterSchedules(schedules, date, view) {
       const eventDate = new Date(event.startTime);
       return eventDate >= startOfWeek && eventDate < endOfWeek;
     });
+  } else if (view === "month") {
+    return schedules.filter((event) => {
+      const eventDate = new Date(event.startTime);
+      return (
+        eventDate.getMonth() === date.getMonth() &&
+        eventDate.getFullYear() === date.getFullYear()
+      );
+    });
   }
 }
 
@@ -82,4 +90,78 @@ export function EventItem({ event, index, status, title, description, view }) {
       description={description}
     />
   );
+}
+
+export function generateDaysOfWeek(locale, weekday = "long") {
+  return [...Array(7).keys()].map((_, i) =>
+    new Intl.DateTimeFormat(locale, { weekday: weekday }).format(
+      new Date(1970, 0, i + 4),
+    ),
+  );
+}
+
+// Helper function to get the number of days in a month
+function getDaysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+// Helper function to get the number of days in the previous month
+function getDaysInPrevMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+
+// Helper function to get the first day of the month
+function getFirstDayOfMonth(year, month) {
+  return new Date(year, month, 1).getDay();
+}
+
+// Helper function to get the last day of the month
+function getLastDayOfMonth(year, month) {
+  return new Date(year, month + 1, 0).getDay();
+}
+export function getDaysOfMonth(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const daysInMonth = getDaysInMonth(year, month);
+  const daysInPrevMonth = getDaysInPrevMonth(year, month);
+  const firstDayOfMonth = getFirstDayOfMonth(year, month);
+  const lastDayOfMonth = getLastDayOfMonth(year, month);
+
+  const days = [];
+  for (let i = 1; i <= firstDayOfMonth; i++) {
+    days.push({
+      date: `${year}-${month.toString().padStart(2, "0")}-${(
+        daysInPrevMonth -
+        firstDayOfMonth +
+        i
+      )
+        .toString()
+        .padStart(2, "0")}`,
+    });
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    const currentDate = new Date();
+    const day = {
+      date: `${year}-${(month + 1).toString().padStart(2, "0")}-${i
+        .toString()
+        .padStart(2, "0")}`,
+      isCurrentMonth: true,
+    };
+    if (
+      i === currentDate.getDate() &&
+      year === currentDate.getFullYear() &&
+      month === currentDate.getMonth()
+    )
+      day.isToday = true;
+    if (i === date.getDate()) day.isSelected = true;
+    days.push(day);
+  }
+  for (let i = 1; i <= 6 - lastDayOfMonth; i++) {
+    days.push({
+      date: `${year}-${(month + 2).toString().padStart(2, "0")}-${i
+        .toString()
+        .padStart(2, "0")}`,
+    });
+  }
+  return days;
 }

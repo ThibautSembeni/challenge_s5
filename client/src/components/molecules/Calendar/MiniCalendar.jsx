@@ -3,90 +3,32 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/20/solid/index.js";
 import { useMemo } from "react";
+import {
+  generateDaysOfWeek,
+  getDaysOfMonth,
+} from "@/components/molecules/Calendar/Helper/index.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-// Helper function to get the number of days in a month
-function getDaysInMonth(year, month) {
-  return new Date(year, month + 1, 0).getDate();
-}
-
-// Helper function to get the number of days in the previous month
-function getDaysInPrevMonth(year, month) {
-  return new Date(year, month, 0).getDate();
-}
-
-// Helper function to get the first day of the month
-function getFirstDayOfMonth(year, month) {
-  return new Date(year, month, 1).getDay();
-}
-
-// Helper function to get the last day of the month
-function getLastDayOfMonth(year, month) {
-  return new Date(year, month + 1, 0).getDay();
-}
-function getDays(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const daysInMonth = getDaysInMonth(year, month);
-  const daysInPrevMonth = getDaysInPrevMonth(year, month);
-  const firstDayOfMonth = getFirstDayOfMonth(year, month);
-  const lastDayOfMonth = getLastDayOfMonth(year, month);
-
-  const days = [];
-  for (let i = 1; i <= firstDayOfMonth; i++) {
-    days.push({
-      date: `${year}-${month.toString().padStart(2, "0")}-${(
-        daysInPrevMonth -
-        firstDayOfMonth +
-        i
-      )
-        .toString()
-        .padStart(2, "0")}`,
-    });
-  }
-  for (let i = 1; i <= daysInMonth; i++) {
-    const day = {
-      date: `${year}-${(month + 1).toString().padStart(2, "0")}-${i
-        .toString()
-        .padStart(2, "0")}`,
-      isCurrentMonth: true,
-    };
-    if (i === new Date().getDate()) day.isToday = true;
-    if (i === date.getDate()) day.isSelected = true; // replace 22 with the selected day
-    days.push(day);
-  }
-  for (let i = 1; i <= 6 - lastDayOfMonth; i++) {
-    days.push({
-      date: `${year}-${(month + 2).toString().padStart(2, "0")}-${i
-        .toString()
-        .padStart(2, "0")}`,
-    });
-  }
-  return days;
-}
 export default function MiniCalendar({
   date,
   setDate,
   canSwitchMonth = false,
   locale = "fr-FR",
+  className,
 }) {
-  const days = useMemo(() => getDays(date), [date]);
+  const days = useMemo(() => getDaysOfMonth(date), [date]);
   const daysOfWeek = useMemo(
-    () =>
-      [...Array(7).keys()].map(
-        (_, i) =>
-          new Intl.DateTimeFormat(locale, { weekday: "long" }).format(
-            new Date(1970, 0, i + 4),
-          )[0],
-      ),
+    () => generateDaysOfWeek(locale, "short"),
     [locale],
   );
   return useMemo(() => {
     return (
-      <div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
+      <div
+        className={`hidden w-1/2 max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block ${className}`}
+      >
         <div className="flex items-center text-center text-gray-900">
           {canSwitchMonth && (
             <button
