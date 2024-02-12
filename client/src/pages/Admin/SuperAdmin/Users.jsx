@@ -13,12 +13,66 @@ import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
+import Table from "@/components/atoms/Table/Table.jsx";
 import {
   CalendarDaysIcon, CurrencyEuroIcon, EyeIcon,
   IdentificationIcon, TicketIcon, TrashIcon, UserGroupIcon,
 } from "@heroicons/react/24/outline/index.js";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
+
+const userColumns = [
+  {
+    Header: 'Nom',
+    accessor: 'user',
+    Cell: ( row ) => (
+      <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
+    ),
+  },
+  {
+    Header: 'Contact',
+    accessor: 'email',
+    Cell: ( row ) => (
+      <>
+        <div className="text-gray-900">{row.email}</div>
+        <div className="mt-1 text-gray-500">{row.phone}</div>
+      </>
+    ),
+  },
+  {
+    Header: 'Role',
+    accessor: 'roles',
+    Cell: ( row ) => row.roles.map(role => (
+      <div key={role} className="mt-1 text-gray-500">
+        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">
+          {role}
+        </span>
+      </div>
+    )),
+  },
+  {
+    Header: 'Animaux',
+    accessor: 'pets',
+    Cell: ( row ) => row.pets.map(pet => (
+      <div key={pet.uuid} className="mt-1 text-gray-500">
+        <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+          {pet.name}
+        </span>
+      </div>
+    )),
+  },
+  {
+    Header: 'Adresse',
+    accessor: 'address',
+    Cell: ( row ) => (
+      <>
+        <div className="text-gray-900">{row.address}</div>
+        <div className="mt-1 text-gray-500">{row.postalCode}, {row.city}</div>
+      </>
+    ),
+  },
+];
+
 
 const people = [
   {
@@ -53,8 +107,6 @@ export default function Users() {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
-
-  console.log(users);
 
   return (
     <>
@@ -98,90 +150,7 @@ export default function Users() {
                         </div>
                       </div>
                       <div className="mt-8 flow-root">
-                        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                            <table className="min-w-full divide-y divide-gray-300">
-                              <thead>
-                              <tr>
-                                <th scope="col"
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                  Nom
-                                </th>
-                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Contact
-                                </th>
-                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Role
-                                </th>
-                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Animaux
-                                </th>
-                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Adresse
-                                </th>
-                                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                                  <span className="sr-only">Modifier</span>
-                                </th>
-                              </tr>
-                              </thead>
-                              <tbody className="divide-y divide-gray-200 bg-white">
-                              {users.map((user) => (
-                                <tr key={user.uuid}>
-                                  <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                                    <div className="flex items-center">
-                                      <div className="ml-4">
-                                        <div
-                                          className="font-medium text-gray-900">{user.firstname} {user.lastname}</div>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <div className="text-gray-900">{user.email}</div>
-                                    <div className="mt-1 text-gray-500">{user.phone}</div>
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    {user.roles.map((role) => (
-                                      <div key={role} className="mt-1 text-gray-500">
-                                        <span
-                                          className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-700/10">{role}</span>
-                                      </div>
-                                    ))}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    {user.pets.map((pet) => (
-                                      <div key={pet.uuid} className="mt-1 text-gray-500">
-                                        <span
-                                          className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{pet.name}</span>
-                                      </div>
-                                    ))}
-                                  </td>
-                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <div className="text-gray-900">{user.address}</div>
-                                    <div className="mt-1 text-gray-500">{user.postalCode}, {user.city}</div>
-                                  </td>
-                                  <td
-                                    className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 flex items-center gap-2">
-                                    <a href="#" className="text-blue-600 hover:text-blue-900">
-                                      <EyeIcon className="h-5 w-5" aria-hidden="true"/>
-                                      <span className="sr-only">, {user.lastname}</span>
-                                    </a>
-
-                                    <a href="#" className="text-orange-600 hover:text-orange-900">
-                                      <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
-                                      <span className="sr-only">, {user.lastname}</span>
-                                    </a>
-
-                                    <a href="#" className="text-red-600 hover:text-red-900">
-                                      <TrashIcon className="h-5 w-5" aria-hidden="true"/>
-                                      <span className="sr-only">, {user.lastname}</span>
-                                    </a>
-                                  </td>
-                                </tr>
-                              ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
+                        <Table columns={userColumns} data={users} />
                       </div>
                     </div>
                   </div>
