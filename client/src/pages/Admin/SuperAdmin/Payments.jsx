@@ -8,7 +8,7 @@ import {
   VideoCameraIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
-import {getAllVeterinarians} from "@/api/clinic/Veterinarian.jsx";
+import {getAllPayments} from "@/api/payments/Payments.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
@@ -32,12 +32,12 @@ const people = [
   // More people...
 ];
 
-export default function Veterinarians() {
+export default function Payments() {
   const {user} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [navigation, setNavigation] = useState([]);
-  const [veterinarians, setVeterinarians] = useState([]);
+  const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -45,11 +45,11 @@ export default function Veterinarians() {
       if (user.roles.includes("ROLE_ADMIN")) {
         setNavigation([
           {name: "Tableau de bord", href: "/full-administration/accueil", icon: HomeIcon, current: false},
-          {name: "Vétérinaires", href: "/full-administration/veterinaires", icon: IdentificationIcon, current: true},
+          {name: "Vétérinaires", href: "/full-administration/veterinaires", icon: IdentificationIcon, current: false},
           {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false, clinicStayValidation: 3},
           {name: "Utilisateurs", href: "/full-administration/utilisateurs", icon: UserGroupIcon, current: false},
           {name: "Animaux", href: "/full-administration/animaux", icon: TicketIcon, current: false},
-          {name: "Paiements", href: "/full-administration/paiements", icon: CurrencyEuroIcon, current: false},
+          {name: "Paiements", href: "/full-administration/paiements", icon: CurrencyEuroIcon, current: true},
         ]);
       }
     }
@@ -57,18 +57,20 @@ export default function Veterinarians() {
   }, [user]);
 
   useEffect(() => {
-    fetchVeterinarians().then(() => setIsLoading(false));
+    fetchPayments().then(() => setIsLoading(false));
   }, []);
 
-  const fetchVeterinarians = async () => {
+  const fetchPayments = async () => {
     try {
       setIsLoading(true);
-      const response = await getAllVeterinarians();
-      setVeterinarians(response.data["hydra:member"])
+      const response = await getAllPayments();
+      setPayments(response.data["hydra:member"])
     } catch (error) {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
+
+  console.log(payments);
 
   return (
     <>
@@ -97,9 +99,9 @@ export default function Veterinarians() {
                     <div className="px-4 sm:px-6 lg:px-8">
                       <div className="sm:flex sm:items-center">
                         <div className="sm:flex-auto">
-                          <h1 className="text-base font-semibold leading-6 text-gray-900">Les vétérinaires</h1>
+                          <h1 className="text-base font-semibold leading-6 text-gray-900">Les paiements</h1>
                           <p className="mt-2 text-sm text-gray-700">
-                            Retrouvez ici la liste des vétérinaires.
+                            Retrouvez ici la liste des paiements.
                           </p>
                         </div>
                         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -119,13 +121,19 @@ export default function Veterinarians() {
                               <tr>
                                 <th scope="col"
                                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                  Nom
+                                  Utilisateur
                                 </th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Contact
+                                  Cabinet
                                 </th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                  Clinique
+                                  Id de paiement
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                  Montant
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                  Statut
                                 </th>
                                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                   <span className="sr-only">Modifier</span>
@@ -133,37 +141,45 @@ export default function Veterinarians() {
                               </tr>
                               </thead>
                               <tbody className="divide-y divide-gray-200 bg-white">
-                              {veterinarians.map((veterinarian) => (
-                                <tr key={veterinarian.uuid}>
+                              {payments.map((payment) => (
+                                <tr key={payment.stripePaymentID}>
                                   <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                                     <div className="flex items-center">
                                       <div className="ml-4">
-                                        <div className="font-medium text-gray-900">{veterinarian.firstname} {veterinarian.lastname}</div>
+                                        <div
+                                          className="font-medium text-gray-900">{payment.person.firstname} {payment.person.lastname}</div>
+                                        <div
+                                          className="font-medium text-gray-500 mt-1">{payment.person.email}</div>
                                       </div>
                                     </div>
                                   </td>
                                   <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <div className="text-gray-900">{veterinarian.email}</div>
-                                    <div className="mt-1 text-gray-500">{veterinarian.phone}</div>
+                                    <div className="text-gray-900">{payment.clinic.name}</div>
                                   </td>
                                   <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                    <div className="text-gray-900">{veterinarian.clinic.name}</div>
+                                    <div className="text-gray-900">{payment.stripePaymentID}</div>
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                    <div className="text-gray-900">{payment.amount}</div>
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                    <div className="text-gray-900">
+                                      <span
+                                        className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">{payment.status}</span>
+                                    </div>
                                   </td>
                                   <td
                                     className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 flex items-center gap-2">
                                     <a href="#" className="text-blue-600 hover:text-blue-900">
                                       <EyeIcon className="h-5 w-5" aria-hidden="true"/>
-                                      <span className="sr-only">, {veterinarian.name}</span>
                                     </a>
 
                                     <a href="#" className="text-orange-600 hover:text-orange-900">
                                       <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
-                                      <span className="sr-only">, {veterinarian.name}</span>
                                     </a>
 
                                     <a href="#" className="text-red-600 hover:text-red-900">
                                       <TrashIcon className="h-5 w-5" aria-hidden="true"/>
-                                      <span className="sr-only">, {veterinarian.name}</span>
                                     </a>
                                   </td>
                                 </tr>

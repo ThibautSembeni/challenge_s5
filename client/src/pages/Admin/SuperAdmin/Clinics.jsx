@@ -13,15 +13,9 @@ import {useAuth} from "@/contexts/AuthContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {
-  CalendarDaysIcon,
-  IdentificationIcon,
+  CalendarDaysIcon, CurrencyEuroIcon,
+  IdentificationIcon, TicketIcon, UserGroupIcon,
 } from "@heroicons/react/24/outline/index.js";
-
-const stats = [
-  {id: 1, name: "Nombre de rdv aujourd'hui", stat: "71", icon: UsersIcon},
-  {id: 2, name: "Avg. Open Rate", stat: "58.16%", icon: EnvelopeOpenIcon},
-  {id: 3, name: "Avg. Click Rate", stat: "24.57%", icon: CursorArrowRaysIcon},
-];
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
 
@@ -38,7 +32,7 @@ const people = [
   // More people...
 ];
 
-export default function Home() {
+export default function Clinics() {
   const {user} = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -59,6 +53,9 @@ export default function Home() {
             current: true,
             clinicStayValidation: 3
           },
+          {name: "Utilisateurs", href: "/full-administration/utilisateurs", icon: UserGroupIcon, current: false},
+          {name: "Animaux", href: "/full-administration/animaux", icon: TicketIcon, current: false},
+          {name: "Paiements", href: "/full-administration/paiements", icon: CurrencyEuroIcon, current: false},
         ]);
       }
     }

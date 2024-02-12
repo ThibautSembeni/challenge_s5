@@ -13,6 +13,9 @@ import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
 import FullAdminHome from "@/pages/Admin/SuperAdmin/Home.jsx";
 import FullAdminVeterinarians from "@/pages/Admin/SuperAdmin/Veterinarians.jsx";
 import FullAdminClinics from "@/pages/Admin/SuperAdmin/Clinics.jsx";
+import FullAdminPets from "@/pages/Admin/SuperAdmin/Pets.jsx";
+import FullAdminUsers from "@/pages/Admin/SuperAdmin/Users.jsx";
+import FullAdminPayments from "@/pages/Admin/SuperAdmin/Payments.jsx";
 import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
 import InformationRegister from "@/pages/PracticienRegister/InformationRegister.jsx";
@@ -141,6 +144,21 @@ const list = [
       {
         path: "cabinets",
         element: <FullAdminClinics />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "paiements",
+        element: <FullAdminPayments />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "animaux",
+        element: <FullAdminPets />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "utilisateurs",
+        element: <FullAdminUsers />,
         roles: ["ROLE_ADMIN"],
       },
     ],

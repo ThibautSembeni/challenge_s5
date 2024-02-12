@@ -3,12 +3,23 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Entity\Auth\User;
 use App\Repository\PaymentsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['payment:read:collection']]),
+        new Get(normalizationContext: ['groups' => ['payment:read:item']]),
+        new Post(normalizationContext: ['groups' => ['payment:write:item']]),
+    ],
+    normalizationContext: ['groups' => ['payment:read:collection']],
+)]
 class Payments
 {
     #[ORM\Id]
@@ -16,18 +27,23 @@ class Payments
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['payment:read:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $stripePaymentID = null;
 
+    #[Groups(['payment:read:collection'])]
     #[ORM\Column]
     private ?float $amount = null;
 
+    #[Groups(['payment:read:collection'])]
     #[ORM\Column(length: 50)]
     private ?string $status = null;
 
+    #[Groups(['payment:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'payments')]
     private ?User $person = null;
 
+    #[Groups(['payment:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'payments')]
     private ?Clinics $clinic = null;
 

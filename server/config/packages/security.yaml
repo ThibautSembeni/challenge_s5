@@ -29,10 +29,12 @@ security:
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ALLOWED_TO_SWITCH]
 
+    # TODO : Add roles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     access_control:
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api/veterinarians, method: POST, roles: PUBLIC_ACCESS }
@@ -41,6 +43,8 @@ security:
         - { path: ^/api/clinics/[a-zA-Z0-9_-]+$, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/api/pets, method: GET, roles: PUBLIC_ACCESS }
+        - { path: ^/api/payments, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs,       roles: PUBLIC_ACCESS }
         - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
 

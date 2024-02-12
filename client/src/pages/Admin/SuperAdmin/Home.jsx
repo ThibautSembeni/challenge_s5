@@ -6,7 +6,7 @@ import {
   CursorArrowRaysIcon,
   EnvelopeOpenIcon,
   VideoCameraIcon,
-  PencilSquareIcon,
+  PencilSquareIcon, UserGroupIcon, TicketIcon, CurrencyEuroIcon,
 } from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
@@ -53,7 +53,10 @@ export default function Home() {
         setNavigation([
           {name: "Tableau de bord", href: "/full-administration/accueil", icon: HomeIcon, current: true},
           {name: "Vétérinaires", href: "/full-administration/veterinaires", icon: IdentificationIcon, current: false},
-          {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false},
+          {name: "Cabinets", href: "/full-administration/cabinets", icon: HomeIcon, current: false, clinicStayValidation: 3},
+          {name: "Utilisateurs", href: "/full-administration/utilisateurs", icon: UserGroupIcon, current: false},
+          {name: "Animaux", href: "/full-administration/animaux", icon: TicketIcon, current: false},
+          {name: "Paiements", href: "/full-administration/paiements", icon: CurrencyEuroIcon, current: false},
         ]);
       }
     }

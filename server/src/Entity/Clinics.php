@@ -44,13 +44,13 @@ class Clinics
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item', 'payment:read:collection'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item', 'payment:read:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

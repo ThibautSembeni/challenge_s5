@@ -43,6 +43,24 @@ export const refreshToken = async () => {
 export const getUser = async (uuid) => {
   return axiosInstance.get(`/users/${uuid}`);
 };
+
+export const getAllUsers = async ({
+      page = 1,
+      itemsPerPage = 30,
+      pagination = false,
+      ...filters
+    } = {}) => {
+  const params = new URLSearchParams({
+    page,
+    itemsPerPage,
+    pagination,
+    ...filters,
+  });
+  return axios.get(
+    `${import.meta.env.VITE_API_URL}/users?${params.toString()}`,
+  );
+};
+
 export const updateOneUsers = async (
   uuid,
   {

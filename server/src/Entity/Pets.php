@@ -42,10 +42,10 @@ class Pets
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['pets:read:collection', 'pets:read:item'])]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'users:read:collection'])]
     private Uuid $uuid;
 
-    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item', 'appointments:read:collections', 'appointments:read:item'])]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item', 'appointments:read:collections', 'appointments:read:item', 'users:read:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

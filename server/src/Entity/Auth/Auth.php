@@ -20,18 +20,18 @@ trait Auth
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['user:read', 'user:read:full'])]
+    #[Groups(['user:read', 'user:read:full', 'payment:read:collection'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
     private Uuid $uuid;
 
-    #[Groups(['user:read', 'user:write', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:read:full', 'pets:read:item', 'users:read:collection', 'payment:read:collection'])]
     #[Assert\Email()]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[Groups(['user:read:full'])]
+    #[Groups(['user:read:full', 'users:read:collection'])]
     #[ORM\Column]
     private array $roles = [];
 
