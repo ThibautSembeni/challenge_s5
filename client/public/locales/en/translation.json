@@ -143,6 +143,23 @@
           "divDtSpanDueDate": "Due date",
           "divDtSpanSatus": "Status",
           "divDDPaidWithMastercard": "Paid with MasterCard"
+        },
+        "show": {
+          "divDtStatus": "Status",
+          "divDtDDaVenir":  "Coming next",
+          "divDtDD2Passé": "Past appointment",
+          "divDtDD3Annulé": "Cancelled",
+          "divDlDivDtPraticien": "Practician",
+          "divDt1Patient": "Patient",
+          "divDt2RendreEnConsultation": "Go to your consultaltion",
+          "divDtMoyensPaiement": "Payment methods",
+          "divDDChequeEspeceCarte": "Check, cash, credit card",
+          "divDtRaison": "Reason",
+          "divDtPiecesJointes": "Attachments files",
+          "divSpanAjouterCalendrier": "Add to calendar",
+          "divButtonSpanTelecharger": "Download",
+          "divDtLaisserAvis": "Leave a review",
+          "divDtAvis": "Review"
         }
       },
       "home": {

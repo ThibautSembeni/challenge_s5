@@ -8,10 +8,12 @@ import { displayDay, displayTime } from "@/utils/date.js";
 import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline/index.js";
 import { Link } from "react-router-dom";
 import CreateFeedbacks from "@/components/organisms/Feedback/CreateFeedbacks.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Show({ uuid }) {
     const [appointment, setAppointment] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { t } = useTranslation();
 
     const handleGetAppointmentDetail = async () => {
         setLoading(true);
@@ -42,20 +44,20 @@ export default function Show({ uuid }) {
                     </div>
                 </div>
                 <div className="flex-none self-start px-6 pt-4">
-                    <dt className="sr-only">Status</dt>
+                    <dt className="sr-only">{t("components.organisms.appointment.show.divDtSatus")}</dt>
                     {appointment.status === "scheduled" && (
                         <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            A venir
+                            {t("components.organisms.appointment.show.divDtDDaVenir")}
                         </dd>
                     )}
                     {appointment.status === "completed" && (
                         <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                            Passé
+                            {t("components.organisms.appointment.show.divDtDD2Passé")}
                         </dd>
                     )}{" "}
                     {appointment.status === "cancelled" && (
                         <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                            Annulé
+                            {t("components.organisms.appointment.show.divDtDD3Annulé")}
                         </dd>
                     )}
                 </div>
@@ -64,7 +66,7 @@ export default function Show({ uuid }) {
                 <dl className="divide-y divide-gray-100">
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            Practicien
+                            {t("components.organisms.appointment.show.divDlDivDtPraticien")}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {appointment.veterinarian.lastname +
@@ -74,7 +76,7 @@ export default function Show({ uuid }) {
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            Patient
+                            {t("components.organisms.appointment.show.divDt1Patient")}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {appointment.pet.name}
@@ -82,7 +84,7 @@ export default function Show({ uuid }) {
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            Se rendre à la consultation
+                            {t("components.organisms.appointment.show.divDt2RendreEnConsultation")}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-col">
                             <span className={"font-semibold"}>
@@ -114,15 +116,15 @@ export default function Show({ uuid }) {
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            Moyens de paiement
+                            {t("components.organisms.appointment.show.divDtMoyensPaiement")}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            Chèques, espèces et cartes bancaires
+                            {t("components.organisms.appointment.show.divDDChequeEspeceCarte")}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            Raison{" "}
+                            {t("components.organisms.appointment.show.divDtRaison")} {" "}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {appointment.reason}
@@ -130,7 +132,7 @@ export default function Show({ uuid }) {
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                            Pièces jointes
+                            {t("components.organisms.appointment.show.divDtPiecesJointes")}
                         </dt>
                         <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                             <ul
@@ -145,7 +147,7 @@ export default function Show({ uuid }) {
                                         />
                                         <div className="ml-4 flex min-w-0 flex-1 gap-2">
                                             <span className="truncate font-medium">
-                                                Ajouter à votre calendrier
+                                               {t("components.organisms.appointment.show.divSpanAjouterCalendrier")}
                                             </span>
                                             <span className="flex-shrink-0 text-gray-400">
                                                 2.4mb
@@ -161,7 +163,7 @@ export default function Show({ uuid }) {
                                                 );
                                             }}
                                         >
-                                            Télécharger
+                                            {t("components.organisms.appointment.show.divButtonSpanTelecharger")}
                                         </button>
                                     </div>
                                 </li>
@@ -170,7 +172,7 @@ export default function Show({ uuid }) {
                     </div>
                     <div className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                         <dt className="text-sm font-medium text-gray-900 py-4">
-                            Laisser un avis
+                            {t("components.organisms.appointment.show.divDtLaisserAvis")}
                         </dt>
                         <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                             <CreateFeedbacks appointment={appointment.uuid} />
@@ -178,7 +180,7 @@ export default function Show({ uuid }) {
                     </div>
                     <div className="mt-4 bg-white shadow rounded-lg p-6">
                         <dt className="text-lg font-semibold text-gray-900 pb-4">
-                            Avis :
+                            {t("components.organisms.appointment.show.divDtAvis")}
                         </dt>
                         <dd className="mt-2">
                             {appointment.feedbacks.map((feedback, index) => (

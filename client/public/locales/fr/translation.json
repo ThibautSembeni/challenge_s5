@@ -144,6 +144,23 @@
           "divDtSpanDueDate": "Date d'écheance",
           "divDtSpanSatus": "Status",
           "divDDPaidWithMastercard": "Payé avec Mastercard"
+        },
+        "show": {
+          "divDtStatus": "Status",
+          "divDtDDaVenir":  "A venir",
+          "divDtDD2Passé": "Passé",
+          "divDtDD3Annulé": "Annulé",
+          "divDlDivDtPraticien": "Praticien",
+          "divDt1Patient": "Patient",
+          "divDt2RendreEnConsultation": "Se rendre à la consultation",
+          "divDtMoyensPaiement": "Moyens de paiement",
+          "divDDChequeEspeceCarte": "Chèques, espèces et cartes bancaires",
+          "divDtRaison": "Raison",
+          "divDtPiecesJointes": "Pièces jointes",
+          "divSpanAjouterCalendrier": "Ajouter à votre calendrier",
+          "divButtonSpanTelecharger": "Télécharger",
+          "divDtLaisserAvis": "Laisser un avis",
+          "divDtAvis : ": "Avis"
         }
       },
       "home": {
