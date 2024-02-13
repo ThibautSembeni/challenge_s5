@@ -44,15 +44,7 @@ use Symfony\Component\Uid\Uuid;
 )]
 class Veterinarians
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['veterinarians:read'])]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
-
     #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item', 'user:read', 'user:read:full'])]
-    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -110,11 +102,6 @@ class Veterinarians
         $this->uuid = Uuid::v4();
         $this->services = new ArrayCollection();
     }
-
-//    public function getId(): ?int
-//    {
-//        return $this->id;
-//    }
 
     public function getUuid(): Uuid
     {

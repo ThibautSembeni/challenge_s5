@@ -34,14 +34,7 @@ use Symfony\Component\Uid\Uuid;
 )]
 class Pets
 {
-    #[Groups(['pets:read:collection', 'pets:read:item'])]
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
-
-    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
     #[Groups(['pets:read:collection', 'pets:read:item', 'users:read:collection'])]

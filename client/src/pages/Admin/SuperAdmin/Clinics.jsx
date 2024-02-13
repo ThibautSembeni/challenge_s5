@@ -269,7 +269,6 @@ export default function Clinics() {
               >
                 {selectedClinic && (
                   <div className="flex flex-col gap-2">
-                    <p><b>ID :</b> {selectedClinic.id}</p>
                     <p><b>UUID :</b> {selectedClinic.uuid}</p>
                     <p><b>Nom :</b> {selectedClinic.name}</p>
                     <p><b>Adresse :</b> {selectedClinic.address}, {selectedClinic.postalCode}, {selectedClinic.city}</p>

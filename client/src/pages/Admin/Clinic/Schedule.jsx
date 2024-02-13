@@ -171,13 +171,13 @@ export default function Schedule() {
   };
 
   const days = {
-    lundi: "Lundi",
-    mardi: "Mardi",
-    mercredi: "Mercredi",
-    jeudi: "Jeudi",
-    vendredi: "Vendredi",
-    samedi: "Samedi",
-    dimanche: "Dimanche",
+    lundi: "Monday",
+    mardi: "Tuesday",
+    mercredi: "Wednesday",
+    jeudi: "Thursday",
+    vendredi: "Friday",
+    samedi: "Saturday",
+    dimanche: "Sunday",
   };
 
   const generateTimeOptions = () => {
