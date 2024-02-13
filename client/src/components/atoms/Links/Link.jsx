@@ -1,6 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 import { FontSize } from "@/components/atoms/_type.jsx";
+import { useNavigate } from "react-router-dom";
 
 const colorButton = ["black", "orange", "green", "red"];
 const styledButton = ["filled", "bordered"];
@@ -24,7 +25,6 @@ Link.propTypes = {
 };
 
 Link.defaultProps = {
-  target: "_blank",
   rel: "noopener noreferrer",
   asButton: false,
   colorButton: "orange",
@@ -72,10 +72,23 @@ export function Link({
         bordered:
           "bg-transparent text-red border border-red hover:bg-red hover:text-white duration-150",
       },
+      blue: {
+        filled: "bg-blue text-white",
+        bordered:
+          "bg-transparent text-blue border border-blue hover:bg-blue hover:text-white duration-150",
+      },
     };
 
     return colorMap[colorButton][styledButton];
   };
+  const navigate = useNavigate();
+  onClick =
+    onClick ??
+    (!target &&
+      ((e) => {
+        e.preventDefault();
+        navigate(href);
+      }));
 
   const handlePadding = () => {
     return size === "s" ? "py-0.5 px-1.5 rounded" : "py-1.5 px-3 rounded-md";
@@ -104,11 +117,12 @@ export function Link({
     return fontSizeMap[fontSize] || "text-sm";
   };
   return (
-    <a
+    <LinkBase
       href={disabled ? undefined : href}
       role={disabled ? "link" : undefined}
       target={target}
       rel={rel}
+      component={"a"}
       className={`${className} ${asButton && handleColor()} ${
         asButton && handlePadding()
       } ${asButton && handleWeight()} ${asButton && handleFontSize()} ${
@@ -118,6 +132,14 @@ export function Link({
       aria-disabled={disabled}
     >
       {children}
-    </a>
+    </LinkBase>
   );
 }
+
+export const LinkBase = memo(function LinkBase({
+  component: Component,
+  ...props
+}) {
+  const classes = "";
+  return <Component className={classes} {...props} />;
+});

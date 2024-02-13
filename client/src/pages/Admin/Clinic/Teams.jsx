@@ -1,51 +1,36 @@
-import React, {Fragment, useEffect, useState} from 'react'
-import {
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline'
-import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
-import {useAuth} from "@/contexts/AuthContext.jsx";
+import React, { Fragment, useEffect, useState } from "react";
+import { CalendarIcon, HomeIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { getAllClinicsByManager, getOneClinics } from "@/api/clinic/Clinic.jsx";
+import { useAuth } from "@/contexts/AuthContext.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import TeamSectionComponent from "@/components/organisms/Veterinarian/TeamSectionComponent.jsx";
-import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
+import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
 import {
   CalendarDaysIcon,
   IdentificationIcon,
   PencilSquareIcon,
-  VideoCameraIcon
+  VideoCameraIcon,
 } from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
-import {createVeterinarianByClinic} from "@/api/clinic/Veterinarian.jsx";
-import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+import { createVeterinarianByClinic } from "@/api/clinic/Veterinarian.jsx";
+import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
 
-const navigation = [
-  { name: 'Accueil', href: '/administration/accueil', icon: HomeIcon, current: false },
-  { name: 'Équipe', href: '/administration/equipe', icon: UsersIcon, current: true },
-  { name: 'Calendrier d\'ouverture', href: '/administration/calendrier-ouverture', icon: CalendarIcon, current: false },
-  { name: 'Rendez-vous', href: '/administration/rendez-vous', icon: CalendarDaysIcon, current: false },
-  { name: 'Téléconsultation', href: '/administration/animaux', icon: VideoCameraIcon, current: false },
-  { name: 'Animaux', href: '/administration/animaux', icon: IdentificationIcon, current: false },
-  { name: 'Informations cabinet', href: '/administration/informations-cabinet', icon: PencilSquareIcon, current: false },
-]
+const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
 
-const userNavigation = [
-  { name: 'Déconnexion', href: '#' },
-]
-
-export default function Teams () {
+export default function Teams() {
   const { user } = useAuth();
   const { selectedClinic } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);
   const [inputClinic, setInputClinic] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
+  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     if (user && user.uuid) {
@@ -54,12 +39,69 @@ export default function Teams () {
   }, [user.uuid, selectedClinic]);
 
   useEffect(() => {
-    if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+    if (
+      selectedClinic === "all" ||
+      selectedClinic === "Voir tous les cabinets" ||
+      typeof selectedClinic === undefined
+    ) {
       setInputClinic(true);
     } else {
       setInputClinic(false);
     }
   }, [selectedClinic]);
+
+  useEffect(() => {
+    let newNavigation = [
+      {
+        name: "Accueil",
+        href: "/administration/accueil",
+        icon: HomeIcon,
+        current: false,
+      },
+      {
+        name: "Rendez-vous",
+        href: "/administration/rendez-vous",
+        icon: CalendarDaysIcon,
+        current: false,
+      },
+      {
+        name: "Téléconsultation",
+        href: "/administration/animaux",
+        icon: VideoCameraIcon,
+        current: false,
+      },
+      {
+        name: "Animaux",
+        href: "/administration/animaux",
+        icon: IdentificationIcon,
+        current: false,
+      },
+    ];
+
+    if (user.roles.includes("ROLE_MANAGER")) {
+      newNavigation.push(
+        {
+          name: "Équipe",
+          href: "/administration/equipe",
+          icon: UsersIcon,
+          current: true,
+        },
+        {
+          name: "Calendrier d'ouverture",
+          href: "/administration/calendrier-ouverture",
+          icon: CalendarIcon,
+          current: false,
+        },
+        {
+          name: "Informations cabinet",
+          href: "/administration/informations-cabinet",
+          icon: PencilSquareIcon,
+          current: false,
+        },
+      );
+    }
+    setNavigation(newNavigation);
+  }, [user.roles]);
 
   const fetchAndSetClinicsData = async (userUuid) => {
     if (!userUuid) {
@@ -70,31 +112,44 @@ export default function Teams () {
       setIsLoading(true);
 
       let clinics;
-      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+      if (
+        selectedClinic === "all" ||
+        selectedClinic === "Voir tous les cabinets" ||
+        typeof selectedClinic === undefined
+      ) {
         const response = await getAllClinicsByManager(userUuid);
-        clinics = response.data['hydra:member'];
+        clinics = response.data["hydra:member"];
       } else {
         const response = await getOneClinics(selectedClinic);
         clinics = [response.data];
       }
 
-      const transformedClinics = clinics.map(clinic => ({
+      const transformedClinics = clinics.map((clinic) => ({
         clinicInfo: clinic,
-        teams: clinic.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
-          name: `${firstname} ${lastname}`,
-          initial: `${firstname[0]}`,
-          role: specialties,
-          uuid,
-          current: false,
-          imageUrl: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-          href: `/veterinaire/${uuid}`,
-        })),
+        teams: clinic.veterinarians.map(
+          ({ firstname, lastname, specialties, uuid }) => ({
+            name: `${firstname} ${lastname}`,
+            initial: `${firstname[0]}`,
+            role: specialties,
+            uuid,
+            current: false,
+            imageUrl:
+              "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+            href: `/veterinaire/${uuid}`,
+          }),
+        ),
       }));
 
       setClinicsData(transformedClinics);
 
-      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
-        setVeterinariansData(transformedClinics.flatMap(clinic => clinic.teams));
+      if (
+        selectedClinic === "all" ||
+        selectedClinic === "Voir tous les cabinets" ||
+        typeof selectedClinic === undefined
+      ) {
+        setVeterinariansData(
+          transformedClinics.flatMap((clinic) => clinic.teams),
+        );
       } else {
         setVeterinariansData(transformedClinics[0].teams);
       }
@@ -128,12 +183,14 @@ export default function Teams () {
       clinicId = `/api/clinics/${selectedClinic}`;
     }
 
-    const createVeterinarianByClinicResponse = await createVeterinarianByClinic({
-      firstname,
-      lastname,
-      email,
-      clinicId,
-    });
+    const createVeterinarianByClinicResponse = await createVeterinarianByClinic(
+      {
+        firstname,
+        lastname,
+        email,
+        clinicId,
+      },
+    );
 
     if (createVeterinarianByClinicResponse.success) {
       await fetchAndSetClinicsData(user.uuid);
@@ -174,17 +231,29 @@ export default function Teams () {
               isSuccess={isSuccess}
             />
 
-            <SideBar navigation={navigation} teams={veterinariansData} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} uuid={user.uuid} />
+            <SideBar
+              navigation={navigation}
+              teams={veterinariansData}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+              uuid={user.uuid}
+            />
 
             <div className="lg:pl-72">
-              <TopSideBar navigation={userNavigation} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+              <TopSideBar
+                navigation={userNavigation}
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
 
               <main className="py-10">
                 <div className="px-4 sm:px-6 lg:px-8">
                   <div className="mb-20">
                     <div className="sm:flex sm:items-center">
                       <div className="sm:flex-auto">
-                        <h1 className="text-base font-semibold leading-6 text-gray-900">Vétérinaires</h1>
+                        <h1 className="text-base font-semibold leading-6 text-gray-900">
+                          Vétérinaires
+                        </h1>
                       </div>
                       <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <button
@@ -197,12 +266,19 @@ export default function Teams () {
                       </div>
                     </div>
 
-                    <Modal isOpen={isModalOpen} onClose={closeModal} title="Ajouter des vétérinaires au cabinet">
+                    <Modal
+                      isOpen={isModalOpen}
+                      onClose={closeModal}
+                      title="Ajouter des vétérinaires au cabinet"
+                    >
                       <form onSubmit={handleSubmit}>
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                           {inputClinic && (
                             <div className="col-span-full">
-                              <label htmlFor="clinic" className="block text-sm font-medium leading-6 text-gray-900">
+                              <label
+                                htmlFor="clinic"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
                                 Cabinet
                               </label>
                               <div className="mt-2">
@@ -215,7 +291,9 @@ export default function Teams () {
                                 >
                                   {clinicsData.map((clinic) => (
                                     <Fragment key={clinic.clinicInfo.uuid}>
-                                      <option value={clinic.clinicInfo.uuid}>{clinic.clinicInfo.name}</option>
+                                      <option value={clinic.clinicInfo.uuid}>
+                                        {clinic.clinicInfo.name}
+                                      </option>
                                     </Fragment>
                                   ))}
                                 </select>
@@ -223,7 +301,10 @@ export default function Teams () {
                             </div>
                           )}
                           <div className="sm:col-span-3">
-                            <label htmlFor="firstname" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label
+                              htmlFor="firstname"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
                               Prénom
                             </label>
                             <div className="mt-2">
@@ -239,7 +320,10 @@ export default function Teams () {
                           </div>
 
                           <div className="sm:col-span-3">
-                            <label htmlFor="lastname" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label
+                              htmlFor="lastname"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
                               Nom
                             </label>
                             <div className="mt-2">
@@ -255,7 +339,10 @@ export default function Teams () {
                           </div>
 
                           <div className="col-span-full">
-                            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label
+                              htmlFor="email"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
                               Email
                             </label>
                             <div className="mt-2">
@@ -274,7 +361,6 @@ export default function Teams () {
                           <button
                             type="submit"
                             className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-
                           >
                             Enregistrer
                           </button>
@@ -289,7 +375,10 @@ export default function Teams () {
                       </form>
                     </Modal>
 
-                    <TeamSectionComponent teamsProps={veterinariansData} admin={true} />
+                    <TeamSectionComponent
+                      teamsProps={veterinariansData}
+                      admin={true}
+                    />
                   </div>
                 </div>
               </main>
@@ -298,5 +387,5 @@ export default function Teams () {
         </>
       )}
     </>
-  )
+  );
 }

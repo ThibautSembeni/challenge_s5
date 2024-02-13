@@ -23,47 +23,53 @@ use Symfony\Component\Uid\Uuid;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['pets:read:collection']]),
+        new Get(normalizationContext: ['groups' => ['pets:read:item']]),
+        new Post(normalizationContext: ['groups' => ['pets:write:item']]),
+        new Patch(normalizationContext: ['groups' => ['pets:update:item']]),
+        new Delete()
     ],
     normalizationContext: ['groups' => ['pets:read:collection']],
 )]
 class Pets
 {
-    #[Groups(['pets:read:collection'])]
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
+//    #[Groups(['pets:read:collection', 'pets:read:item'])]
+//    #[ORM\GeneratedValue]
+//    #[ORM\Column]
+//    #[ApiProperty(identifier: false)]
+//    private ?int $id = null;
 
+    #[Groups(['pets:read:collection', 'pets:read:item'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['pets:read:collection'])]
+    #[ORM\Id]
     private Uuid $uuid;
 
-    #[Groups(['pets:read:collection'])]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item', 'appointments:read:collections', 'appointments:read:item'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['pets:read:collection'])]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item'])]
     #[ORM\Column(length: 255)]
     private ?string $species = null;
 
-    #[Groups(['pets:read:collection'])]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item'])]
     #[ORM\Column(length: 255)]
     private ?string $breed = null;
 
+    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item'])]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $birthdate = null;
 
+    #[Groups(['pets:read:item', 'pets:write:item', 'pets:update:item'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $medicalHistory = null;
 
-    #[Groups(['pets:read:collection'])]
+    #[Groups(['pets:read:collection', 'pets:read:item'])]
     #[ORM\ManyToOne(inversedBy: 'pets')]
     private ?User $userID = null;
 
-    #[ORM\OneToMany(mappedBy: 'petID', targetEntity: Appointments::class)]
+    #[ORM\OneToMany(mappedBy: 'pet', targetEntity: Appointments::class)]
     private Collection $appointments;
 
     public function __construct()
@@ -72,10 +78,10 @@ class Pets
         $this->uuid = Uuid::v4();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {
@@ -166,7 +172,7 @@ class Pets
     {
         if (!$this->appointments->contains($appointment)) {
             $this->appointments->add($appointment);
-            $appointment->setPetID($this);
+            $appointment->setPet($this);
         }
 
         return $this;
@@ -176,8 +182,8 @@ class Pets
     {
         if ($this->appointments->removeElement($appointment)) {
             // set the owning side to null (unless already changed)
-            if ($appointment->getPetID() === $this) {
-                $appointment->setPetID(null);
+            if ($appointment->getPet() === $this) {
+                $appointment->setPet(null);
             }
         }
 

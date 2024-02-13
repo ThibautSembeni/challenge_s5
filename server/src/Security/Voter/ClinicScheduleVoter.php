@@ -52,7 +52,7 @@ class ClinicScheduleVoter extends Voter
         }
 
         foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicSchedule->getClinicId()) {
+            if ($userClinic === $clinicSchedule->getClinic()) {
                 return true;
             }
         }
@@ -67,7 +67,7 @@ class ClinicScheduleVoter extends Voter
         }
 
         foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicSchedule->getClinicId()) {
+            if ($userClinic === $clinicSchedule->getClinic()) {
                 return true;
             }
         }

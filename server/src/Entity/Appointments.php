@@ -2,55 +2,116 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use App\Controller\GenerateIcsFileFromAppointmentController;
 use App\Entity\Auth\User;
+use App\Enum\AppointmentsStatusEnum;
 use App\Repository\AppointmentsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\String_;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AppointmentsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(normalizationContext: ['groups' => ['appointments:read:collections']]),
+        new GetCollection(uriTemplate: '/appointments/history', normalizationContext: ['groups' => ['appointments:read:collections']], name: 'get_appointments_history'),
+        new Get(normalizationContext: ['groups' => ['appointments:read:item']], name: 'getOneAppointment'),
+        new Get(
+            uriTemplate: '/appointments/{uuid}/ics',
+            controller: GenerateIcsFileFromAppointmentController::class,
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can access this resource.',
+            name: 'generate_ics_file_from_appointment',
+        ),
+        new Post(
+            normalizationContext: ['groups' => ['appointments:write:create']],
+            denormalizationContext: ['groups' => ['appointments:write:create']]
+        ),
+        new GetCollection(
+            uriTemplate: '/veterinarians/{uuid}/appointments',
+            uriVariables: [
+                'uuid' => new Link(toProperty: 'veterinarian', fromClass: Veterinarians::class)
+            ],
+            paginationEnabled: false,
+            paginationClientEnabled: false,
+            normalizationContext: ['groups' => ['appointments:read:collections']],
+            security: "is_granted('ROLE_VETERINARIAN')",
+            name: 'get_veterinarian_appointments'
+        )
+    ],
+)]
 class Appointments
 {
+    #[Groups(['appointments:read:item', 'appointments:read:collections'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['appointments:read:collections', 'appointments:read:item'])]
+    private Uuid $uuid;
+
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $reason = null;
-
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'schedules:read:collection'])]
     #[ORM\Column]
-    private array $status = [];
+    private ?string $status = AppointmentsStatusEnum::STATUS_SCHEDULED->value;
 
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'feedbacks:read', 'appointments:write:create'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
-    private ?Veterinarians $veterinarianID = null;
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
+    private ?Veterinarians $veterinarian = null;
 
+
+    #[Groups(['feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
-    private ?Pets $petID = null;
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
+    private ?Pets $pet = null;
 
-    #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: AppointmentServices::class)]
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentServices::class)]
     private Collection $appointmentServices;
 
-    #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: Feedbacks::class)]
+    #[Groups(['appointments:read:item'])]
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: Feedbacks::class)]
     private Collection $feedbacks;
 
-    #[ORM\OneToMany(mappedBy: 'appointmentID', targetEntity: AppointmentHistory::class)]
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentHistory::class)]
     private Collection $appointmentHistories;
+
+    #[Groups(['appointments:write:create', 'appointments:read:collections'])]
+    #[ORM\OneToOne(inversedBy: 'appointments', cascade: ['persist', 'remove'])]
+    private ?Schedules $schedules = null;
+
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create', 'schedules:read:collection'])]
+    #[ORM\ManyToOne(inversedBy: 'appointments')]
+    private ?Services $service = null;
 
     public function __construct()
     {
         $this->appointmentServices = new ArrayCollection();
         $this->feedbacks = new ArrayCollection();
         $this->appointmentHistories = new ArrayCollection();
+        $this->uuid = Uuid::v4();
     }
 
     public function getId(): ?int
@@ -70,38 +131,29 @@ class Appointments
         return $this;
     }
 
-    public function getReason(): ?string
-    {
-        return $this->reason;
-    }
-
-    public function setReason(?string $reason): static
-    {
-        $this->reason = $reason;
-
-        return $this;
-    }
-
-    public function getStatus(): array
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(array $status): static
+    #[Groups(['appointments:write'])]
+    #[ApiProperty(example: AppointmentsStatusEnum::STATUS_SCHEDULED->value)]
+    public function setStatus(string $status): static
     {
-        $this->status = $status;
+        $enum = AppointmentsStatusEnum::from($status);
+        $this->status = $enum->value;
 
         return $this;
     }
 
-    public function getVeterinarianID(): ?Veterinarians
+    public function getVeterinarian(): ?Veterinarians
     {
-        return $this->veterinarianID;
+        return $this->veterinarian;
     }
 
-    public function setVeterinarianID(?Veterinarians $veterinarianID): static
+    public function setVeterinarian(?Veterinarians $veterinarian): static
     {
-        $this->veterinarianID = $veterinarianID;
+        $this->veterinarian = $veterinarian;
 
         return $this;
     }
@@ -118,14 +170,14 @@ class Appointments
         return $this;
     }
 
-    public function getPetID(): ?Pets
+    public function getPet(): ?Pets
     {
-        return $this->petID;
+        return $this->pet;
     }
 
-    public function setPetID(?Pets $petID): static
+    public function setPet(?Pets $pet): static
     {
-        $this->petID = $petID;
+        $this->pet = $pet;
 
         return $this;
     }
@@ -142,7 +194,7 @@ class Appointments
     {
         if (!$this->appointmentServices->contains($appointmentService)) {
             $this->appointmentServices->add($appointmentService);
-            $appointmentService->setAppointmentID($this);
+            $appointmentService->setAppointment($this);
         }
 
         return $this;
@@ -152,8 +204,8 @@ class Appointments
     {
         if ($this->appointmentServices->removeElement($appointmentService)) {
             // set the owning side to null (unless already changed)
-            if ($appointmentService->getAppointmentID() === $this) {
-                $appointmentService->setAppointmentID(null);
+            if ($appointmentService->getAppointment() === $this) {
+                $appointmentService->setAppointment(null);
             }
         }
 
@@ -172,7 +224,7 @@ class Appointments
     {
         if (!$this->feedbacks->contains($feedback)) {
             $this->feedbacks->add($feedback);
-            $feedback->setAppointmentID($this);
+            $feedback->setAppointment($this);
         }
 
         return $this;
@@ -182,8 +234,8 @@ class Appointments
     {
         if ($this->feedbacks->removeElement($feedback)) {
             // set the owning side to null (unless already changed)
-            if ($feedback->getAppointmentID() === $this) {
-                $feedback->setAppointmentID(null);
+            if ($feedback->getAppointment() === $this) {
+                $feedback->setAppointment(null);
             }
         }
 
@@ -202,7 +254,7 @@ class Appointments
     {
         if (!$this->appointmentHistories->contains($appointmentHistory)) {
             $this->appointmentHistories->add($appointmentHistory);
-            $appointmentHistory->setAppointmentID($this);
+            $appointmentHistory->setAppointment($this);
         }
 
         return $this;
@@ -212,10 +264,39 @@ class Appointments
     {
         if ($this->appointmentHistories->removeElement($appointmentHistory)) {
             // set the owning side to null (unless already changed)
-            if ($appointmentHistory->getAppointmentID() === $this) {
-                $appointmentHistory->setAppointmentID(null);
+            if ($appointmentHistory->getAppointment() === $this) {
+                $appointmentHistory->setAppointment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUuid(): Uuid
+    {
+        return $this->uuid;
+    }
+
+    public function getSchedules(): ?Schedules
+    {
+        return $this->schedules;
+    }
+
+    public function setSchedules(?Schedules $schedules): static
+    {
+        $this->schedules = $schedules;
+
+        return $this;
+    }
+
+    public function getService(): ?Services
+    {
+        return $this->service;
+    }
+
+    public function setService(?Services $service): static
+    {
+        $this->service = $service;
 
         return $this;
     }

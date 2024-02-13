@@ -12,6 +12,18 @@
             "src/ApiResource/.gitignore"
         ]
     },
+    "dama/doctrine-test-bundle": {
+        "version": "8.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "4.0",
+            "ref": "2c920f73a217f30bd4a37833c91071f4d3dc1ecd"
+        },
+        "files": [
+            "config/packages/test/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "doctrine/annotations": {
         "version": "2.0",
         "recipe": {
@@ -33,6 +45,18 @@
             "config/packages/doctrine.yaml",
             "src/Entity/.gitignore",
             "src/Repository/.gitignore"
+        ]
+    },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "3.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
@@ -116,6 +140,20 @@
         },
         "files": [
             "config/packages/http_discovery.yaml"
+        ]
+    },
+    "phpunit/phpunit": {
+        "version": "10.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "9.6",
+            "ref": "7364a21d87e658eb363c5020c072ecfdc12e2326"
+        },
+        "files": [
+            ".env.test",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
         ]
     },
     "stof/doctrine-extensions-bundle": {
@@ -218,6 +256,18 @@
             "config/packages/monolog.yaml"
         ]
     },
+    "symfony/notifier": {
+        "version": "6.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.0",
+            "ref": "178877daf79d2dbd62129dd03612cb1a2cb407cc"
+        },
+        "files": [
+            "config/packages/notifier.yaml"
+        ]
+    },
     "symfony/routing": {
         "version": "6.3",
         "recipe": {
@@ -243,6 +293,15 @@
             "config/packages/security.yaml"
         ]
     },
+    "symfony/sendinblue-mailer": {
+        "version": "6.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.2",
+            "ref": "ae1cf494ce06b9a4578a8445c610402a1676ee8d"
+        }
+    },
     "symfony/twig-bundle": {
         "version": "6.3",
         "recipe": {
@@ -255,6 +314,15 @@
             "config/packages/twig.yaml",
             "templates/base.html.twig"
         ]
+    },
+    "symfony/twilio-notifier": {
+        "version": "6.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.0",
+            "ref": "10af129fcac6d00ffc9bb23d039d997dee35e657"
+        }
     },
     "symfony/uid": {
         "version": "6.3",
@@ -304,5 +372,17 @@
     },
     "twig/extra-bundle": {
         "version": "v3.7.1"
+    },
+    "zenstruck/foundry": {
+        "version": "1.36",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.10",
+            "ref": "37c2f894cc098ab4c08874b80cccc8e2f8de7976"
+        },
+        "files": [
+            "config/packages/zenstruck_foundry.yaml"
+        ]
     }
 }

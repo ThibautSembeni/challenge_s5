@@ -38,23 +38,23 @@ use Symfony\Component\Uid\Uuid;
 #[ApiFilter(ClinicByManagerFilter::class)]
 class Clinics
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
+//    #[ORM\Column]
+//    #[ORM\GeneratedValue]
+//    #[ApiProperty(identifier: false)]
+//    private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read'])]
-    #[ORM\GeneratedValue]
+    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:read', 'appointments:read:item'])]
+//    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
+    #[ORM\Id]
     private Uuid $uuid;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read'])]
+    #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item'])]
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
@@ -62,7 +62,7 @@ class Clinics
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'appointments:read:item'])]
     #[ORM\Column(length: 20)]
     private ?string $phone = null;
 
@@ -79,11 +79,11 @@ class Clinics
     private ?float $longitude = null;
 
     #[ApiFilter(CustomSearchFilter::class)]
-    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read', 'appointments:read:item'])]
     #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read'])]
+    #[Groups(['clinics:read:collection', 'veterinarians:read', 'clinics:read', 'appointments:read:item'])]
     #[ORM\Column(length: 15)]
     private ?string $postalCode = null;
 
@@ -92,11 +92,11 @@ class Clinics
     private ?string $description = null;
 
     #[Groups(['clinics:write:create', 'clinics:read'])]
-    #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicSchedules::class)]
+    #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: ClinicSchedules::class)]
     private Collection $clinicSchedules;
 
     #[Groups(['clinics:write:create', 'clinics:read'])]
-    #[ORM\OneToMany(mappedBy: 'clinic_id', targetEntity: ClinicComplementaryInformation::class)]
+    #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
     #[Groups(['clinics:write:create', 'clinics:read'])]
@@ -119,10 +119,10 @@ class Clinics
         $this->payments = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {
@@ -252,7 +252,7 @@ class Clinics
     {
         if (!$this->clinicSchedules->contains($clinicSchedule)) {
             $this->clinicSchedules->add($clinicSchedule);
-            $clinicSchedule->setClinicId($this);
+            $clinicSchedule->setClinic($this);
         }
 
         return $this;
@@ -272,8 +272,8 @@ class Clinics
     {
         if ($this->clinicSchedules->removeElement($clinicSchedule)) {
             // set the owning side to null (unless already changed)
-            if ($clinicSchedule->getClinicId() === $this) {
-                $clinicSchedule->setClinicId(null);
+            if ($clinicSchedule->getClinic() === $this) {
+                $clinicSchedule->setClinic(null);
             }
         }
 
@@ -303,7 +303,7 @@ class Clinics
     {
         if (!$this->clinicComplementaryInformation->contains($clinicComplementaryInformation)) {
             $this->clinicComplementaryInformation->add($clinicComplementaryInformation);
-            $clinicComplementaryInformation->setClinicId($this);
+            $clinicComplementaryInformation->setClinic($this);
         }
 
         return $this;
@@ -313,8 +313,8 @@ class Clinics
     {
         if ($this->clinicComplementaryInformation->removeElement($clinicComplementaryInformation)) {
             // set the owning side to null (unless already changed)
-            if ($clinicComplementaryInformation->getClinicId() === $this) {
-                $clinicComplementaryInformation->setClinicId(null);
+            if ($clinicComplementaryInformation->getClinic() === $this) {
+                $clinicComplementaryInformation->setClinic(null);
             }
         }
         return $this;

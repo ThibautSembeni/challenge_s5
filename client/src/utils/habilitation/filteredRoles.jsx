@@ -6,7 +6,7 @@ export default function areRolesAllowed(routeRoles, userRoles) {
   }
   if (Array.isArray(routeRoles)) {
     // Vérifier si au moins un des rôles de la route correspond à un rôle de l'utilisateur.
-    return routeRoles.some((role) => userRoles.includes(role));
+    return routeRoles.some((role) => userRoles?.includes(role));
   } else if (typeof routeRoles === "string") {
     // Vérifier si le rôle de la route correspond à un rôle de l'utilisateur.
     return userRoles.includes(routeRoles);

@@ -3,3 +3,4 @@
 server/.env.local
 */.env.*.local
 /server/swagger_docs.json
+/actions-runner/

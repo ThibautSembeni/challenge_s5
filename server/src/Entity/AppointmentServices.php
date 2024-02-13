@@ -16,36 +16,36 @@ class AppointmentServices
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointmentServices')]
-    private ?Appointments $appointmentID = null;
+    private ?Appointments $appointment = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointmentServices')]
-    private ?Services $serviceID = null;
+    private ?Services $service = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAppointmentID(): ?Appointments
+    public function getAppointment(): ?Appointments
     {
-        return $this->appointmentID;
+        return $this->appointment;
     }
 
-    public function setAppointmentID(?Appointments $appointmentID): static
+    public function setAppointment(?Appointments $appointment): static
     {
-        $this->appointmentID = $appointmentID;
+        $this->appointment = $appointment;
 
         return $this;
     }
 
-    public function getServiceID(): ?Services
+    public function getService(): ?Services
     {
-        return $this->serviceID;
+        return $this->service;
     }
 
-    public function setServiceID(?Services $serviceID): static
+    public function setService(?Services $service): static
     {
-        $this->serviceID = $serviceID;
+        $this->service = $service;
 
         return $this;
     }

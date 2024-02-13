@@ -21,13 +21,13 @@ export const postRegister = async ({
   });
 };
 export const getLogout = async () => {
-  return axiosInstance.get(
+  return axiosInstance.post(
     `/logout?refresh_token=${localStorage.getItem("refresh_token")}`,
   );
 };
 
 export const getAuthenticated = async (token) => {
-  return axiosInstance.get(`/me`, {
+  return axiosInstance.get(`/users/current/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

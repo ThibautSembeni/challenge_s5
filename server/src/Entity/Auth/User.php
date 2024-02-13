@@ -10,12 +10,16 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\GetCurrentUserController;
+use App\Controller\UserController;
 use App\Entity\Appointments;
 use App\Entity\Clinics;
 use App\Entity\Notifications;
 use App\Entity\Payments;
 use App\Entity\Pets;
+use App\Entity\Services;
 use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Veterinarians;
 use App\Repository\AuthRepository;
 use App\State\UserPasswordHasher;
 use DateTimeImmutable;
@@ -37,7 +41,14 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
         new Post(processor: UserPasswordHasher::class),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class),
-        new Get(uriTemplate: '/me', openapiContext: ['summary' => 'Get current user'], normalizationContext: ['groups' => ['user:read:full']], security: 'is_granted("ROLE_USER")',),
+        new GetCollection(
+            uriTemplate: '/users/current/me',
+            controller: GetCurrentUserController::class,
+            normalizationContext: ['groups' => ['user:read:full']],
+            security: 'is_granted("ROLE_USER")',
+            securityMessage: 'Only authenticated users can access this resource.',
+            name: 'current_user_get'
+        ),
         new Delete()
         // new Put(), // I don't use PUT, only PATCH
     ],
@@ -49,11 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
     use TimestampableTrait;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
@@ -91,6 +102,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'person', targetEntity: Payments::class)]
     private Collection $payments;
+
+    #[Groups(['user:read', 'user:read:full'])]
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Veterinarians $veterinarian = null;
 
     public function __construct()
     {
@@ -348,6 +363,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $payment->setPerson(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Services>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function getVeterinarian(): ?Veterinarians
+    {
+        return $this->veterinarian;
+    }
+
+    public function setVeterinarian(?Veterinarians $veterinarian): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($veterinarian === null && $this->veterinarian !== null) {
+            $this->veterinarian->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($veterinarian !== null && $veterinarian->getUser() !== $this) {
+            $veterinarian->setUser($this);
+        }
+
+        $this->veterinarian = $veterinarian;
 
         return $this;
     }
