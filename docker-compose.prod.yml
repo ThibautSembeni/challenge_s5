@@ -57,6 +57,8 @@ services:
 
   nginx:
     image: nginx:latest
+    depends_on:
+      - server
     ports:
       - '80:80'
       - '443:443'
@@ -66,5 +68,6 @@ services:
       - ./docker/nginx/error.log:/var/log/nginx/error.log
       - /etc/letsencrypt/live/api.vetcare.thibautsbn.fr/fullchain.pem:/etc/pki/tls/certs/fullchain.pem
       - /etc/letsencrypt/live/api.vetcare.thibautsbn.fr/privkey.pem:/etc/pki/tls/certs/privkey.pem
+      - ./server:/var/www/html
 volumes:
   database_data:
