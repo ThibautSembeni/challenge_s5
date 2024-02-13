@@ -74,7 +74,7 @@ class VeterinariansEventSubscriber implements EventSubscriber
      * @throws RandomException
      * @throws ORMException
      */
-    public function sendEmail(Veterinarians $veterinarian, EntityManager $entityManager): void
+    private function sendEmail(Veterinarians $veterinarian, EntityManager $entityManager): void
     {
         $user = new User();
         $user->setEmail($veterinarian->getEmail());

@@ -47,8 +47,12 @@ class ClinicVoter extends Voter
 
     private function canEdit(Clinics $clinics, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
+        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
             return false;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
         }
 
         foreach ($user->getClinic() as $userClinic) {
