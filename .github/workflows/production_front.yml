@@ -52,7 +52,7 @@ jobs:
 
       - name: Test with curl
         run: |
-          curl -I http://localhost:5173
+          curl -I http://localhost:4173
 
   deploy:
     runs-on: ubuntu-latest
