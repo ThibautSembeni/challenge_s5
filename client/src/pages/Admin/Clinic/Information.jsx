@@ -19,12 +19,15 @@ import ComplementaryInformationComponent
   from "@/components/organisms/Veterinarian/ComplementaryInformationComponent.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 const userNavigation = [
   {name: 'Déconnexion', href: '#'},
 ]
 
 export default function Pet() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { selectedClinic } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
@@ -253,7 +256,7 @@ export default function Pet() {
                       <div key={clinic.clinicInfo.uuid} className="px-4 sm:px-6 lg:px-8">
                         <div className="sm:flex sm:items-center">
                           <div className="flex flex-wrap items-center gap-2">
-                            <h1 className="text-xl font-semibold leading-6 text-gray-900">Informations sur le cabinet</h1>
+                            <h1 className="text-xl font-semibold leading-6 text-gray-900">{t("pages.admin.clinic.information.h1")}</h1>
                             <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
                               {clinic.clinicInfo.name}
                             </span>
@@ -266,7 +269,7 @@ export default function Pet() {
                                 onClick={() => setModifyInformation(!modifyInformation)}
                                 className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                               >
-                                Modifier les informations du cabinet
+                                {t("pages.admin.clinic.information.buttonModiferInfoCabinet")}
                               </button>
                             </div>
                           )}
@@ -278,7 +281,7 @@ export default function Pet() {
                               <div className="grid grid-cols-1 gap-x-6 gap-y-8">
                                 <div className="col-span-full">
                                   <label htmlFor="name" className="block text-sm font-medium leading-6">
-                                    Nom du cabinet
+                                    {t("pages.admin.clinic.information.labelName")}
                                   </label>
                                   <div className="mt-2">
                                     <input
@@ -295,7 +298,7 @@ export default function Pet() {
 
                                 <div className="col-span-full">
                                   <label htmlFor="phone" className="block text-sm font-medium leading-6">
-                                    Téléphone
+                                    {t("pages.admin.clinic.information.labelPhone")}
                                   </label>
                                   <div className="mt-2">
                                     <input
@@ -312,7 +315,7 @@ export default function Pet() {
 
                                 <div className="col-span-full">
                                   <label htmlFor="address" className="block text-sm font-medium leading-6">
-                                    Adresse postal
+                                    {t("pages.admin.clinic.information.labelAddress")}
                                   </label>
                                   <div className="mt-2">
                                     <input
@@ -329,7 +332,7 @@ export default function Pet() {
 
                                 <div className="col-span-full">
                                   <label htmlFor="postal_code" className="block text-sm font-medium leading-6">
-                                    Code postal
+                                    {t("pages.admin.clinic.information.labelCodePostal")}
                                   </label>
                                   <div className="mt-2">
                                     <input
@@ -346,7 +349,7 @@ export default function Pet() {
 
                                 <div className="col-span-full">
                                   <label htmlFor="city" className="block text-sm font-medium leading-6">
-                                    Ville
+                                    {t("pages.admin.clinic.information.labelCity")}
                                   </label>
                                   <div className="mt-2">
                                     <input
@@ -363,7 +366,7 @@ export default function Pet() {
 
                                 <div className="col-span-full">
                                   <label htmlFor="description" className="block text-sm font-medium leading-6">
-                                    Description
+                                    {t("pages.admin.clinic.information.labelDescription")}
                                   </label>
                                   <div className="mt-2">
                                   <textarea
@@ -384,7 +387,7 @@ export default function Pet() {
                                     type="submit"
                                     className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 text-white"
                                   >
-                                    Enregistrer
+                                    {t("pages.admin.clinic.information.buttonSubmit")}
                                   </button>
                                 </div>
                               )}
@@ -406,19 +409,19 @@ export default function Pet() {
                               onClick={() => openModal(clinic.clinicInfo.uuid)}
                               className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                              Ajouter des informations complémentaires sur le cabinet
+                              {t("pages.admin.clinic.information.buttonAjouterInfoSurCabinet")}
                             </button>
                           </div>
                         </div>
 
                         <Modal isOpen={modalsOpen[clinic.clinicInfo.uuid] || false}
                                onClose={() => closeModal(clinic.clinicInfo.uuid)}
-                               title="Ajouter des informations complémentaires">
+                               title={t("pages.admin.clinic.information.titleAjouterInfoCabinet")}>
                           <form  onSubmit={(event) => handleSubmitModal(event, clinic.clinicInfo.uuid)}>
                             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                               <div className="col-span-full">
                                 <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                                  Nom
+                                  {t("pages.admin.clinic.information.labelNameSimple")}
                                 </label>
                                 <div className="mt-2">
                                   <input
@@ -433,7 +436,7 @@ export default function Pet() {
 
                               <div className="col-span-full">
                                 <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
-                                  Description
+                                  {t("pages.admin.clinic.information.labelDescription")}
                                 </label>
                                 <div className="mt-2">
                                 <textarea
@@ -451,14 +454,14 @@ export default function Pet() {
                                 className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
 
                               >
-                                Enregistrer
+                                {t("pages.admin.clinic.information.buttonSubmit")}
                               </button>
                               <button
                                 type="button"
                                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                                 onClick={closeModal}
                               >
-                                Annuler
+                                {t("pages.admin.clinic.information.buttonAnnuler")}
                               </button>
                             </div>
                           </form>

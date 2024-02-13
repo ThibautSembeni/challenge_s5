@@ -25,6 +25,8 @@ import {
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import EmptyPage from "@/components/organisms/Appointment/emptyPage.jsx";
 import Show from "@/components/organisms/Appointment/show.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 const user = {
   name: "Tom Cook",

@@ -257,6 +257,13 @@
     "admin": {
       "clinic": {
         "appointment": {
+          "navAcuueil": "Home",
+          "navRDV": "Appointments",
+          "navTeleconsultation": "Teleconsultation",
+          "navAnimaux": "Animals",
+          "navManagerEquipe": "Teams",
+          "navManagerCalendrier": "Openings calendar",
+          "navManagerInfoCabinet": "Clinic details",
           "h1": "Appointments",
           "thNom": "Name",
           "thType": "Type",
@@ -265,6 +272,21 @@
           "thSpanModifier": "Modify",
           "tdSpanActif": "Active",
           "tdHrefModifier": "Modify"
+        },
+        "information": {
+          "h1": "Clinic details",
+          "buttonModiferInfoCabinet": "Modify clinic details",
+          "labelName": "Name of the clinic",
+          "labelPhone": "Phone",
+          "labelAddress": "Postal address",
+          "labelCodePostal": "Postal code",
+          "labelCity": "City",
+          "labelDescription": "Description",
+          "buttonSubmit": "Save",
+          "buttonAnnuler": "Cancel",
+          "buttonAjouterInfoSurCabinet": "Add additional information about the clinic",
+          "titleAjouterInfoCabinet": "Add additional information",
+          "labelNameSimple": "Name"
         },
         "home": {
           "h3": "Statistics",

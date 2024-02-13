@@ -258,6 +258,13 @@
     "admin": {
       "clinic": {
         "appointment": {
+          "navAcuueil": "Accueil",
+          "navRDV": "Rendez-vous",
+          "navTeleconsultation": "Teleconsultation",
+          "navAnimaux": "Animaux",
+          "navManagerEquipe": "Equipes",
+          "navManagerCalendrier": "Calendrier d'ouvertue",
+          "navManagerInfoCabinet": "Informations cabinet",
           "h1": "Les rendez-vous",
           "thNom": "Nom",
           "thType": "Type",
@@ -266,6 +273,21 @@
           "thSpanModifier": "Modifier",
           "tdSpanActif": "Actif",
           "tdHrefModifier": "Modifier"
+        },
+        "information": {
+          "h1": "Informations sur le cabinet",
+          "buttonModiferInfoCabinet": "Modifier les informations du cabinet",
+          "labelName": "Nom du cabinet",
+          "labelPhone": "Téléphone",
+          "labelAddress": "Adresse postal",
+          "labelCodePostal": "Code postal",
+          "labelCity": "Ville",
+          "labelDescription": "Description",
+          "buttonSubmit": "Enregistrer",
+          "buttonAnnuler": "Annuler",
+          "buttonAjouterInfoSurCabinet": "Ajouter des informations complémentaires sur le cabinet",
+          "titleAjouterInfoCabinet": "Ajouter des informations complémentaires",
+          "labelNameSimple": "Nom"
         },
         "home": {
           "h3": "Statistiques",
@@ -306,6 +328,11 @@
         }
       }
 
+    },
+    "appointment": {
+      "index": {
+
+      }
     },
     "auth": {
       "login": {
