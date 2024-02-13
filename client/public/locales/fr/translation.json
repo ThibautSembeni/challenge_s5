@@ -168,6 +168,12 @@
           "h2Cabinet": "Cabinet",
           "pChoisissezCabinet":  "Choisissez le cabinet dans lequel vous souhaitez prendre rendez-vous.",
           "labelChoisissezCabinet": "Choisissez un cabinet"
+        },
+        "typeConsultation": {
+          "h2TypeConsultation": "Type de consultation",
+          "pChoisissezCabinetVideo": "Choisissez si vous souhaitez consulter en cabinet ou réaliser une consultation vidéo.",
+          "buttonCameraIconRDVVideo": "Rendez-vous en vidéo",
+          "buttonHomeIconRDVCabinet": "Rendez-vous au cabinet",
         }
       },
       "home": {

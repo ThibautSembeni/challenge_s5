@@ -167,6 +167,12 @@
           "h2Cabinet": "Clinic",
           "pChoisissezCabinet":  "Choose the clinic where you want to schedule your next appointment",
           "labelChoisissezCabinet": "Choose a clinic"
+        },
+        "typeConsultation": {
+          "h2TypeConsultation": "Type of consultation",
+          "pChoisissezCabinetVideo": "Choose the type of consultation, video or at the clinic.",
+          "buttonCameraIconRDVVideo": "Video appointment",
+          "buttonHomeIconRDVCabinet": "Clinic appointment"
         }
       },
       "home": {

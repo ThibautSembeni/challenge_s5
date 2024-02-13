@@ -1,21 +1,22 @@
 import Select from "@/components/atoms/Select/index.jsx";
 import { CameraIcon, HomeModernIcon } from "@heroicons/react/20/solid/index.js";
 import { HomeIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
 export default function TypeConsultation({
   handleVideoAppointment,
   handleClinicAppointment,
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-12">
       <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
         <div>
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Type de consultation
+            {t("components.organisms.typeConsultation.h2TypeConsultation")}
           </h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            Choisissez si vous souhaitez consulter en cabinet ou réaliser une
-            consultation vidéo.
+            {t("components.organisms.typeConsultation.pChoisissezCabinetVideo")}
           </p>
         </div>
 
@@ -30,7 +31,7 @@ export default function TypeConsultation({
                 className="-ml-0.5 h-5 w-5 uppercase"
                 aria-hidden="true"
               />
-              Rendez-vous en vidéo
+              {t("components.organisms.typeConsultation.buttonCameraIconRDVVideo")}
             </button>
             <button
               type="button"
@@ -41,7 +42,7 @@ export default function TypeConsultation({
                 className="-ml-0.5 h-5 w-5 uppercase"
                 aria-hidden="true"
               />
-              Rendez-vous au cabinet
+              {t("components.organisms.typeConsultation.buttonHomeIconRDVCabinet")}
             </button>
           </div>
         </div>
