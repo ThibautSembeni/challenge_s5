@@ -38,7 +38,10 @@
       "h3": "Company"
     },
     "newsletter": {
-      "h3": "Subscribe to our newsletter"
+      "h3": "Subscribe to our newsletter",
+      "p": "The latest news, articles, and resources, sent to your inbox every month.",
+      "labelEmailAddress": "Email address",
+      "button": "Subscribe"
     }
   },
   "components" : {
@@ -284,6 +287,7 @@
           "labelDescription": "Description",
           "buttonSubmit": "Save",
           "buttonAnnuler": "Cancel",
+          "h1InfosComplementaires": "Additional information about the clinic",
           "buttonAjouterInfoSurCabinet": "Add additional information about the clinic",
           "titleAjouterInfoCabinet": "Add additional information",
           "labelNameSimple": "Name"
@@ -312,6 +316,8 @@
           "modalAttrTitle": "Add opening hours",
           "labelDay": "Day",
           "labelIsOpen": "Opening",
+          "optionOpen": "Open",
+          "optionClose": "Closed",
           "buttonSubmit": "Save",
           "buttonCancel": "Cancel"
         },

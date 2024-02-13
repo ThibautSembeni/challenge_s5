@@ -49,13 +49,15 @@ class VeterinarianVoter extends Voter
 
     private function canCreate(Veterinarians $veterinarians, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
-            return false;
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
         }
 
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $veterinarians->getClinic()) {
-                return true;
+        if ($this->security->isGranted('ROLE_MANAGER')) {
+            foreach ($user->getClinic() as $userClinic) {
+                if ($userClinic === $veterinarians->getClinic()) {
+                    return true;
+                }
             }
         }
 
@@ -64,13 +66,15 @@ class VeterinarianVoter extends Voter
 
     private function canEdit(Veterinarians $veterinarians, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
-            return false;
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
         }
 
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $veterinarians->getClinic()) {
-                return true;
+        if ($this->security->isGranted('ROLE_MANAGER')) {
+            foreach ($user->getClinic() as $userClinic) {
+                if ($userClinic === $veterinarians->getClinic()) {
+                    return true;
+                }
             }
         }
 
@@ -79,13 +83,15 @@ class VeterinarianVoter extends Voter
 
     private function canDelete(Veterinarians $veterinarians, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER')) {
-            return false;
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
         }
 
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $veterinarians->getClinic()) {
-                return true;
+        if ($this->security->isGranted('ROLE_MANAGER')) {
+            foreach ($user->getClinic() as $userClinic) {
+                if ($userClinic === $veterinarians->getClinic()) {
+                    return true;
+                }
             }
         }
 

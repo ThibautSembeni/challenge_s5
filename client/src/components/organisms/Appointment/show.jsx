@@ -25,133 +25,121 @@ export default function Show({ uuid }) {
     useEffect(() => {
         if (uuid) handleGetAppointmentDetail();
     }, [uuid]);
+  
+  if (loading) return <Skeleton />;
 
-    if (loading) return <Skeleton />;
 
-    return (
-        <div className={`overflow-hidden sm:rounded-lg bg-white`}>
-            <div className="px-4 py-6 sm:px-6 flex justify-between">
-                <div>
-                    <h3 className="text-base font-semibold leading-7 text-gray-900 flex gap-2 items-center">
-                        <CalendarIcon className={"h-6 w-5"} />
-                        {displayDay(appointment?.date)}
-                    </h3>
-                    <div className="mt-1 text-base font-semibold leading-6 text-gray-900 flex items-center">
-                        <ClockIcon className={"h-6 w-5"} />
-                        <span className="ml-3">
-                            {displayTime(appointment?.date)}
-                        </span>
-                    </div>
-                </div>
-                <div className="flex-none self-start px-6 pt-4">
-                    <dt className="sr-only">{t("components.organisms.appointment.show.divDtSatus")}</dt>
-                    {appointment.status === "scheduled" && (
-                        <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            {t("components.organisms.appointment.show.divDtDDaVenir")}
-                        </dd>
-                    )}
-                    {appointment.status === "completed" && (
-                        <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                            {t("components.organisms.appointment.show.divDtDD2Passé")}
-                        </dd>
-                    )}{" "}
-                    {appointment.status === "cancelled" && (
-                        <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                            {t("components.organisms.appointment.show.divDtDD3Annulé")}
-                        </dd>
-                    )}
-                </div>
-            </div>
-            <div className="border-t border-gray-100">
-                <dl className="divide-y divide-gray-100">
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-900">
-                            {t("components.organisms.appointment.show.divDlDivDtPraticien")}
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {appointment.veterinarian.lastname +
-                                " " +
-                                appointment.veterinarian.firstname}
-                        </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-900">
-                            {t("components.organisms.appointment.show.divDt1Patient")}
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {appointment.pet.name}
-                        </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-900">
-                            {t("components.organisms.appointment.show.divDt2RendreEnConsultation")}
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-col">
-                            <span className={"font-semibold"}>
-                                {appointment.veterinarian.clinic.name}
-                            </span>
-                            <Link
-                                to={`https://www.google.com/maps/search/?api=1&query=${new URLSearchParams(
-                                    appointment.veterinarian.clinic.address +
-                                        " " +
-                                        appointment.veterinarian.clinic
-                                            .postalCode +
-                                        " " +
-                                        appointment.veterinarian.clinic.city
-                                )}`}
-                                target={"_blank"}
-                                className={"text-blue-500 flex flex-col"}
-                            >
-                                <span>
-                                    {appointment.veterinarian.clinic.address}
-                                </span>
-                                <span>
-                                    {appointment.veterinarian.clinic
-                                        .postalCode +
-                                        " " +
-                                        appointment.veterinarian.clinic.city}
-                                </span>
-                            </Link>
-                        </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-900">
-                            {t("components.organisms.appointment.show.divDtMoyensPaiement")}
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {t("components.organisms.appointment.show.divDDChequeEspeceCarte")}
-                        </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium text-gray-900">
-                            {t("components.organisms.appointment.show.divDtRaison")} {" "}
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {appointment.reason}
-                        </dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">
-                            {t("components.organisms.appointment.show.divDtPiecesJointes")}
-                        </dt>
-                        <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            <ul
-                                role="list"
-                                className="divide-y divide-gray-100 rounded-md border border-gray-200"
-                            >
-                                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                                    <div className="flex w-0 flex-1 items-center">
-                                        <PaperClipIcon
-                                            className="h-5 w-5 flex-shrink-0 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                                            <span className="truncate font-medium">
-                                               {t("components.organisms.appointment.show.divSpanAjouterCalendrier")}
-                                            </span>
-                                            <span className="flex-shrink-0 text-gray-400">
-                                                2.4mb
-                                            </span>
+  return (
+    <div className={`overflow-hidden sm:rounded-lg bg-white`}>
+      <div className="px-4 py-6 sm:px-6 flex justify-between">
+        <div>
+          <h3 className="text-base font-semibold leading-7 text-gray-900 flex gap-2 items-center">
+            <CalendarIcon className={"h-6 w-5"} />
+            {displayDay(appointment?.date)}
+          </h3>
+          <div className="mt-1 text-base font-semibold leading-6 text-gray-900 flex items-center">
+            <ClockIcon className={"h-6 w-5"} />
+            <span className="ml-3">{displayTime(appointment?.date)}</span>
+          </div>
+        </div>
+        <div className="flex-none self-start px-6 pt-4">
+          <dt className="sr-only">{t("components.organisms.appointment.show.divDtSatus")}</dt>
+          {appointment.status === "scheduled" && (
+            <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                {t("components.organisms.appointment.show.divDtDDaVenir")}
+            </dd>
+          )}
+          {appointment.status === "completed" && (
+            <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                {t("components.organisms.appointment.show.divDtDD2Passé")}
+            </dd>
+          )}{" "}
+          {appointment.status === "cancelled" && (
+            <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                {t("components.organisms.appointment.show.divDtDD3Annulé")}
+            </dd>
+          )}
+        </div>
+      </div>
+      <div className="border-t border-gray-100">
+        <dl className="divide-y divide-gray-100">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-900">{t("components.organisms.appointment.show.divDlDivDtPraticien")}</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {appointment.veterinarian.lastname +
+                " " +
+                appointment.veterinarian.firstname}
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-900">{t("components.organisms.appointment.show.divDt1Patient")}</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {appointment.pet.name}
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-900">
+                {t("components.organisms.appointment.show.divDt2RendreEnConsultation")}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-col">
+              <span className={"font-semibold"}>
+                {appointment.veterinarian.clinic.name}
+              </span>
+              <Link
+                to={`https://www.google.com/maps/search/?api=1&query=${new URLSearchParams(
+                  appointment.veterinarian.clinic.address +
+                    " " +
+                    appointment.veterinarian.clinic.postalCode +
+                    " " +
+                    appointment.veterinarian.clinic.city,
+                )}`}
+                target={"_blank"}
+                className={"text-blue-500 flex flex-col"}
+              >
+                <span>{appointment.veterinarian.clinic.address}</span>
+                <span>
+                  {appointment.veterinarian.clinic.postalCode +
+                    " " +
+                    appointment.veterinarian.clinic.city}
+                </span>
+              </Link>
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-900">
+                {t("components.organisms.appointment.show.divDtMoyensPaiement")}
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                {t("components.organisms.appointment.show.divDDChequeEspeceCarte")}
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-900">{t("components.organisms.appointment.show.divDtRaison")} </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {appointment.service.description}
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium leading-6 text-gray-900">
+                {t("components.organisms.appointment.show.divDtPiecesJointes")}
+            </dt>
+            <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <ul
+                role="list"
+                className="divide-y divide-gray-100 rounded-md border border-gray-200"
+              >
+                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                  <div className="flex w-0 flex-1 items-center">
+                    <PaperClipIcon
+                      className="h-5 w-5 flex-shrink-0 text-gray-400"
+                      aria-hidden="true"
+                    />
+                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                      <span className="truncate font-medium">
+                         {t("components.organisms.appointment.show.divSpanAjouterCalendrier")}
+                      </span>
+                      <span className="flex-shrink-0 text-gray-400">2.4mb</span>
+
                                         </div>
                                     </div>
                                     <div className="ml-4 flex-shrink-0">

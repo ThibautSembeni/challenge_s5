@@ -10,6 +10,12 @@ import Teams from "@/pages/Admin/Clinic/Teams.jsx";
 import Pet from "@/pages/Admin/Clinic/Pet.jsx";
 import Information from "@/pages/Admin/Clinic/Information.jsx";
 import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
+import FullAdminHome from "@/pages/Admin/SuperAdmin/Home.jsx";
+import FullAdminVeterinarians from "@/pages/Admin/SuperAdmin/Veterinarians.jsx";
+import FullAdminClinics from "@/pages/Admin/SuperAdmin/Clinics.jsx";
+import FullAdminPets from "@/pages/Admin/SuperAdmin/Pets.jsx";
+import FullAdminUsers from "@/pages/Admin/SuperAdmin/Users.jsx";
+import FullAdminPayments from "@/pages/Admin/SuperAdmin/Payments.jsx";
 import ClinicAdminSchedule from "@/pages/Admin/Clinic/Schedule.jsx";
 import NotFound404 from "@/pages/NotFound404.jsx";
 import InformationRegister from "@/pages/PracticienRegister/InformationRegister.jsx";
@@ -18,6 +24,9 @@ import MonEspace from "@/pages/MonEspace/index.jsx";
 import Appointments from "@/pages/Appointment/index.jsx";
 import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
+import Logout from "@/pages/Auth/Logout.jsx";
+import Manage from "@/pages/Manage/index.jsx";
+
 const list = [
   {
     path: "",
@@ -87,6 +96,8 @@ const list = [
   ////// CLINIC ADMINISTRATION //////
   {
     path: "administration",
+    element: <Outlet />,
+    context: 'clinicAdmin',
     children: [
       {
         path: "accueil",
@@ -120,6 +131,66 @@ const list = [
       },
     ],
   },
+  ////// CLINIC SUPER ADMINISTRATION //////
+  {
+    path: "full-administration",
+    element: <Outlet />,
+    context: 'superAdmin',
+    children: [
+      {
+        path: "accueil",
+        element: <FullAdminHome />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "veterinaires",
+        element: <FullAdminVeterinarians />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "cabinets",
+        element: <FullAdminClinics />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "paiements",
+        element: <FullAdminPayments />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "animaux",
+        element: <FullAdminPets />,
+        roles: ["ROLE_ADMIN"],
+      },
+      {
+        path: "utilisateurs",
+        element: <FullAdminUsers />,
+        roles: ["ROLE_ADMIN"],
+      },
+    ],
+  },
+  {
+    path: "manage",
+    element: <Outlet />,
+    roles: ["ROLE_VETERINARIAN"],
+    children: [
+      {
+        path: "",
+        element: <Manage />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+      {
+        path: "calendar",
+        element: <Manage type={"calendar"} />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+      {
+        path: "services",
+        element: <Manage type={"services"} />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+    ],
+  },
   {
     path: "login",
     element: <Login />,
@@ -127,6 +198,10 @@ const list = [
   {
     path: "register",
     element: <Register />,
+  },
+  {
+    path: "logout",
+    element: <Logout />,
   },
   {
     path: "*",

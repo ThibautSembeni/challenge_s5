@@ -16,7 +16,7 @@ export default function Cabinet({ clinic }) {
         </div>
 
         <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-          <div className="sm:col-span-3">
+          <div className="sm:col-span-6">
             <Select
               type={"secondary-text"}
               label={t("components.organisms.bookingAppointment.labelChoisissezCabinet")}

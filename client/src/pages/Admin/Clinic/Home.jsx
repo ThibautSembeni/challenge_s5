@@ -9,7 +9,7 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
+import { getAllClinicsByManager, getOneClinics } from "@/api/clinic/Clinic.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
 import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
@@ -17,11 +17,10 @@ import {
   CalendarDaysIcon,
   IdentificationIcon,
 } from "@heroicons/react/24/outline/index.js";
-
 //translation
 import { useTranslation } from "react-i18next";
+import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
 
-import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
 
 const stats = [
@@ -30,7 +29,7 @@ const stats = [
   { id: 3, name: "Avg. Click Rate", stat: "24.57%", icon: CursorArrowRaysIcon },
 ];
 
-const userNavigation = [{ name: "Déconnexion", href: "#" }];
+const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
 
 const people = [
   {
@@ -65,30 +64,37 @@ export default function Home() {
       setIsLoading(true);
 
       let clinics;
-      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+      if (
+        selectedClinic === "all" ||
+        selectedClinic === "Voir tous les cabinets" ||
+        typeof selectedClinic === undefined
+      ) {
         const response = await getAllClinicsByManager(userUuid);
-        clinics = response.data['hydra:member'];
+        clinics = response.data["hydra:member"];
       } else {
         const response = await getOneClinics(selectedClinic);
         clinics = [response.data];
       }
 
-      const transformedClinics = clinics.map(clinic => ({
+      const transformedClinics = clinics.map((clinic) => ({
         clinicInfo: clinic,
-        teams: clinic.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
-          name: `${firstname} ${lastname}`,
-          initial: `${firstname[0]}`,
-          role: specialties,
-          uuid,
-          current: false,
-          imageUrl: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-          href: `/veterinaire/${uuid}`,
-        })),
-        clinicSchedules: clinic.clinicSchedules.map(schedule => ({
+        teams: clinic.veterinarians.map(
+          ({ firstname, lastname, specialties, uuid }) => ({
+            name: `${firstname} ${lastname}`,
+            initial: `${firstname[0]}`,
+            role: specialties,
+            uuid,
+            current: false,
+            imageUrl:
+              "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+            href: `/veterinaire/${uuid}`,
+          }),
+        ),
+        clinicSchedules: clinic.clinicSchedules.map((schedule) => ({
           day: schedule.day,
-          startTime: new Date(schedule.timeslot_id.start_time),
-          endTime: new Date(schedule.timeslot_id.end_time),
-          isOpen: schedule.timeslot_id.isOpen,
+          startTime: new Date(schedule.timeslot.start_time),
+          endTime: new Date(schedule.timeslot.end_time),
+          isOpen: schedule.timeslot.isOpen,
         })),
         earliestStart: 24,
         latestEnd: 0,
@@ -96,8 +102,14 @@ export default function Home() {
 
       setClinicsData(transformedClinics);
 
-      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
-        setVeterinariansData(transformedClinics.flatMap(clinic => clinic.teams));
+      if (
+        selectedClinic === "all" ||
+        selectedClinic === "Voir tous les cabinets" ||
+        typeof selectedClinic === undefined
+      ) {
+        setVeterinariansData(
+          transformedClinics.flatMap((clinic) => clinic.teams),
+        );
       } else {
         setVeterinariansData(transformedClinics[0].teams);
       }
@@ -153,7 +165,7 @@ export default function Home() {
           href: "/administration/informations-cabinet",
           icon: PencilSquareIcon,
           current: false,
-        }
+        },
       );
     }
     setNavigation(newNavigation);
@@ -259,86 +271,95 @@ export default function Home() {
                                   scope="col"
                                   className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                                 >
+
                                   {t("pages.admin.clinic.home.thNom")}
+
                                 </th>
                                 <th
                                   scope="col"
                                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                 >
+
                                   {t("pages.admin.clinic.home.thType")}
+
                                 </th>
                                 <th
                                   scope="col"
                                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                 >
+
                                   {t("pages.admin.clinic.home.thStatus")}
+
                                 </th>
                                 <th
                                   scope="col"
                                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                 >
+
                                   {t("pages.admin.clinic.home.thAnimal")}
+
                                 </th>
                                 <th
                                   scope="col"
                                   className="relative py-3.5 pl-3 pr-4 sm:pr-0"
                                 >
+
                                   <span className="sr-only">{t("pages.admin.clinic.home.thModifier")}</span>
                                 </th>
                               </tr>
 
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
-                            {people.map((person) => (
-                              <tr key={person.email}>
-                                <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                                  <div className="flex items-center">
-                                    <div className="h-11 w-11 flex-shrink-0">
-                                      <img
-                                        className="h-11 w-11 rounded-full"
-                                        src={person.image}
-                                        alt=""
-                                      />
-                                    </div>
-                                    <div className="ml-4">
-                                      <div className="font-medium text-gray-900">
-                                        {person.name}
+                              {people.map((person) => (
+                                <tr key={person.email}>
+                                  <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                    <div className="flex items-center">
+                                      <div className="h-11 w-11 flex-shrink-0">
+                                        <img
+                                          className="h-11 w-11 rounded-full"
+                                          src={person.image}
+                                          alt=""
+                                        />
                                       </div>
-                                      <div className="mt-1 text-gray-500">
-                                        {person.email}
+                                      <div className="ml-4">
+                                        <div className="font-medium text-gray-900">
+                                          {person.name}
+                                        </div>
+                                        <div className="mt-1 text-gray-500">
+                                          {person.email}
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                  <div className="text-gray-900">
-                                    {person.title}
-                                  </div>
-                                  <div className="mt-1 text-gray-500">
-                                    {person.department}
-                                  </div>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                  Actif
-                                </span>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                  {person.role}
-                                </td>
-                                <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                  <a
-                                    href="#"
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                  >
-                                    Modifier{" "}
-                                    <span className="sr-only">
-                                    , {person.name}
-                                  </span>
-                                  </a>
-                                </td>
-                              </tr>
-                            ))}
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                    <div className="text-gray-900">
+                                      {person.title}
+                                    </div>
+                                    <div className="mt-1 text-gray-500">
+                                      {person.department}
+                                    </div>
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                    <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                      Actif
+                                    </span>
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                    {person.role}
+                                  </td>
+                                  <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                    <a
+                                      href="#"
+                                      className="text-indigo-600 hover:text-indigo-900"
+                                    >
+                                      Modifier{" "}
+                                      <span className="sr-only">
+                                        , {person.name}
+                                      </span>
+                                    </a>
+                                  </td>
+                                </tr>
+                              ))}
                             </tbody>
                           </table>
                         </div>

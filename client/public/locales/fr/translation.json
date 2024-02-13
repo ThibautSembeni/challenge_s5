@@ -38,7 +38,10 @@
       "h3": "Société"
     },
     "newsletter": {
-      "h3": "Inscrivez-vous à notre newsletter"
+      "h3": "Inscrivez-vous à notre newsletter",
+      "p": "Les dernières news, articles, et ressources, envoyées à votre adresse email.",
+      "labelEmailAddress": "Adresse email",
+      "button": "S'inscrire"
     }
   },
   "components" : {
@@ -91,7 +94,7 @@
           "sidebar": {
             "spanFermer": "Fermer",
             "listboxCabinet": "Cabinet",
-            "lesVeterinaires" : "Les vêterinaires",
+            "lesVeterinaires" : "Les véterinaires",
             "spanVoirTousLesCabinets": "Voir tous les cabinets"
           },
           "topSidebar": {
@@ -285,6 +288,7 @@
           "labelDescription": "Description",
           "buttonSubmit": "Enregistrer",
           "buttonAnnuler": "Annuler",
+          "h1InfosComplementaires": "Informations complémentaires sur le cabinet",
           "buttonAjouterInfoSurCabinet": "Ajouter des informations complémentaires sur le cabinet",
           "titleAjouterInfoCabinet": "Ajouter des informations complémentaires",
           "labelNameSimple": "Nom"
@@ -313,6 +317,8 @@
           "modalAttrTitle": "Ajouter des horaires d'ouverture",
           "labelDay": "Jour",
           "labelIsOpen": "Ouverture",
+          "optionOpen": "Ouvert",
+          "optionClose": "Ferme",
           "buttonSubmit": "Enregistrer",
           "buttonCancel": "Annuler"
         },

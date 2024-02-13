@@ -1,43 +1,54 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, { Fragment, useEffect, useState } from "react";
 import {
   CalendarIcon,
   HomeIcon,
   UsersIcon,
   IdentificationIcon,
-} from '@heroicons/react/24/outline'
-import {createClinicSchedules, getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
-import {useAuth} from "@/contexts/AuthContext.jsx";
-import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
+} from "@heroicons/react/24/outline";
+import {
+  createClinicSchedules,
+  getAllClinicsByManager,
+  getOneClinics,
+} from "@/api/clinic/Clinic.jsx";
+import { useAuth } from "@/contexts/AuthContext.jsx";
+import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {CalendarDaysIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/react/24/outline/index.js";
+import {
+  CalendarDaysIcon,
+  PencilSquareIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
+
 
 //translation
 import { useTranslation } from "react-i18next";
 
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
-const userNavigation = [
-  { name: 'Déconnexion', href: '#' },
-]
+
+
+const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
+
 
 export default function Schedule () {
   //translation
   const { t } = useTranslation();
+
   const { user } = useAuth();
   const { selectedClinic } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);
   const [modifyInformation, setModifyInformation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalsOpen, setModalsOpen] = useState({});
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
-  const [navigation, setNavigation] = useState([])
+  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     if (user && user.uuid) {
@@ -92,7 +103,7 @@ export default function Schedule () {
           href: "/administration/informations-cabinet",
           icon: PencilSquareIcon,
           current: false,
-        }
+        },
       );
     }
     setNavigation(newNavigation);
@@ -107,30 +118,37 @@ export default function Schedule () {
       setIsLoading(true);
 
       let clinics;
-      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
+      if (
+        selectedClinic === "all" ||
+        selectedClinic === "Voir tous les cabinets" ||
+        typeof selectedClinic === undefined
+      ) {
         const response = await getAllClinicsByManager(userUuid);
-        clinics = response.data['hydra:member'];
+        clinics = response.data["hydra:member"];
       } else {
         const response = await getOneClinics(selectedClinic);
         clinics = [response.data];
       }
 
-      const transformedClinics = clinics.map(clinic => ({
+      const transformedClinics = clinics.map((clinic) => ({
         clinicInfo: clinic,
-        teams: clinic.veterinarians.map(({ firstname, lastname, specialties, uuid }) => ({
-          name: `${firstname} ${lastname}`,
-          initial: `${firstname[0]}`,
-          role: specialties,
-          uuid,
-          current: false,
-          imageUrl: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-          href: `/veterinaire/${uuid}`,
-        })),
-        clinicSchedules: clinic.clinicSchedules.map(schedule => ({
+        teams: clinic.veterinarians.map(
+          ({ firstname, lastname, specialties, uuid }) => ({
+            name: `${firstname} ${lastname}`,
+            initial: `${firstname[0]}`,
+            role: specialties,
+            uuid,
+            current: false,
+            imageUrl:
+              "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
+            href: `/veterinaire/${uuid}`,
+          }),
+        ),
+        clinicSchedules: clinic.clinicSchedules.map((schedule) => ({
           day: schedule.day,
-          startTime: new Date(schedule.timeslot_id.start_time),
-          endTime: new Date(schedule.timeslot_id.end_time),
-          isOpen: schedule.timeslot_id.isOpen,
+          startTime: new Date(schedule.timeslot.start_time),
+          endTime: new Date(schedule.timeslot.end_time),
+          isOpen: schedule.timeslot.isOpen,
           id: schedule.id,
         })),
         earliestStart: 24,
@@ -139,8 +157,14 @@ export default function Schedule () {
 
       setClinicsData(transformedClinics);
 
-      if (selectedClinic === "all" || selectedClinic === "Voir tous les cabinets" || typeof selectedClinic === undefined) {
-        setVeterinariansData(transformedClinics.flatMap(clinic => clinic.teams));
+      if (
+        selectedClinic === "all" ||
+        selectedClinic === "Voir tous les cabinets" ||
+        typeof selectedClinic === undefined
+      ) {
+        setVeterinariansData(
+          transformedClinics.flatMap((clinic) => clinic.teams),
+        );
       } else {
         setVeterinariansData(transformedClinics[0].teams);
       }
@@ -150,28 +174,30 @@ export default function Schedule () {
   };
 
   const openModal = (clinicUuid) => {
-    setModalsOpen(prev => ({ ...prev, [clinicUuid]: true }));
+    setModalsOpen((prev) => ({ ...prev, [clinicUuid]: true }));
   };
 
   const closeModal = (clinicUuid) => {
-    setModalsOpen(prev => ({ ...prev, [clinicUuid]: false }));
+    setModalsOpen((prev) => ({ ...prev, [clinicUuid]: false }));
   };
 
   const days = {
-    "lundi": "Lundi",
-    "mardi": "Mardi",
-    "mercredi": "Mercredi",
-    "jeudi": "Jeudi",
-    "vendredi": "Vendredi",
-    "samedi": "Samedi",
-    "dimanche": "Dimanche",
-  }
+    lundi: "Monday",
+    mardi: "Tuesday",
+    mercredi: "Wednesday",
+    jeudi: "Thursday",
+    vendredi: "Friday",
+    samedi: "Saturday",
+    dimanche: "Sunday",
+  };
 
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        const time = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
         options.push(time);
       }
     }
@@ -187,15 +213,15 @@ export default function Schedule () {
     const isOpen = data.get("isOpen");
     const startTime = data.get("startTime");
     const endTime = data.get("endTime");
-    const clinicId = `/api/clinics/${uuid}`;
+    const clinic = `/api/clinics/${uuid}`;
 
     const createClinic = await createClinicSchedules({
       day,
       isOpen,
       startTime,
       endTime,
-      clinicId,
-    })
+      clinic,
+    });
 
     console.log(createClinic);
 
@@ -231,8 +257,13 @@ export default function Schedule () {
     return (
       <>
         <div className="sm:col-span-3">
-          <label htmlFor="startTime" className="block text-sm font-medium leading-6 text-gray-900">
+
+          <label
+            htmlFor="startTime"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
             {t("pages.admin.clinic.schedule.labelStartTime")}
+
           </label>
           <div className="mt-2">
             <select
@@ -240,16 +271,23 @@ export default function Schedule () {
               name="startTime"
               className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              {timeOptions.map(time => (
-                <option key={time} value={time}>{time}</option>
+              {timeOptions.map((time) => (
+                <option key={time} value={time}>
+                  {time}
+                </option>
               ))}
             </select>
           </div>
         </div>
 
         <div className="sm:col-span-3">
-          <label htmlFor="endTime" className="block text-sm font-medium leading-6 text-gray-900">
+
+          <label
+            htmlFor="endTime"
+            className="block text-sm font-medium leading-6 text-gray-900"
+          >
             {t("pages.admin.clinic.schedule.labelEndTime")}
+
           </label>
           <div className="mt-2">
             <select
@@ -257,8 +295,10 @@ export default function Schedule () {
               name="endTime"
               className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
             >
-              {timeOptions.map(time => (
-                <option key={time} value={time}>{time}</option>
+              {timeOptions.map((time) => (
+                <option key={time} value={time}>
+                  {time}
+                </option>
               ))}
             </select>
           </div>
@@ -281,18 +321,35 @@ export default function Schedule () {
               isSuccess={isSuccess}
             />
 
-            <SideBar navigation={navigation} teams={veterinariansData} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} uuid={user.uuid} />
+            <SideBar
+              navigation={navigation}
+              teams={veterinariansData}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+              uuid={user.uuid}
+            />
 
             <div className="lg:pl-72">
-              <TopSideBar navigation={userNavigation} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+              <TopSideBar
+                navigation={userNavigation}
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
 
               <main className="py-10">
 
                 {clinicsData.map((clinic) => (
-                  <div className="px-4 sm:px-6 lg:px-8" key={clinic.clinicInfo.uuid}>
+                  <div
+                    className="px-4 sm:px-6 lg:px-8"
+                    key={clinic.clinicInfo.uuid}
+                  >
                     <div className="sm:flex sm:items-center">
                       <div className="sm:flex-auto">
-                        <h1 className="text-base font-semibold leading-6 text-gray-900">{t("pages.admin.clinic.schedule.h1")}</h1>
+
+                        <h1 className="text-base font-semibold leading-6 text-gray-900">
+                          {t("pages.admin.clinic.schedule.h1")}
+                        </h1>
+
                       </div>
                       <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <button
@@ -307,13 +364,23 @@ export default function Schedule () {
                     </div>
 
 
-                    <Modal isOpen={modalsOpen[clinic.clinicInfo.uuid] || false}
-                           onClose={() => closeModal(clinic.clinicInfo.uuid)}
-                           title="{t('pages.admin.clinic.schedule.modalAttrTitle')}">
-                      <form onSubmit={(event) => handleSubmit(event, clinic.clinicInfo.uuid)}>
+                    <Modal
+                      isOpen={modalsOpen[clinic.clinicInfo.uuid] || false}
+                      onClose={() => closeModal(clinic.clinicInfo.uuid)}
+                      title={t('pages.admin.clinic.schedule.modalAttrTitle')}
+                    >
+                      <form
+                        onSubmit={(event) =>
+                          handleSubmit(event, clinic.clinicInfo.uuid)
+                        }
+                      >
+
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                           <div className="sm:col-span-3">
-                            <label htmlFor="day" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label
+                              htmlFor="day"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
                               Jour
                             </label>
                             <div className="mt-2">
@@ -322,7 +389,7 @@ export default function Schedule () {
                                 name="day"
                                 className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                               >
-                                {Object.keys(days).map(day => (
+                                {Object.keys(days).map((day) => (
                                   <option key={day}>{days[day]}</option>
                                 ))}
                               </select>
@@ -331,19 +398,23 @@ export default function Schedule () {
                           </div>
 
 
-                        <div className="sm:col-span-3">
-                          <label htmlFor="isOpen" className="block text-sm font-medium leading-6 text-gray-900">
-                            {t("pages.admin.clinic.schedule.labelIsOpen")}
-                          </label>
-                          <div className="mt-2">
-                            <select
-                              id="isOpen"
-                              name="isOpen"
-                              className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                          <div className="sm:col-span-3">
+                            <label
+                              htmlFor="isOpen"
+                              className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                              <option value="1">Ouvert</option>
-                              <option value="0">Fermé</option>
-                            </select>
+                              {t("pages.admin.clinic.schedule.labelIsOpen")}
+                            </label>
+                            <div className="mt-2">
+                              <select
+                                id="isOpen"
+                                name="isOpen"
+                                className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                              >
+                                <option value="1">{t("pages.admin.clinic.schedule.optionOpen")}</option>
+                                <option value="0">{t("pages.admin.clinic.schedule.optionClose")}</option>
+                              </select>
+                            </div>
 
                           </div>
 
@@ -353,7 +424,6 @@ export default function Schedule () {
                           <button
                             type="submit"
                             className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
-
                           >
                             {t("pages.admin.clinic.schedule.buttonSubmit")}
                           </button>
@@ -365,7 +435,7 @@ export default function Schedule () {
                             {t("pages.admin.clinic.schedule.buttonCancel")}
                           </button>
                         </div>
-                        </div>
+
 
                       </form>
                     </Modal>
@@ -386,6 +456,8 @@ export default function Schedule () {
         </>
       )}
     </>
-)
+
+  );
+
 }
 

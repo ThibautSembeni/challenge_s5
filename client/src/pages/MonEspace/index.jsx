@@ -48,7 +48,7 @@ export default function MonEspace() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // use location of react router dom
   const location = useLocation();
-  console.log(location);
+
   return (
     <>
       <div>

@@ -130,12 +130,9 @@ export default function List({ pets, setAddPet, setEditPet, setCurrentUUID }) {
                         setCurrentUUID(pet.uuid);
                       }}
                     >
-                      <a
-                        href="#"
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
+                      <span className="text-indigo-600 hover:text-indigo-900 cursor-pointer">
                         Edit<span className="sr-only">, {pet.name}</span>
-                      </a>
+                      </span>
                     </td>
                   </tr>
                 ))}
