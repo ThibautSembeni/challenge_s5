@@ -133,7 +133,18 @@
           "h3": "Aucun rendez-vous à venir",
           "p": "Trouvez un prtaicien et prenez rendez-vous en ligne à tout moment",
           "plusIcon": "Prendre un rendez vous"
-          }
+          },
+        "preview": {
+          "h2RendezVous": "Rendez-vous",
+          "divDtSatus": "Status",
+          "divDtDD": "A venir",
+          "divDtDD2": "Passé",
+          "divDtDD3": "Annulé",
+          "divDtSpanVeterinaire": "Vétérinaire",
+          "divDtSpanDueDate": "Date d'écheance",
+          "divDtSpanSatus": "Status",
+          "divDDPaidWithMastercard": "Payé avec Mastercard"
+        }
       },
       "home": {
         "featureSections": {

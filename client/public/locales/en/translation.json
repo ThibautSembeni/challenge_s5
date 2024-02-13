@@ -132,6 +132,17 @@
           "h3": "Next appointments",
           "p": "Find a practician and schedule your next appointment online",
           "plusIcon": "Schedule an appointment"
+        },
+        "preview": {
+          "h2RendezVous": "Appointments",
+          "divDtSatus": "Status",
+          "divDtDD": "Coming next",
+          "divDtDD2": "Past appointment",
+          "divDtDD3": "Cancelled",
+          "divDtSpanVeterinaire": "Vetenarian",
+          "divDtSpanDueDate": "Due date",
+          "divDtSpanSatus": "Status",
+          "divDDPaidWithMastercard": "Paid with MasterCard"
         }
       },
       "home": {
