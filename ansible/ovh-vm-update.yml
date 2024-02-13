@@ -4,9 +4,12 @@
     - name: Clone a github repository
       git:
         repo: https://github.com/ThibautSembeni/challenge_s5.git
-        dest: /home/vetcare/app
+        dest: ~/app
         clone: yes
         update: yes
+    - name: install pip docker
+      import_tasks: docker/docker-pip.yml
+      become: yes
 
 - hosts: all
   name: Run using a project directory
@@ -15,7 +18,7 @@
   tasks:
     - name: Create and pull compose services
       community.docker.docker_compose:
-        project_src: /home/vetcare/app
+        project_src: app
         files: docker-compose.prod.yml
         pull: true
         state: present
