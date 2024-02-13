@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {EyeIcon, PencilSquareIcon, TrashIcon,} from "@heroicons/react/24/outline";
 import Table from "@/components/atoms/Table/Table.jsx";
-import {getAllClinics, updateOneClinics} from "@/api/clinic/Clinic.jsx";
+import {getAllClinics, updateOneClinics, deleteClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
@@ -36,6 +36,7 @@ export default function Clinics() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedClinic, setSelectedClinic] = useState(null);
 
   const [showNotificationToast, setShowNotificationToast] = useState(false);
@@ -98,6 +99,34 @@ export default function Clinics() {
     }, 10000);
   };
 
+  const deleteClinic = async (uuid) => {
+    try {
+      setIsLoading(true);
+      const response = await deleteClinics(uuid);
+
+      setIsDeleteModalOpen(false)
+
+      if (response.success) {
+        await fetchClinics();
+        setIsLoading(false);
+        setIsSuccess(true);
+        setMessage("Le cabinet a bien été supprimé");
+        setShowNotificationToast(true);
+      } else {
+        setIsLoading(false);
+        setIsSuccess(false);
+        setMessage(response.message);
+        setShowNotificationToast(true);
+      }
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  }
+
   const handleOpenModalWithClinicInfo = (clinic) => {
     setSelectedClinic(clinic);
     setIsModalOpen(true);
@@ -108,10 +137,25 @@ export default function Clinics() {
     setIsUpdateModalOpen(true);
   };
 
+  const handleOpenDeleteModalWithClinicInfo = (clinic) => {
+    setSelectedClinic(clinic);
+    setIsDeleteModalOpen(true);
+  };
+
   const columns = [
     {
       Header: 'Nom',
       accessor: 'name',
+      Cell: (row) => (
+        <>
+          <div className="text-gray-900 flex items-center gap-2">
+            {row.deletedAt && (
+              <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700">Supprimé</span>
+            )}
+            {row.name}
+          </div>
+        </>
+      ),
     },
     {
       Header: 'Contact',
@@ -128,7 +172,7 @@ export default function Clinics() {
       accessor: 'isActif',
       Cell: (row) => (
         row.isActif ? (
-          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700">Active</span>
+          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700">Confirmé</span>
         ) : (
           <div className="flex">
           <span
@@ -161,7 +205,7 @@ export default function Clinics() {
           <button onClick={() => handleOpenUpdateModalWithClinicInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-red-600 hover:text-red-900">
+          <button onClick={() => handleOpenDeleteModalWithClinicInfo(row)} className="text-red-600 hover:text-red-900">
             <TrashIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
         </div>
@@ -393,6 +437,34 @@ export default function Clinics() {
                         </button>
                       </div>
                     </form>
+                  </div>
+                )}
+              </Modal>
+
+              <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Supprimer le cabinet"
+              >
+                {selectedClinic && (
+                  <div>
+                    <p>Êtes-vous sûr de vouloir supprimer le cabinet {selectedClinic.name} ?</p>
+                    <div className="mt-8 grid grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsDeleteModalOpen(false)}
+                        className="col-span-1 m-1 rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 text-white"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteClinic(selectedClinic.uuid)}
+                        className="col-span-1 m-1 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 text-white"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </div>
                 )}
               </Modal>

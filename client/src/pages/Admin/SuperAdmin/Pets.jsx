@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {PencilSquareIcon,} from "@heroicons/react/24/outline";
 import Table from "@/components/atoms/Table/Table.jsx";
-import {getAllPets, updatePets} from "@/api/pets/index.jsx";
+import {getAllPets, updatePets, deletePets} from "@/api/pets/index.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
@@ -34,6 +34,7 @@ export default function Pets() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedPet, setSelectedPet] = useState(null);
 
   const [showNotificationToast, setShowNotificationToast] = useState(false);
@@ -89,6 +90,34 @@ export default function Pets() {
     }, 10000);
   };
 
+  const deletePet = async (uuid) => {
+    try {
+      setIsLoading(true);
+      const response = await deletePets(uuid);
+
+      setIsDeleteModalOpen(false)
+
+      if (response.success) {
+        await fetchPets();
+        setIsLoading(false);
+        setIsSuccess(true);
+        setMessage("L'animal a bien été supprimé");
+        setShowNotificationToast(true);
+      } else {
+        setIsLoading(false);
+        setIsSuccess(false);
+        setMessage(response.message);
+        setShowNotificationToast(true);
+      }
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  }
+
   const handleOpenModalWithPetInfo = (pet) => {
     setSelectedPet(pet);
     setIsModalOpen(true);
@@ -99,13 +128,23 @@ export default function Pets() {
     setIsUpdateModalOpen(true);
   };
 
+  const handleOpenDeleteModalWithPetInfo = (pet) => {
+    setSelectedPet(pet);
+    setIsDeleteModalOpen(true);
+  };
+
   const paymentColumns = [
     {
       Header: 'Nom',
       accessor: 'name',
       Cell: (row) => (
         <>
-          <div className="font-medium text-gray-900">{row.name}</div>
+          <div className="font-medium text-gray-900 flex items-center gap-2">
+            {row.deletedAt && (
+              <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700">Supprimé</span>
+            )}
+            {row.name}
+          </div>
         </>
       ),
     },
@@ -137,7 +176,7 @@ export default function Pets() {
           <button onClick={() => handleOpenUpdateModalWithPetInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-red-600 hover:text-red-900">
+          <button onClick={() => handleOpenDeleteModalWithPetInfo(row)} className="text-red-600 hover:text-red-900">
             <TrashIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
         </div>
@@ -285,6 +324,34 @@ export default function Pets() {
                         </button>
                       </div>
                     </form>
+                  </div>
+                )}
+              </Modal>
+
+              <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Supprimer l'animal"
+              >
+                {selectedPet && (
+                  <div>
+                    <p>Êtes-vous sûr de vouloir supprimer le cabinet {selectedPet.name} ?</p>
+                    <div className="mt-8 grid grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsDeleteModalOpen(false)}
+                        className="col-span-1 m-1 rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 text-white"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deletePet(selectedPet.uuid)}
+                        className="col-span-1 m-1 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 text-white"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </div>
                 )}
               </Modal>

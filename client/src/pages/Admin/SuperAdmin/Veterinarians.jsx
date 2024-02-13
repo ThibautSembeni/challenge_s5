@@ -1,6 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {PencilSquareIcon,} from "@heroicons/react/24/outline";
-import {getAllVeterinarians, updateOneVeterinarians} from "@/api/clinic/Veterinarian.jsx";
+import {getAllVeterinarians, updateOneVeterinarians, deleteVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import Table from "@/components/atoms/Table/Table.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
@@ -34,6 +34,7 @@ export default function Veterinarians() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedVeterinarian, setSelectedVeterinarian] = useState(null);
 
   const [showNotificationToast, setShowNotificationToast] = useState(false);
@@ -94,6 +95,34 @@ export default function Veterinarians() {
     }, 10000);
   };
 
+  const deleteVeterinarian = async (uuid) => {
+    try {
+      setIsLoading(true);
+      const response = await deleteVeterinarians(uuid);
+
+      setIsDeleteModalOpen(false)
+
+      if (response.success) {
+        await fetchVeterinarians();
+        setIsLoading(false);
+        setIsSuccess(true);
+        setMessage("Le vétérinaire a bien été supprimé");
+        setShowNotificationToast(true);
+      } else {
+        setIsLoading(false);
+        setIsSuccess(false);
+        setMessage(response.message);
+        setShowNotificationToast(true);
+      }
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  }
+
   const handleOpenModalWithVeterinarianInfo = (veterinarian) => {
     setSelectedVeterinarian(veterinarian);
     setIsModalOpen(true);
@@ -104,13 +133,23 @@ export default function Veterinarians() {
     setIsUpdateModalOpen(true);
   };
 
+  const handleOpenDeleteModalWithVeterinarianInfo = (veterinarian) => {
+    setSelectedVeterinarian(veterinarian);
+    setIsDeleteModalOpen(true);
+  };
+
   const veterinarianColumns = [
     {
       Header: 'Nom',
       accessor: 'fullname',
       Cell: (row) => (
         <>
-          <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
+          <div className="font-medium text-gray-900 flex items-center gap-2">
+            {row.deletedAt && (
+              <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700">Supprimé</span>
+            )}
+            {row.firstname} {row.lastname}
+          </div>
         </>
       ),
     },
@@ -143,7 +182,7 @@ export default function Veterinarians() {
           <button onClick={() => handleOpenUpdateModalWithVeterinarianInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-red-600 hover:text-red-900">
+          <button onClick={() => handleOpenDeleteModalWithVeterinarianInfo(row)} className="text-red-600 hover:text-red-900">
             <TrashIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
         </div>
@@ -307,6 +346,34 @@ export default function Veterinarians() {
                         </button>
                       </div>
                     </form>
+                  </div>
+                )}
+              </Modal>
+
+              <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Supprimer le vétérinaire"
+              >
+                {selectedVeterinarian && (
+                  <div>
+                    <p>Êtes-vous sûr de vouloir supprimer le vétérinaire {selectedVeterinarian.firstname} {selectedVeterinarian.lastname} ?</p>
+                    <div className="mt-8 grid grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsDeleteModalOpen(false)}
+                        className="col-span-1 m-1 rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 text-white"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteVeterinarian(selectedVeterinarian.uuid)}
+                        className="col-span-1 m-1 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 text-white"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </div>
                 )}
               </Modal>

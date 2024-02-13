@@ -1,6 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {PencilSquareIcon,} from "@heroicons/react/24/outline";
-import {getAllUsers, updateOneUsers} from "@/api/auth/index.jsx";
+import {getAllUsers, updateOneUsers, deleteUser} from "@/api/auth/index.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
@@ -34,6 +34,7 @@ export default function Users() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const [showNotificationToast, setShowNotificationToast] = useState(false);
@@ -98,6 +99,34 @@ export default function Users() {
     }, 10000);
   };
 
+  const deleteSoftUser = async (uuid) => {
+    try {
+      setIsLoading(true);
+      const response = await deleteUser(uuid);
+
+      setIsDeleteModalOpen(false)
+
+      if (response.success) {
+        await fetchUsers();
+        setIsLoading(false);
+        setIsSuccess(true);
+        setMessage("L'utilisateur a bien été supprimé");
+        setShowNotificationToast(true);
+      } else {
+        setIsLoading(false);
+        setIsSuccess(false);
+        setMessage(response.message);
+        setShowNotificationToast(true);
+      }
+
+      setTimeout(() => {
+        setShowNotificationToast(false);
+      }, 10000);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données : ", error);
+    }
+  }
+
   const handleOpenModalWithUserInfo = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
@@ -108,12 +137,22 @@ export default function Users() {
     setIsUpdateModalOpen(true);
   };
 
+  const handleOpenDeleteModalWithUserInfo = (user) => {
+    setSelectedUser(user);
+    setIsDeleteModalOpen(true);
+  };
+
   const userColumns = [
     {
       Header: 'Nom',
       accessor: 'user',
       Cell: ( row ) => (
-        <div className="font-medium text-gray-900">{row.firstname} {row.lastname}</div>
+        <div className="font-medium text-gray-900 flex items-center gap-2">
+          {row.deletedAt && (
+            <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700">Supprimé</span>
+          )}
+          {row.firstname} {row.lastname}
+        </div>
       ),
     },
     {
@@ -169,7 +208,7 @@ export default function Users() {
           <button onClick={() => handleOpenUpdateModalWithUserInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-red-600 hover:text-red-900">
+          <button onClick={() => handleOpenDeleteModalWithUserInfo(row)} className="text-red-600 hover:text-red-900">
             <TrashIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
         </div>
@@ -391,6 +430,34 @@ export default function Users() {
                         </button>
                       </div>
                     </form>
+                  </div>
+                )}
+              </Modal>
+
+              <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Supprimer l'utilisateur"
+              >
+                {selectedUser && (
+                  <div>
+                    <p>Êtes-vous sûr de vouloir supprimer l'utilisateur {selectedUser.firstname} {selectedUser.lastname} ?</p>
+                    <div className="mt-8 grid grid-cols-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsDeleteModalOpen(false)}
+                        className="col-span-1 m-1 rounded-md bg-gray-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 text-white"
+                      >
+                        Annuler
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteSoftUser(selectedUser.uuid)}
+                        className="col-span-1 m-1 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 text-white"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
                   </div>
                 )}
               </Modal>

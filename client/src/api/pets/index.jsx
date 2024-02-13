@@ -55,5 +55,11 @@ export const updatePets = async (uuid, { name, species, breed, birthdate, medica
 };
 
 export const deletePets = async (uuid) => {
-  return axiosInstance.delete(`/pets/${uuid}`);
+  try {
+    await axiosInstance.delete(`/pets/${uuid}`);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la suppression de l'animal" };
+  }
 };

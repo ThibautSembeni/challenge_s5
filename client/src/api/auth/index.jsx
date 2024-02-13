@@ -79,5 +79,11 @@ export const updateOneUsers = async ( uuid, { firstname, lastname, email, phone,
 };
 
 export const deleteUser = async (uuid) => {
-  return axiosInstance.delete(`/users/${uuid}`);
+  try {
+    await axiosInstance.delete(`/users/${uuid}`);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la suppression du cabinet" };
+  }
 };

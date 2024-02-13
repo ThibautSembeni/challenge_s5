@@ -134,7 +134,13 @@ export const replaceOneClinics = async (
 };
 
 export const deleteClinics = async (uuid) => {
-  return axiosInstance.delete(`/clinics/${uuid}`);
+  try {
+    await axiosInstance.delete(`/clinics/${uuid}`);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la suppression du cabinet" };
+  }
 };
 
 export const updateOneClinics = async (uuid, { name, email, phone, address, postalCode, city, description }) => {

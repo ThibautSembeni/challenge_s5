@@ -140,9 +140,6 @@ export default function Payments() {
           <button onClick={() => handleOpenUpdateModalWithPaymentInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-red-600 hover:text-red-900">
-            <TrashIcon className="h-5 w-5" aria-hidden="true"/>
-          </button>
         </div>
       ),
       accessor: 'actions',

@@ -10,9 +10,11 @@ use ApiPlatform\Metadata\Post;
 use App\Entity\Auth\User;
 use App\Repository\PaymentsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentsRepository::class)]
+#[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['payment:read:collection']]),
@@ -41,6 +43,10 @@ class Payments
     #[Groups(['payment:read:collection', 'payment:write:item'])]
     #[ORM\Column(length: 50)]
     private ?string $status = null;
+
+    #[Groups(['payment:read:collection'])]
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt = null;
 
     #[Groups(['payment:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'payments')]
@@ -112,6 +118,35 @@ class Payments
     {
         $this->clinic = $clinic;
 
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime|null $deletedAt
+     * @return self
+     */
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
+
+    public function delete(): self
+    {
+        $this->deletedAt = new \DateTime();
         return $this;
     }
 }
