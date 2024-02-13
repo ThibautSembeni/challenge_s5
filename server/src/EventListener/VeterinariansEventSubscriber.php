@@ -74,7 +74,7 @@ class VeterinariansEventSubscriber implements EventSubscriber
      * @throws RandomException
      * @throws ORMException
      */
-    public function sendEmail(Veterinarians $veterinarian, EntityManager $entityManager): void
+    private function sendEmail(Veterinarians $veterinarian, EntityManager $entityManager): void
     {
         $user = new User();
         $user->setEmail($veterinarian->getEmail());
@@ -85,6 +85,8 @@ class VeterinariansEventSubscriber implements EventSubscriber
         $password = bin2hex(random_bytes(8));
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
+
+        $user->setVeterinarian($veterinarian);
 
         $entityManager->persist($user);
         $entityManager->flush();

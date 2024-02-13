@@ -7,8 +7,9 @@ export default function List({
   setAddService,
   setEditService,
   setCurrentUUID,
+                               isLoading
 }) {
-  if (services.length === 0) {
+  if (isLoading) {
     return <ListSkeleton />;
   }
   return (

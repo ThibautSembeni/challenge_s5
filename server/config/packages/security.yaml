@@ -33,13 +33,16 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api/veterinarians, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/api/veterinarians, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/veterinarians/[a-zA-Z0-9_-]+$, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics/[a-zA-Z0-9_-]+$, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: POST, roles: PUBLIC_ACCESS }
+        - { path: ^/api/pets, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/feedbacks, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs,       roles: PUBLIC_ACCESS }
         - { path: ^/chatbot, method: POST, roles: PUBLIC_ACCESS }

@@ -1,9 +1,22 @@
 import axiosInstance from "@/utils/axiosInstance.js";
 import axios from "axios";
-
-export const getAllVeterinarians = async () => {
-  return axios.get(`${import.meta.env.VITE_API_URL}/veterinarians`);
+export const getAllVeterinarians = async ({
+      page = 1,
+      itemsPerPage = 30,
+      pagination = false,
+      ...filters
+    } = {}) => {
+  const params = new URLSearchParams({
+    page,
+    itemsPerPage,
+    pagination,
+    ...filters,
+  });
+  return axios.get(
+    `${import.meta.env.VITE_API_URL}/veterinarians?${params.toString()}`,
+  );
 };
+
 export const createVeterinarians = async ({
   lastname,
   firstname,
@@ -88,29 +101,19 @@ export const deleteVeterinarians = async (uuid) => {
   }
 };
 
-export const updateOneVeterinarians = async (
-  uuid,
-  {
-    lastname,
-    firstname,
-    phone,
-    specialties,
-    email,
-    clinicID,
-    appointments,
-    appointmentHistories,
-    schedules,
-  },
-) => {
-  return axiosInstance.patch(`/veterinarians/${uuid}`, {
-    lastname,
-    firstname,
-    phone,
-    specialties,
-    email,
-    clinicID,
-    appointments,
-    appointmentHistories,
-    schedules,
-  });
+export const updateOneVeterinarians = async (uuid, {lastname, firstname, phone, email}) => {
+  try {
+    const response = await axiosInstance.patch(`/veterinarians/${uuid}`, {
+      lastname, firstname, phone, email
+    }, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du vétérinaire : ", error);
+    return { success: false, message: "Une erreur est survenue lors de la mise à jour du vétérinaire" };
+  }
 };

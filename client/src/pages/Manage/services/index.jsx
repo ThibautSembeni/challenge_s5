@@ -15,12 +15,15 @@ export default function MyServices() {
   const [addService, setAddService] = useState(false);
   const [editService, setEditService] = useState(false);
   const [currentUUID, setCurrentUUID] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleGetAllServices = async () => {
+    setIsLoading(true);
     const result = await getAllServicesFromVeterinarian();
     if (result.status === 200) {
       setServices(result.data["hydra:member"]);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -50,6 +53,7 @@ export default function MyServices() {
             setAddService={setAddService}
             setEditService={setEditService}
             setCurrentUUID={setCurrentUUID}
+            isLoading={isLoading}
           />
         )}
         {addService && !editService && (

@@ -4,3 +4,5 @@ server/.env.local
 */.env.*.local
 /server/swagger_docs.json
 /actions-runner/
+/ansible/.private_key
+/ansible/inventory

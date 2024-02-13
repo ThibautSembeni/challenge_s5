@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(normalizationContext: ['groups' => ['users:read:collection']]),
         new Post(processor: UserPasswordHasher::class),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class),
@@ -60,14 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
     use TimestampableTrait;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
+    #[Groups(['users:read:collection'])]
     #[ORM\OneToMany(mappedBy: 'userID', targetEntity: Pets::class)]
     private Collection $pets;
 
@@ -77,19 +78,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userID', targetEntity: Notifications::class)]
     private Collection $notifications;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'users:read:collection'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'users:read:collection'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['user:read', 'user:write:update'])]
+    #[Groups(['user:read', 'user:write:update', 'users:read:collection'])]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $city = null;
 
-    #[Groups(['user:read', 'user:write:update'])]
+    #[Groups(['user:read', 'user:write:update', 'users:read:collection'])]
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $postalCode = null;
 
