@@ -163,6 +163,13 @@
           "divDtAvis : ": "Avis"
         }
       },
+      "bookingAppointment": {
+        "cabinet": {
+          "h2Cabinet": "Cabinet",
+          "pChoisissezCabinet":  "Choisissez le cabinet dans lequel vous souhaitez prendre rendez-vous.",
+          "labelChoisissezCabinet": "Choisissez un cabinet"
+        }
+      },
       "home": {
         "featureSections": {
           "h2": "Au service de ceux qui vous sont chers"

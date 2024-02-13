@@ -162,6 +162,13 @@
           "divDtAvis": "Review"
         }
       },
+      "bookingAppointment": {
+        "cabinet": {
+          "h2Cabinet": "Clinic",
+          "pChoisissezCabinet":  "Choose the clinic where you want to schedule your next appointment",
+          "labelChoisissezCabinet": "Choose a clinic"
+        }
+      },
       "home": {
         "featureSections": {
           "h2": "Care about the ones you love"
