@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Entity\Auth\User;
 use App\Repository\PaymentsRepository;
@@ -17,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(normalizationContext: ['groups' => ['payment:read:collection']]),
         new Get(normalizationContext: ['groups' => ['payment:read:item']]),
         new Post(normalizationContext: ['groups' => ['payment:write:item']]),
+        new Patch(normalizationContext: ['groups' => ['payment:write:item']])
     ],
     normalizationContext: ['groups' => ['payment:read:collection']],
 )]
@@ -32,11 +34,11 @@ class Payments
     #[ORM\Column(length: 255)]
     private ?string $stripePaymentID = null;
 
-    #[Groups(['payment:read:collection'])]
+    #[Groups(['payment:read:collection', 'payment:write:item'])]
     #[ORM\Column]
     private ?float $amount = null;
 
-    #[Groups(['payment:read:collection'])]
+    #[Groups(['payment:read:collection', 'payment:write:item'])]
     #[ORM\Column(length: 50)]
     private ?string $status = null;
 

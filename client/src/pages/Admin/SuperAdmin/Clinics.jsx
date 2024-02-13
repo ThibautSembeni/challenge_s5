@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {EyeIcon, PencilSquareIcon, TrashIcon,} from "@heroicons/react/24/outline";
 import Table from "@/components/atoms/Table/Table.jsx";
-import {getAllClinics} from "@/api/clinic/Clinic.jsx";
+import {getAllClinics, updateOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
 import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideBar.jsx";
@@ -10,6 +10,7 @@ import {CheckIcon} from "@heroicons/react/20/solid";
 import {checkClinic} from "@/api/clinic/Clinic.jsx";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import MapInfo from "@/components/molecules/Map/MapInfo.jsx";
+import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
 
@@ -34,7 +35,12 @@ export default function Clinics() {
   const [clinics, setClinics] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedClinic, setSelectedClinic] = useState(null);
+
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     fetchClinics().then(() => setIsLoading(false));
@@ -49,10 +55,57 @@ export default function Clinics() {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
+  const handleSubmitInformation = async (event, uuid) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const data = new FormData(event.currentTarget);
+    const name = data.get('name');
+    const email = data.get('email');
+    const phone = data.get('phone');
+    const address = data.get('address');
+    const postalCode = data.get('postal_code');
+    const city = data.get('city');
+    const description = data.get('description');
+
+    const updateClinicResponse = await updateOneClinics(uuid, {
+      name,
+      email,
+      phone,
+      address,
+      postalCode,
+      city,
+      description,
+    });
+
+    setIsUpdateModalOpen(false);
+
+    if (updateClinicResponse.success) {
+      await fetchClinics();
+      setIsLoading(false);
+      setIsSuccess(true);
+      setMessage("Les informations du cabinet ont bien été modifiées");
+      setShowNotificationToast(true);
+    } else {
+      setIsLoading(false);
+      setIsSuccess(false);
+      setMessage(updateClinicResponse.message);
+      setShowNotificationToast(true);
+    }
+
+    setTimeout(() => {
+      setShowNotificationToast(false);
+    }, 10000);
+  };
 
   const handleOpenModalWithClinicInfo = (clinic) => {
     setSelectedClinic(clinic);
     setIsModalOpen(true);
+  };
+
+  const handleOpenUpdateModalWithClinicInfo = (clinic) => {
+    setSelectedClinic(clinic);
+    setIsUpdateModalOpen(true);
   };
 
   const columns = [
@@ -105,7 +158,7 @@ export default function Clinics() {
           <button onClick={() => handleOpenModalWithClinicInfo(row)} className="text-blue-600 hover:text-blue-900">
             <EyeIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-orange-600 hover:text-orange-900">
+          <button onClick={() => handleOpenUpdateModalWithClinicInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
           <button className="text-red-600 hover:text-red-900">
@@ -129,6 +182,13 @@ export default function Clinics() {
               sidebarOpen={sidebarOpen}
               setSidebarOpen={setSidebarOpen}
               uuid={user.uuid}
+            />
+
+            <NotificationToast
+              show={showNotificationToast}
+              setShow={setShowNotificationToast}
+              message={message}
+              isSuccess={isSuccess}
             />
 
             <div className="lg:pl-72">
@@ -200,6 +260,139 @@ export default function Clinics() {
                         className={"w-full h-[20vh]"}
                       />
                     </div>
+                  </div>
+                )}
+              </Modal>
+
+              <Modal
+                isOpen={isUpdateModalOpen}
+                onClose={() => setIsUpdateModalOpen(false)}
+                title="Modification des informations du cabinet"
+              >
+                {selectedClinic && (
+                  <div>
+                    <form onSubmit={(event) => handleSubmitInformation(event, selectedClinic.uuid)}>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-8">
+                        <div className="col-span-full">
+                          <label htmlFor="name" className="block text-sm font-medium leading-6">
+                            Nom du cabinet
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="name"
+                              name="name"
+                              type="text"
+                              required={true}
+                              defaultValue={selectedClinic.name}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="email" className="block text-sm font-medium leading-6">
+                            Email
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="email"
+                              name="email"
+                              type="email"
+                              required={true}
+                              defaultValue={selectedClinic.email}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="phone" className="block text-sm font-medium leading-6">
+                            Téléphone
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="phone"
+                              name="phone"
+                              type="text"
+                              defaultValue={selectedClinic.phone}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-full">
+                          <label htmlFor="address" className="block text-sm font-medium leading-6">
+                            Adresse postal
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="address"
+                              name="address"
+                              type="text"
+                              required={true}
+                              defaultValue={selectedClinic.address}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="postal_code" className="block text-sm font-medium leading-6">
+                            Code postal
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="postal_code"
+                              name="postal_code"
+                              type="text"
+                              required={true}
+                              defaultValue={selectedClinic.postalCode}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="city" className="block text-sm font-medium leading-6">
+                            Ville
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="city"
+                              name="city"
+                              type="text"
+                              required={true}
+                              defaultValue={selectedClinic.city}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-full">
+                          <label htmlFor="description" className="block text-sm font-medium leading-6">
+                            Description
+                          </label>
+                          <div className="mt-2">
+                            <textarea
+                              id="description"
+                              name="description"
+                              required={true}
+                              defaultValue={selectedClinic.description}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-8 flex">
+                        <button
+                          type="submit"
+                          className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 text-white"
+                        >
+                          Enregistrer
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 )}
               </Modal>

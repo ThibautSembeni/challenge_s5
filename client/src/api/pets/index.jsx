@@ -37,17 +37,21 @@ export const createPets = async ({
     medicalHistory,
   });
 };
-export const updatePets = async (
-  uuid,
-  { name, species, breed, birthdate, medicalHistory },
-) => {
-  return axiosInstance.patch(`/pets/${uuid}`, {
-    name,
-    species,
-    breed,
-    birthdate,
-    medicalHistory,
-  });
+export const updatePets = async (uuid, { name, species, breed, birthdate, medicalHistory }) => {
+  try {
+    const response = await axiosInstance.patch(`/pets/${uuid}`, {
+      name, species, breed, birthdate, medicalHistory
+    }, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de l'animal : ", error);
+    return { success: false, message: "Une erreur est survenue lors de la mise à jour de l'animal" };
+  }
 };
 
 export const deletePets = async (uuid) => {

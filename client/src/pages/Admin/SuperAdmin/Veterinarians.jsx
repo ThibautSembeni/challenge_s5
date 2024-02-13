@@ -1,6 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {PencilSquareIcon,} from "@heroicons/react/24/outline";
-import {getAllVeterinarians} from "@/api/clinic/Veterinarian.jsx";
+import {getAllVeterinarians, updateOneVeterinarians} from "@/api/clinic/Veterinarian.jsx";
 import Table from "@/components/atoms/Table/Table.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import {useSuperAdmin} from "@/contexts/SuperAdminContext.jsx";
@@ -8,6 +8,7 @@ import AdminSideBar, {TopSideBar} from "@/components/molecules/Navbar/AdminSideB
 import Loading from "@/components/molecules/Loading.jsx";
 import {EyeIcon, TrashIcon,} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
+import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
 const userNavigation = [{name: "Déconnexion", href: "#"}];
 
@@ -32,7 +33,12 @@ export default function Veterinarians() {
   const [veterinarians, setVeterinarians] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedVeterinarian, setSelectedVeterinarian] = useState(null);
+
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     fetchVeterinarians().then(() => setIsLoading(false));
@@ -51,10 +57,51 @@ export default function Veterinarians() {
       console.error("Erreur lors de la récupération des données : ", error);
     }
   };
+  const handleSubmitInformation = async (event, uuid) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const phone = data.get('phone');
+    const firstname = data.get('firstname');
+    const lastname = data.get('lastname');
+
+    const updateVeterinairianResponse = await updateOneVeterinarians(uuid, {
+      email,
+      phone,
+      firstname,
+      lastname,
+    });
+
+    setIsUpdateModalOpen(false);
+
+    if (updateVeterinairianResponse.success) {
+      await fetchVeterinarians();
+      setIsLoading(false);
+      setIsSuccess(true);
+      setMessage("Les informations du vétérinaire ont bien été modifiées");
+      setShowNotificationToast(true);
+    } else {
+      setIsLoading(false);
+      setIsSuccess(false);
+      setMessage(updateVeterinairianResponse.message);
+      setShowNotificationToast(true);
+    }
+
+    setTimeout(() => {
+      setShowNotificationToast(false);
+    }, 10000);
+  };
 
   const handleOpenModalWithVeterinarianInfo = (veterinarian) => {
     setSelectedVeterinarian(veterinarian);
     setIsModalOpen(true);
+  };
+
+  const handleOpenUpdateModalWithVeterinarianInfo = (veterinarian) => {
+    setSelectedVeterinarian(veterinarian);
+    setIsUpdateModalOpen(true);
   };
 
   const veterinarianColumns = [
@@ -93,7 +140,7 @@ export default function Veterinarians() {
           <button onClick={() => handleOpenModalWithVeterinarianInfo(row)} className="text-blue-600 hover:text-blue-900">
             <EyeIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
-          <button className="text-orange-600 hover:text-orange-900">
+          <button onClick={() => handleOpenUpdateModalWithVeterinarianInfo(row)} className="text-orange-600 hover:text-orange-900">
             <PencilSquareIcon className="h-5 w-5" aria-hidden="true"/>
           </button>
           <button className="text-red-600 hover:text-red-900">
@@ -117,6 +164,13 @@ export default function Veterinarians() {
               sidebarOpen={sidebarOpen}
               setSidebarOpen={setSidebarOpen}
               uuid={user.uuid}
+            />
+
+            <NotificationToast
+              show={showNotificationToast}
+              setShow={setShowNotificationToast}
+              message={message}
+              isSuccess={isSuccess}
             />
 
             <div className="lg:pl-72">
@@ -167,6 +221,92 @@ export default function Veterinarians() {
                     <p><b>Nom :</b> {selectedVeterinarian.firstname} {selectedVeterinarian.lastname}</p>
                     <p><b>Email :</b> {selectedVeterinarian.email}</p>
                     <p><b>Téléphone :</b> {selectedVeterinarian.phone}</p>
+                  </div>
+                )}
+              </Modal>
+
+              <Modal
+                isOpen={isUpdateModalOpen}
+                onClose={() => setIsUpdateModalOpen(false)}
+                title="Modification des informations du cabinet"
+              >
+                {selectedVeterinarian && (
+                  <div>
+                    <form onSubmit={(event) => handleSubmitInformation(event, selectedVeterinarian.uuid)}>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-8">
+                        <div className="col-span-1">
+                          <label htmlFor="email" className="block text-sm font-medium leading-6">
+                            Email
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="email"
+                              name="email"
+                              type="email"
+                              required={true}
+                              defaultValue={selectedVeterinarian.email}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="phone" className="block text-sm font-medium leading-6">
+                            Téléphone
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="phone"
+                              name="phone"
+                              type="text"
+                              defaultValue={selectedVeterinarian.phone}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="firstname" className="block text-sm font-medium leading-6">
+                            Prénom
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="firstname"
+                              name="firstname"
+                              type="text"
+                              required={true}
+                              defaultValue={selectedVeterinarian.firstname}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-1">
+                          <label htmlFor="lastname" className="block text-sm font-medium leading-6">
+                            Nom
+                          </label>
+                          <div className="mt-2">
+                            <input
+                              id="lastname"
+                              name="lastname"
+                              type="text"
+                              required={true}
+                              defaultValue={selectedVeterinarian.lastname}
+                              className="block w-full rounded-md border-0 py-1.5 px-2 shadow-sm ring-1 ring-inset ring-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-8 flex">
+                        <button
+                          type="submit"
+                          className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 text-white"
+                        >
+                          Enregistrer
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 )}
               </Modal>

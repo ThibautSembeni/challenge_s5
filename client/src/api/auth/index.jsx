@@ -61,31 +61,21 @@ export const getAllUsers = async ({
   );
 };
 
-export const updateOneUsers = async (
-  uuid,
-  {
-    firstname,
-    lastname,
-    email,
-    phone,
-    address,
-    city,
-    postalCode,
-    newPassword,
-    oldPassword,
-  },
-) => {
-  return axiosInstance.patch(`/users/${uuid}`, {
-    firstname,
-    lastname,
-    email,
-    phone,
-    address,
-    city,
-    postalCode,
-    newPassword,
-    oldPassword,
-  });
+export const updateOneUsers = async ( uuid, { firstname, lastname, email, phone, address, city, postalCode, newPassword, oldPassword }) => {
+  try {
+    const response = await axiosInstance.patch(`/users/${uuid}`, {
+      firstname, lastname, email, phone, address, city, postalCode, newPassword, oldPassword
+    }, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de l'utilisateur : ", error);
+    return { success: false, message: "Une erreur est survenue lors de la mise à jour de l'utilisateur" };
+  }
 };
 
 export const deleteUser = async (uuid) => {

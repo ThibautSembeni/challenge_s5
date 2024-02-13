@@ -137,10 +137,10 @@ export const deleteClinics = async (uuid) => {
   return axiosInstance.delete(`/clinics/${uuid}`);
 };
 
-export const updateOneClinics = async (uuid, { name, phone, address, postalCode, city, description }) => {
+export const updateOneClinics = async (uuid, { name, email, phone, address, postalCode, city, description }) => {
   try {
     const response = await axiosInstance.patch(`/clinics/${uuid}`, {
-      name, phone, address, postalCode, city, description
+      name, email, phone, address, postalCode, city, description
     }, {
       headers: {
         'Content-Type': 'application/merge-patch+json'
