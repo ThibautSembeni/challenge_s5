@@ -32,7 +32,7 @@ jobs:
       - name: Update docker compose image
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          know_hosts: |
+          known_hosts: |
             ${{secrets.OVH_VM_IP}} ${{secrets.OVH_VM_KNOW_HOST}}
           inventory: |
             [all]
