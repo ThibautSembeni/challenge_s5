@@ -246,7 +246,6 @@ export default function Veterinarians() {
               >
                 {selectedVeterinarian && (
                   <div className="flex flex-col gap-2">
-                    <p><b>ID :</b> {selectedVeterinarian.id}</p>
                     <p><b>UUID :</b> {selectedVeterinarian.uuid}</p>
                     <p><b>Cabinet :</b> {selectedVeterinarian.clinic.name}</p>
                     <p><b>Nom :</b> {selectedVeterinarian.firstname} {selectedVeterinarian.lastname}</p>

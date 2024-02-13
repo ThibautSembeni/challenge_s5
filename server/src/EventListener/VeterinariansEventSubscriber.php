@@ -86,6 +86,8 @@ class VeterinariansEventSubscriber implements EventSubscriber
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
 
+        $user->setVeterinarian($veterinarian);
+
         $entityManager->persist($user);
         $entityManager->flush();
 

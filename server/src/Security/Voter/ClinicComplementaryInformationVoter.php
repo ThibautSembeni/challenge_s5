@@ -50,13 +50,15 @@ class ClinicComplementaryInformationVoter extends Voter
 
     private function canCreate(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
-            return false;
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
         }
 
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicComplementaryInformation->getClinic()) {
-                return true;
+        if ($this->security->isGranted('ROLE_MANAGER')) {
+            foreach ($user->getClinic() as $userClinic) {
+                if ($userClinic === $clinicComplementaryInformation->getClinic()) {
+                    return true;
+                }
             }
         }
 
@@ -65,31 +67,11 @@ class ClinicComplementaryInformationVoter extends Voter
 
     private function canEdit(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
-            return false;
-        }
-
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicComplementaryInformation->getClinic()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->canCreate($clinicComplementaryInformation, $user);
     }
 
     private function canDelete(ClinicComplementaryInformation $clinicComplementaryInformation, User $user): bool
     {
-        if (!$this->security->isGranted('ROLE_MANAGER') || !$this->security->isGranted("ROLE_ADMIN")) {
-            return false;
-        }
-
-        foreach ($user->getClinic() as $userClinic) {
-            if ($userClinic === $clinicComplementaryInformation->getClinic()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->canCreate($clinicComplementaryInformation, $user);
     }
 }

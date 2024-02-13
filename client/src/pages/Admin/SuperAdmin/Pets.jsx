@@ -240,7 +240,6 @@ export default function Pets() {
               >
                 {selectedPet && (
                   <div className="flex flex-col gap-2">
-                    <p><b>ID :</b> {selectedPet.id}</p>
                     <p><b>UUID :</b> {selectedPet.uuid}</p>
                     <p><b>Nom :</b> {selectedPet.name}</p>
                     <p><b>Espèce :</b> {selectedPet.species}</p>

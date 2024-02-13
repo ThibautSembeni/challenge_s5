@@ -2,12 +2,9 @@
 
 namespace App\EventListener;
 
-use App\Entity\Auth\User;
 use App\Entity\Clinics;
-use App\Entity\Veterinarians;
 use App\Service\Geocoder;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
