@@ -52,13 +52,17 @@ function classNames(...classes) {
 export default function Appointment() {
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const handleGetAppointments = async () => {
     const result = await getAllAppointments();
     setAppointments(result.data["hydra:member"]);
+    setIsLoading(false);
   };
   const handleGetAppointmentsCompleted = async () => {
+    setIsLoading(true);
     const result = await getAllCompletedAppointments();
     setAppointments(result.data["hydra:member"]);
+    setIsLoading(false);
   };
 
   const handleAppointmentClick = (uuid) => {
@@ -81,11 +85,15 @@ export default function Appointment() {
             <div className="grid grid-cols-1 gap-4 h-full overflow-y-auto">
               <section aria-labelledby="section-2-title" className={""}>
                 <h2 className="sr-only" id="section-2-title">
-                  Section title
+                  Mes rendez-vous
                 </h2>
                 <div className="rounded-lg bg-white relative overflow-hidden border border-gray-200">
                   <div className="p-6 flex flex-col gap-4 h-25 overflow-y">
-                    {appointments && appointments.length > 0 ? (
+                    {isLoading ? (
+                      <p
+                        className={"h-2.5 bg-gray-200 rounded-full w-48 mb-4"}
+                      ></p>
+                    ) : appointments && appointments.length > 0 ? (
                       appointments.map((appointment, index) => {
                         return (
                           <AppointmentPreview

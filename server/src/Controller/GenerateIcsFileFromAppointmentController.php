@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Appointments;
 use App\Repository\AppointmentHistoryRepository;
 use DateInterval;
+use DateTimeImmutable;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\Alarm;
@@ -38,7 +39,7 @@ class GenerateIcsFileFromAppointmentController extends AbstractController
         $event = new Event();
         $event
             ->setSummary('RDV chez ' . $appointments->getVeterinarian()->getFirstname() . ' ' . $appointments->getVeterinarian()->getLastname())
-            ->setDescription('Rendez-vous chez ' . $appointments->getVeterinarian()->getFirstname() . ' ' . $appointments->getVeterinarian()->getLastname() . ' pour ' . $appointments->getReason())
+            ->setDescription('Rendez-vous chez ' . $appointments->getVeterinarian()->getFirstname() . ' ' . $appointments->getVeterinarian()->getLastname() . ' pour ' . $appointments->getService()->getDescription())
             ->setOrganizer(new Organizer(
                 new EmailAddress($appointments->getVeterinarian()->getEmail()),
                 $appointments->getVeterinarian()->getFirstname() . ' ' . $appointments->getVeterinarian()->getLastname()
@@ -47,8 +48,8 @@ class GenerateIcsFileFromAppointmentController extends AbstractController
                 ->withGeographicPosition(new GeographicPosition($appointments->getVeterinarian()->getClinic()->getLatitude(), $appointments->getVeterinarian()->getClinic()->getLongitude()))
             )
             ->setOccurrence(new TimeSpan(
-                new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d\TH:i:sP', $appointments->getDate()->format('Y-m-d\TH:i:sP')), true),
-                new DateTime(\DateTimeImmutable::createFromFormat('Y-m-d\TH:i:sP', $appointments->getDate()->format('Y-m-d\TH:i:sP'))->modify('+15 minutes'), true)
+                new DateTime(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $appointments->getDate()->format('Y-m-d H:i:s')), true),
+                new DateTime(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $appointments->getDate()->format('Y-m-d H:i:s'))->modify('+30 minutes'), true)
             ))
             ->addAlarm(
                 new Alarm(

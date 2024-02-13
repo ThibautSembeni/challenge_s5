@@ -11,7 +11,7 @@ App\Entity\Auth\User:
         phone: "<phoneNumber()>"
         postalCode: "<postcode()>"
         city: "<city()>"
-    user_{user, admin, manager}:
+    user_{user, admin, manager, veterinarian}:
         firstname: "<current()>"
         lastname: "<lastname()>"
         email: '<current()>\@user.fr'
@@ -43,7 +43,7 @@ App\Entity\Clinics:
         phone: "<phoneNumber()>"
         latitude: "<latitude()>"
         longitude: "<longitude()>"
-        city: "<city()>"
+        city: '<randomElement(["paris"])>'
         postalCode: "<postcode()>"
         description: "<text(200)>"
 
@@ -64,30 +64,41 @@ App\Entity\ClinicComplementaryInformation:
 
 App\Entity\TimeSlots:
     timeSlots_{1..10}:
-        isOpen: "<boolean()>"
+        isOpen: '<boolean()>'
+        startTime: '<dateTimeBetween("-2 weeks", "+2 weeks")>'
+        endTime: '<dateTimeBetween("-2 weeks", "+2 weeks")>'
 
 App\Entity\ClinicSchedules:
     clinicSchedules_{1..10}:
-        day: '<randomElement(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"])>'
+        day: '<randomElement(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"])>'
         clinic: "@clinics_*"
         timeslot: "@timeSlots_*"
 
 App\Entity\Schedules:
     schedules_{1..10}:
-        day: '<randomElement(["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"])>'
+        day: '<randomElement(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"])>'
         type: '<randomElement(["consult", "vaccin", "opération"])>'
         veterinarian: "@veterinarians_*"
+        startTime: '<dateTimeBetween("-10 years", "now")>'
+        endTime: '<dateTimeBetween("-10 years", "now")>'
 
-App\Entity\Appointments:
-    appointments_{1..10}:
-        date: '<dateTimeBetween("-10 years", "now")>'
-        reason: "<text(200)>"
-        status: '<randomElement(["scheduled", "in progress", "completed", "cancelled"])>'
-        userID: "@user_*"
-        veterinarian: "@veterinarians_*"
-        pet: "@pets_*"
+#App\Entity\Appointments:
+#    appointments_{1..10}:
+#        date: '<dateTimeBetween("-10 years", "now")>'
+#        service: "@services_*"
+#        status: '<randomElement(["scheduled", "in progress", "completed", "cancelled"])>'
+#        userID: "@user_*"
+#        veterinarian: "@veterinarians_*"
+#        pet: "@pets_*"
+#        schedules: "@schedules_*"
 
 App\Entity\AppointmentServices:
     appointmentServices_{1..10}:
         appointment: "@appointments_*"
         service: "@services_*"
+
+App\Entity\Feedbacks:
+    feedbacks_{1..10}:
+        rating: "<numberBetween(0, 5)>"
+        comment: "<text(200)>"
+        appointment: "@appointments_*"

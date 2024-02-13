@@ -10,11 +10,14 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\GenerateSchedulesController;
+use App\Entity\Auth\User;
 use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\SoftDeleteable;
+use App\Dto\GenerateSchedulesRequest;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
@@ -27,7 +30,14 @@ use Symfony\Component\Uid\Uuid;
         new Get(normalizationContext: ['groups' => ['veterinarians:read']]),
         new Put(),
         new Delete(security: "is_granted('DELETE_VETERINARIAN', object)"),
-        new Patch()
+        new Patch(),
+        new Post(
+            uriTemplate: '/veterinarians/{uuid}/generate-schedules',
+            controller: GenerateSchedulesController::class,
+//            inputFormats: ['json' => ['application/ld+json']],
+//            outputFormats: ['json' => ['application/ld+json']]
+
+        )
     ],
     normalizationContext: ['groups' => ['veterinarians:read']],
     paginationPartial: false,
@@ -41,17 +51,18 @@ class Veterinarians
     #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item', 'user:read', 'user:read:full'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
+    #[ORM\Id]
     private Uuid $uuid;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item', 'feedbacks:read'])]
     #[ORM\Column(length: 100)]
     private ?string $lastname = null;
 
-    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item', 'feedbacks:read'])]
     #[ORM\Column(length: 100)]
     private ?string $firstname = null;
 
@@ -73,6 +84,7 @@ class Veterinarians
 
     #[Groups(['veterinarians:read', 'appointments:read:item'])]
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Appointments::class)]
@@ -87,6 +99,9 @@ class Veterinarians
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Services::class)]
     private Collection $services;
 
+    #[ORM\OneToOne(inversedBy: 'veterinarian', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();
@@ -96,10 +111,10 @@ class Veterinarians
         $this->services = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {
@@ -324,6 +339,17 @@ class Veterinarians
     public function delete(): self
     {
         $this->deletedAt = new \DateTime();
+        return $this;
+    }
+  
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 }

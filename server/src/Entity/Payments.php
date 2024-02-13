@@ -54,6 +54,7 @@ class Payments
 
     #[Groups(['payment:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'payments')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
     public function getId(): ?int

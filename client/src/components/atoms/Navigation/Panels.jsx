@@ -5,6 +5,8 @@
 //     { id: "4", name: "Récapitulatif", href: "#", status: "upcoming" },
 // ];
 import { CheckIcon } from "@heroicons/react/20/solid/index.js";
+import { LinkBase } from "@/components/atoms/Links/Link.jsx";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function Panels({ steps }) {
   return (
@@ -16,7 +18,11 @@ export default function Panels({ steps }) {
         {steps.map((step, stepIdx) => (
           <li key={step.name} className="relative md:flex md:flex-1">
             {step.status === "complete" ? (
-              <a href={step.href} className="group flex w-full items-center">
+              <LinkBase
+                to={step.href}
+                component={RouterLink}
+                className="group flex w-full items-center"
+              >
                 <span className="flex items-center px-6 py-4 text-sm font-medium">
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 group-hover:bg-indigo-800">
                     <CheckIcon
@@ -28,10 +34,11 @@ export default function Panels({ steps }) {
                     {step.name}
                   </span>
                 </span>
-              </a>
+              </LinkBase>
             ) : step.status === "current" ? (
-              <a
-                href={step.href}
+              <LinkBase
+                to={step.href}
+                component={RouterLink}
                 className="flex items-center px-6 py-4 text-sm font-medium"
                 aria-current="step"
               >
@@ -41,9 +48,13 @@ export default function Panels({ steps }) {
                 <span className="ml-4 text-sm font-medium text-indigo-600">
                   {step.name}
                 </span>
-              </a>
+              </LinkBase>
             ) : (
-              <a href={step.href} className="group flex items-center">
+              <LinkBase
+                to={step.href}
+                component={RouterLink}
+                className="group flex items-center"
+              >
                 <span className="flex items-center px-6 py-4 text-sm font-medium">
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-gray-300 group-hover:border-gray-400">
                     <span className="text-gray-500 group-hover:text-gray-900">
@@ -54,7 +65,7 @@ export default function Panels({ steps }) {
                     {step.name}
                   </span>
                 </span>
-              </a>
+              </LinkBase>
             )}
 
             {stepIdx !== steps.length - 1 ? (

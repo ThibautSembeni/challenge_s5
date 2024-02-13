@@ -41,6 +41,7 @@ class ClinicComplementaryInformation
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'clinicComplementaryInformation')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
     public function getId(): ?int

@@ -24,6 +24,8 @@ import MonEspace from "@/pages/MonEspace/index.jsx";
 import Appointments from "@/pages/Appointment/index.jsx";
 import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
+import Logout from "@/pages/Auth/Logout.jsx";
+import Manage from "@/pages/Manage/index.jsx";
 
 const list = [
   {
@@ -168,12 +170,38 @@ const list = [
     ],
   },
   {
+    path: "manage",
+    element: <Outlet />,
+    roles: ["ROLE_VETERINARIAN"],
+    children: [
+      {
+        path: "",
+        element: <Manage />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+      {
+        path: "calendar",
+        element: <Manage type={"calendar"} />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+      {
+        path: "services",
+        element: <Manage type={"services"} />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
+    ],
+  },
+  {
     path: "login",
     element: <Login />,
   },
   {
     path: "register",
     element: <Register />,
+  },
+  {
+    path: "logout",
+    element: <Logout />,
   },
   {
     path: "*",

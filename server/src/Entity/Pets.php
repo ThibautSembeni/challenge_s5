@@ -84,10 +84,10 @@ class Pets
         $this->uuid = Uuid::v4();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {

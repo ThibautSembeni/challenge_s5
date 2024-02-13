@@ -3,9 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\GetVeterinarianServices;
 use App\Entity\Auth\User;
 use App\Repository\ServicesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,19 +22,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: '/services/{id}',
-            normalizationContext: ['groups' => ['services:read:collection']],
-            name: 'get_services_for_user'
+            uriTemplate: '/veterinarians/{uuid}/services',
+            uriVariables: [
+                'uuid' => new Link(toProperty: 'veterinarian', fromClass: Veterinarians::class)
+                ],
+            normalizationContext: ['groups' => ['services:read:collection']]
         ),
         new Post(
-            normalizationContext: ['groups' => ['services:write:item']]
-            // TODO: Add security on Veterinarian ROLE
+            normalizationContext: ['groups' => ['services:write:item']],
+            security: 'is_granted("ROLE_VETERINARIAN")'
         ),
-        new Get(
-            normalizationContext: ['groups' => ['services:read:item']],
-            name: 'getOneService'
+        new GetCollection(normalizationContext: ['groups' => ['services:read:collection']], name: 'get_services_for_veterinarian'),
+        new Get(normalizationContext: ['groups' => ['services:read:collection']], name: 'get_one_services_for_veterinarian'),
+        new Put(
+            normalizationContext: ['groups' => ['services:write:item']],
+            security: 'is_granted("UPDATE_SERVICE", object)',
         ),
-    ]
+        new Delete(
+            security: 'is_granted("DELETE_SERVICE", object)',
+        )
+    ],
 )]
 class Services
 {
@@ -39,7 +50,7 @@ class Services
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['services:read:collection', 'services:write:item'])]
+    #[Groups(['services:read:collection', 'services:write:item', 'appointments:read:collections', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -51,11 +62,16 @@ class Services
     private Collection $appointmentServices;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Veterinarians $veterinarian = null;
+
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Appointments::class)]
+    private Collection $appointments;
 
     public function __construct()
     {
         $this->appointmentServices = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,6 +141,36 @@ class Services
     public function setVeterinarian(?Veterinarians $veterinarian): static
     {
         $this->veterinarian = $veterinarian;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointments>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointments $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointments $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getService() === $this) {
+                $appointment->setService(null);
+            }
+        }
 
         return $this;
     }

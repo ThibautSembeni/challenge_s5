@@ -1,27 +1,29 @@
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import {
-  downloadIcsFile,
-  getOneAppointment,
+    downloadIcsFile,
+    getOneAppointment,
 } from "@/api/appointments/index.jsx";
 import { useEffect, useState } from "react";
 import { displayDay, displayTime } from "@/utils/date.js";
 import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline/index.js";
 import { Link } from "react-router-dom";
+import CreateFeedbacks from "@/components/organisms/Feedback/CreateFeedbacks.jsx";
 
 export default function Show({ uuid }) {
-  const [appointment, setAppointment] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const handleGetAppointmentDetail = async () => {
-    setLoading(true);
-    const result = await getOneAppointment(uuid);
-    setAppointment(result.data);
-    setLoading(false);
-  };
+    const [appointment, setAppointment] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (uuid) handleGetAppointmentDetail();
-  }, [uuid]);
+    const handleGetAppointmentDetail = async () => {
+        setLoading(true);
+        const result = await getOneAppointment(uuid);
+        setAppointment(result.data);
+        setLoading(false);
+    };
 
+    useEffect(() => {
+        if (uuid) handleGetAppointmentDetail();
+    }, [uuid]);
+  
   if (loading) return <Skeleton />;
 
   return (
@@ -111,7 +113,7 @@ export default function Show({ uuid }) {
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-900">Raison </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {appointment.reason}
+              {appointment.service.description}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -134,36 +136,99 @@ export default function Show({ uuid }) {
                         Ajouter à votre calendrier
                       </span>
                       <span className="flex-shrink-0 text-gray-400">2.4mb</span>
+                                        </div>
+                                    </div>
+                                    <div className="ml-4 flex-shrink-0">
+                                        <button
+                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                                            onClick={() => {
+                                                downloadIcsFile(
+                                                    appointment.uuid
+                                                );
+                                            }}
+                                        >
+                                            Télécharger
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </dd>
                     </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <button
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                      onClick={() => {
-                        downloadIcsFile(appointment.uuid);
-                      }}
-                    >
-                      Télécharger
-                    </button>
-                  </div>
-                </li>
-              </ul>
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </div>
-  );
+                    <div className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                        <dt className="text-sm font-medium text-gray-900 py-4">
+                            Laisser un avis
+                        </dt>
+                        <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                            <CreateFeedbacks appointment={appointment.uuid} />
+                        </dd>
+                    </div>
+                    <div className="mt-4 bg-white shadow rounded-lg p-6">
+                        <dt className="text-lg font-semibold text-gray-900 pb-4">
+                            Avis :
+                        </dt>
+                        <dd className="mt-2">
+                            {appointment.feedbacks.map((feedback, index) => (
+                                <div key={index} className="mb-5 last:mb-0">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <h3 className="text-md font-medium text-gray-900">
+                                            {appointment.userID.firstname}{" "}
+                                            {appointment.userID.lastname}
+                                        </h3>
+                                        <span className="text-sm text-gray-500">
+                                            {new Date(
+                                                feedback.createdAt
+                                            ).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center mb-2">
+                                        {[...Array(5)].map((_, i) => (
+                                            <svg
+                                                key={i}
+                                                className={`h-5 w-5 ${
+                                                    i < feedback.rating
+                                                        ? "text-yellow-400"
+                                                        : "text-gray-300"
+                                                }`}
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.785.57-1.84-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
+                                            </svg>
+                                        ))}
+                                    </div>
+                                    <p className="text-gray-700">
+                                        {feedback.comment}
+                                    </p>
+                                    <p
+                                        className={`mt-2 text-sm ${
+                                            feedback.verify
+                                                ? "text-green-600"
+                                                : "text-red-600"
+                                        }`}
+                                    >
+                                        {feedback.verify
+                                            ? "Vérifié"
+                                            : "Non vérifié"}
+                                    </p>
+                                </div>
+                            ))}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    );
 }
 
 function Skeleton() {
-  return (
-    <div className="animate-pulse">
-      <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-      <div className="space-y-2 mt-2">
-        <div className="h-4 bg-gray-300 rounded w-5/6"></div>
-        <div className="h-4 bg-gray-300 rounded w-4/6"></div>
-      </div>
-    </div>
-  );
+    return (
+        <div className="animate-pulse">
+            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            <div className="space-y-2 mt-2">
+                <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-300 rounded w-4/6"></div>
+            </div>
+        </div>
+    );
 }

@@ -24,7 +24,7 @@ class ServicesDenormalizer implements DenormalizerInterface
 
         assert($services instanceof Services);
 
-//        $services->setVeterinarian($this->security->getUser());
+        $services->setVeterinarian($this->security->getUser()->getVeterinarian());
 
         return $services;
     }

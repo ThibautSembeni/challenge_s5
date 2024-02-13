@@ -128,10 +128,10 @@ class Clinics
         $this->payments = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {

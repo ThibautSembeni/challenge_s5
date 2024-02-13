@@ -52,7 +52,8 @@ services:
         tags:
             - { name: api_platform.doctrine.orm.query_extension.collection }
             - { name: api_platform.doctrine.orm.query_extension.item }
-    App\Doctrine\Extensions\FindVeterinarianServicesExtension:
+
+    App\Doctrine\Extensions\SchedulesExtension:
         tags:
             - { name: api_platform.doctrine.orm.query_extension.collection }
             - { name: api_platform.doctrine.orm.query_extension.item }
