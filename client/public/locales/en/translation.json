@@ -175,6 +175,13 @@
           "buttonHomeIconRDVCabinet": "Clinic appointment"
         }
       },
+      "feedback": {
+        "createFeedback": {
+          "labelComment": "Add a comment ...",
+          "textAreaPlaceholder": "Add a comment ...",
+          "button": "Publish"
+        }
+      },
       "home": {
         "featureSections": {
           "h2": "Care about the ones you love"

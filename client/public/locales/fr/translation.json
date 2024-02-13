@@ -173,7 +173,14 @@
           "h2TypeConsultation": "Type de consultation",
           "pChoisissezCabinetVideo": "Choisissez si vous souhaitez consulter en cabinet ou réaliser une consultation vidéo.",
           "buttonCameraIconRDVVideo": "Rendez-vous en vidéo",
-          "buttonHomeIconRDVCabinet": "Rendez-vous au cabinet",
+          "buttonHomeIconRDVCabinet": "Rendez-vous au cabinet"
+        }
+      },
+      "feedback": {
+        "createFeedback": {
+          "labelComment": "Ajoute ton commentaire...",
+          "textAreaPlaceholder": "Ajoute ton commentaire...",
+          "button":"Publier"
         }
       },
       "home": {
