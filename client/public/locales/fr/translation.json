@@ -128,6 +128,13 @@
           "button": "Sauvegarder"
         }
       },
+      "appointment": {
+        "emptyPage": {
+          "h3": "Aucun rendez-vous à venir",
+          "p": "Trouvez un prtaicien et prenez rendez-vous en ligne à tout moment",
+          "plusIcon": "Prendre un rendez vous"
+          }
+      },
       "home": {
         "featureSections": {
           "h2": "Au service de ceux qui vous sont chers"

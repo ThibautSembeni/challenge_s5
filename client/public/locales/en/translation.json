@@ -127,6 +127,13 @@
           "button": "Save"
         }
       },
+      "appointment": {
+        "emptyPage": {
+          "h3": "Next appointments",
+          "p": "Find a practician and schedule your next appointment online",
+          "plusIcon": "Schedule an appointment"
+        }
+      },
       "home": {
         "featureSections": {
           "h2": "Care about the ones you love"
