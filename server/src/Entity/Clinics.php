@@ -22,6 +22,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
+use App\Controller\Back\Clinics\VeterinariansCountController;
 
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[ApiResource(
@@ -30,7 +31,14 @@ use Symfony\Component\Uid\Uuid;
         new Post(normalizationContext: ['groups' => ['clinics:write:create']]),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Delete(security: "is_granted('DELETE_CLINIC', object)"),
-        new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)")
+        new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)"),
+        new GetCollection(
+            uriTemplate: '/clinics/veterinarians/count',
+            controller: VeterinariansCountController::class,
+            name: 'get_veterinarians_count',
+            security: "is_granted('ROLE_MANAGER')",
+            securityMessage: "You are not allowed to access this resource!"
+        ),
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
     paginationPartial: false,
@@ -99,7 +107,7 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
-    #[Groups(['clinics:write:create', 'clinics:read'])]
+    #[Groups(['clinics:write:create', 'clinics:read', 'clinics:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'clinic')]
     private ?User $manager = null;
 

@@ -64,10 +64,11 @@ class Veterinarians
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 
-    #[Groups(['veterinarians:read', 'appointments:read:item'])]
+    #[Groups(['veterinarians:read', 'appointments:read:item', 'clinics:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
     private ?Clinics $clinic = null;
 
+    #[Groups(['clinics:read:collection'])]
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Appointments::class)]
     private Collection $appointments;
 
