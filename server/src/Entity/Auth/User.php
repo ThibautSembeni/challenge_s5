@@ -60,11 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
     use TimestampableTrait;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'schedules:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'schedules:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 

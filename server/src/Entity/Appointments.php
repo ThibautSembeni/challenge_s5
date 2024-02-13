@@ -73,12 +73,13 @@ class Appointments
     #[ORM\Column]
     private ?string $status = AppointmentsStatusEnum::STATUS_SCHEDULED->value;
 
-    #[Groups(['appointments:read:item', 'appointments:read:collections', 'appointments:write:create'])]
+    #[Groups(['appointments:read:item', 'appointments:read:collections', 'feedbacks:read', 'appointments:write:create'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Veterinarians $veterinarian = null;
 
-    #[Groups(['schedules:read:collection'])]
+
+    #[Groups(['feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 
@@ -90,6 +91,7 @@ class Appointments
     #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: AppointmentServices::class)]
     private Collection $appointmentServices;
 
+    #[Groups(['appointments:read:item'])]
     #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: Feedbacks::class)]
     private Collection $feedbacks;
 
