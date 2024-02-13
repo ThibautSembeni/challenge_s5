@@ -7,6 +7,7 @@
         dest: ~/app
         clone: yes
         update: yes
+        force: yes
     - name: install pip docker
       import_tasks: docker/docker-pip.yml
       become: yes
