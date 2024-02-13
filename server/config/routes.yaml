@@ -4,9 +4,14 @@
 #        namespace: App\Controller
 #    type: attribute
 api_login_check:
-  path: /api/login
-  methods: [POST]
+    path: /api/login
+    methods: [POST]
 api_refresh_token:
-  path: /api/token/refresh
+    path: /api/token/refresh
 api_token_invalidate:
-  path: /api/logout
+    path: /api/logout
+
+chatbot:
+    path: /api/chatbot
+    methods: [POST]
+    controller: App\Controller\Front\ChatbotController
