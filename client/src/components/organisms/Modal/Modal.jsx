@@ -13,7 +13,7 @@ function Modal({ isOpen, onClose, title, children }) {
           enterFrom="opacity-0"
           enterTo="opacity-100"
           leave="ease-in duration-200"
-          leaveFrom="opacity-100"
+          leaveFrom="opacity-100"q
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />

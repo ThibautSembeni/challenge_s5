@@ -16,10 +16,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PetsRepository::class)]
+#[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['pets:read:collection']]),
@@ -32,20 +34,20 @@ use Symfony\Component\Uid\Uuid;
 )]
 class Pets
 {
-//    #[Groups(['pets:read:collection', 'pets:read:item'])]
-//    #[ORM\GeneratedValue]
-//    #[ORM\Column]
-//    #[ApiProperty(identifier: false)]
-//    private ?int $id = null;
-
     #[Groups(['pets:read:collection', 'pets:read:item'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    #[ApiProperty(identifier: false)]
+    private ?int $id = null;
+
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
-    #[ORM\Id]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'users:read:collection'])]
     private Uuid $uuid;
 
-    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item', 'appointments:read:collections', 'appointments:read:item'])]
+    #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item', 'appointments:read:collections', 'appointments:read:item', 'users:read:collection'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
@@ -64,6 +66,10 @@ class Pets
     #[Groups(['pets:read:item', 'pets:write:item', 'pets:update:item'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $medicalHistory = null;
+
+    #[Groups(['pets:read:collection'])]
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt = null;
 
     #[Groups(['pets:read:collection', 'pets:read:item'])]
     #[ORM\ManyToOne(inversedBy: 'pets')]
@@ -187,6 +193,35 @@ class Pets
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime|null $deletedAt
+     * @return self
+     */
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
+
+    public function delete(): self
+    {
+        $this->deletedAt = new \DateTime();
         return $this;
     }
 }
