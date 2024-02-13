@@ -183,6 +183,12 @@
           "button":"Publier"
         }
       },
+      "payment": {
+        "stripePayment": {
+          "p": "Paiement par carte bancaire",
+          "button": "Confirmer le paiement"
+        }
+      },
       "home": {
         "featureSections": {
           "h2": "Au service de ceux qui vous sont chers"

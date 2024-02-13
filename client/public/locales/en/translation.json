@@ -182,6 +182,12 @@
           "button": "Publish"
         }
       },
+      "payment": {
+        "stripePayment": {
+          "p": "Payment by card",
+          "button": "Confirm payment"
+        }
+      },
       "home": {
         "featureSections": {
           "h2": "Care about the ones you love"
