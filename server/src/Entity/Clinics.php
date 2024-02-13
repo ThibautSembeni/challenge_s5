@@ -38,16 +38,16 @@ use Symfony\Component\Uid\Uuid;
 #[ApiFilter(ClinicByManagerFilter::class)]
 class Clinics
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
+//    #[ORM\Column]
+//    #[ORM\GeneratedValue]
+//    #[ApiProperty(identifier: false)]
+//    private ?int $id = null;
 
-    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item'])]
-    #[ORM\GeneratedValue]
+    #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:read', 'appointments:read:item'])]
+//    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
+    #[ORM\Id]
     private Uuid $uuid;
 
     #[Groups(['clinics:read:collection', 'clinics:write:create', 'clinics:read', 'veterinarians:read', 'appointments:read:item'])]
@@ -119,10 +119,10 @@ class Clinics
         $this->payments = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {

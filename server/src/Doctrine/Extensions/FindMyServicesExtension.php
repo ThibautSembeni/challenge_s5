@@ -12,7 +12,7 @@ use Doctrine\ORM\QueryBuilder;
 use ApiPlatform\Metadata\Operation;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final class FindVeterinarianServicesExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class FindMyServicesExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     public function __construct(private readonly Security $security)
     {
@@ -20,21 +20,24 @@ final class FindVeterinarianServicesExtension implements QueryCollectionExtensio
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
     {
+        if (Services::class === $resourceClass && $operation->getName() === 'get_services_for_veterinarian') {
+            $user = $this->security->getUser();
 
-//        echo var_dump($context); die();
-        if (Services::class === $resourceClass && $operation->getName() === 'get_services_for_user') {
-            return;
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.veterinarian = :veterinarian', $rootAlias));
+            $queryBuilder->setParameter('veterinarian', $user->getVeterinarian());
         }
-        $this->addWhere($queryBuilder, $resourceClass);
     }
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
     {
-//        echo 'item ' . $operation->getName(); die();
-        if ($operation->getName() === 'get_services_for_user') {
-            echo $queryBuilder; die();
+        if (Services::class === $resourceClass && $operation->getName() === 'get_one_services_for_veterinarian') {
+            $user = $this->security->getUser();
+
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.veterinarian = :veterinarian', $rootAlias));
+            $queryBuilder->setParameter('veterinarian', $user->getVeterinarian());
         }
-        $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
@@ -43,8 +46,8 @@ final class FindVeterinarianServicesExtension implements QueryCollectionExtensio
             return;
         }
 
-//        $rootAlias = $queryBuilder->getRootAliases()[0];
-//        $queryBuilder->andWhere(sprintf('%s.userID = :userID', $rootAlias));
-//        $queryBuilder->setParameter('userID', $user->getId());
+        $rootAlias = $queryBuilder->getRootAliases()[0];
+        $queryBuilder->andWhere(sprintf('%s.userID = :userID', $rootAlias));
+        $queryBuilder->setParameter('userID', $user->getId());
     }
 }

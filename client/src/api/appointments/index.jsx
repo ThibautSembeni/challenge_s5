@@ -12,18 +12,18 @@ export const getOneAppointment = async (uuid) => {
 };
 
 export const createAppointment = async ({
-  name,
-  species,
-  breed,
-  birthdate,
-  medicalHistory,
+  date,
+  service,
+  veterinarian,
+  pet,
+  schedules,
 }) => {
   return axiosInstance.post(`/appointments`, {
-    name,
-    species,
-    breed,
-    birthdate,
-    medicalHistory,
+    date,
+    service,
+    veterinarian,
+    pet,
+    schedules,
   });
 };
 export const updateAppointment = async (
@@ -64,4 +64,8 @@ export const downloadIcsFile = async (uuid) => {
   } catch (error) {
     console.error("Erreur lors du téléchargement du fichier ICS", error);
   }
+};
+
+export const getAllAppointmentsOfVeterinarian = async (veterinarian) => {
+  return axiosInstance.get(`/veterinarians/${veterinarian}/appointments`);
 };

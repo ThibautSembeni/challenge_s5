@@ -32,17 +32,17 @@ use Symfony\Component\Uid\Uuid;
 )]
 class Pets
 {
-    #[Groups(['pets:read:collection', 'pets:read:item'])]
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
+//    #[Groups(['pets:read:collection', 'pets:read:item'])]
+//    #[ORM\GeneratedValue]
+//    #[ORM\Column]
+//    #[ApiProperty(identifier: false)]
+//    private ?int $id = null;
 
+    #[Groups(['pets:read:collection', 'pets:read:item'])]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['pets:read:collection', 'pets:read:item'])]
+    #[ORM\Id]
     private Uuid $uuid;
 
     #[Groups(['pets:read:collection', 'pets:read:item', 'pets:write:item', 'pets:update:item', 'appointments:read:collections', 'appointments:read:item'])]
@@ -78,10 +78,10 @@ class Pets
         $this->uuid = Uuid::v4();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getUuid(): Uuid
     {
