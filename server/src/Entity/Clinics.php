@@ -23,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use App\Controller\Back\Clinics\VeterinariansCountController;
+use App\Controller\Back\Clinics\ClinicsCountController;
+use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
 
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[ApiResource(
@@ -38,6 +40,21 @@ use App\Controller\Back\Clinics\VeterinariansCountController;
             name: 'get_veterinarians_count',
             security: "is_granted('ROLE_MANAGER')",
             securityMessage: "You are not allowed to access this resource!"
+        ),
+        new GetCollection(
+            uriTemplate: '/clinics/manager/count',
+            controller: ClinicsCountController::class,
+            name: 'get_clinics_count',
+            security: "is_granted('ROLE_MANAGER')",
+            securityMessage: "You are not allowed to access this resource!"
+        ),
+        new GetCollection(
+            uriTemplate: '/clinics/veterinarians/appointments',
+            controller: VeterinariansAndAppointmentsController::class,
+            name: 'get_veterinarians_appointments',
+            security: "is_granted('ROLE_MANAGER')",
+            securityMessage: "You are not allowed to access this resource!",
+            normalizationContext: ['groups' => ['appointments:read:collections']]
         ),
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
@@ -107,7 +124,7 @@ class Clinics
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: ClinicComplementaryInformation::class)]
     private Collection $clinicComplementaryInformation;
 
-    #[Groups(['clinics:write:create', 'clinics:read', 'clinics:read:collection'])]
+    #[Groups(['clinics:write:create', 'clinics:read'])]
     #[ORM\ManyToOne(inversedBy: 'clinic')]
     private ?User $manager = null;
 

@@ -57,13 +57,60 @@ class ClinicsRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Clinic[] Returns to the manager clinics
+     * @return Clinic[] Returns all clinics for a manager
      */
     public function findClinicsByManager($manager): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.manager = :manager')
             ->setParameter('manager', $manager)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Veterinarians[] Returns the number of veterinarians to all clinics for a manager 
+     */
+    public function countVeterinariansInManagerClinics($clinics): int
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c IN (:clinics)')
+            ->setParameter('clinics', $clinics)
+            ->leftJoin('c.veterinarians', 'v')
+            ->select('COUNT(v.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @return Clinics[] Returns the number of clinics for a manager
+     */
+    public function countClinicsByManager($manager): int
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.manager = :manager')
+            ->setParameter('manager', $manager)
+            ->select('COUNT(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @return Appointments[] Returns an array of scheduled Appointments objects of all veterinarians in all clinics for a manager
+     */
+    public function findScheduledAppointmentsInManagerClinics($manager, $status): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c IN (:clinics)')
+            ->setParameter('clinics', $manager)
+            ->leftJoin('c.veterinarians', 'v')
+            // ->leftJoin('v.appointments', 'a')
+            // ->andWhere('a.status = :status')
+            // ->setParameter('status', $status)
+            // ->select('a')
             ->getQuery()
             ->getResult()
         ;

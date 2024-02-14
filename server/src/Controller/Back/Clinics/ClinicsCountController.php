@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\ClinicsRepository;
 
-class VeterinariansCountController extends AbstractController
+class ClinicsCountController extends AbstractController
 {
     private $security;
     private $clinicsRepository;
@@ -24,15 +24,10 @@ class VeterinariansCountController extends AbstractController
         if (!$user) {
             return new Response('User not authenticated', Response::HTTP_FORBIDDEN);
         }
-        
-        $clinic = $this->clinicsRepository->findClinicsByManager(['manager' => $user]);
-        if (!$clinic) {
-            return new Response('Clinic not found', Response::HTTP_NOT_FOUND);
-        }
 
-        $veterinariansCount = $this->clinicsRepository->countVeterinariansInManagerClinics($clinic);
+        $clinicsCount = $this->clinicsRepository->countClinicsByManager($user);
 
-        return new Response($veterinariansCount, 200, [
+        return new Response($clinicsCount, 200, [
             'Content-Type' => 'application/json'
         ]);
     }
