@@ -58,7 +58,7 @@ services:
   nginx:
     image: nginx:latest
     depends_on:
-      - server
+      - php
     ports:
       - '80:80'
       - '443:443'
