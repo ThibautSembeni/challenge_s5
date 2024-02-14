@@ -98,21 +98,21 @@ class ClinicsRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * @return Appointments[] Returns an array of scheduled Appointments objects of all veterinarians in all clinics for a manager
+    /** 
+     * @return Appointments[] Returns the number of scheduled Appointments objects of all veterinarians in all clinics for a manager
      */
-    public function findScheduledAppointmentsInManagerClinics($manager, $status): array
+    public function countScheduledAppointmentsInManagerClinics($manager, $status): int
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c IN (:clinics)')
             ->setParameter('clinics', $manager)
             ->leftJoin('c.veterinarians', 'v')
-            // ->leftJoin('v.appointments', 'a')
-            // ->andWhere('a.status = :status')
-            // ->setParameter('status', $status)
-            // ->select('a')
+            ->leftJoin('v.appointments', 'a')
+            ->andWhere('a.status = :status')
+            ->setParameter('status', $status)
+            ->select('COUNT(a.id)')
             ->getQuery()
-            ->getResult()
+            ->getSingleScalarResult()
         ;
     }
 

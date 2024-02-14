@@ -30,8 +30,7 @@ class VeterinariansAndAppointmentsController extends AbstractController
             return $this->json(['error' => 'Clinic not found or you are not a manager of any clinic'], Response::HTTP_NOT_FOUND);
         }
 
-        $query = $this->clinicsRepository->findScheduledAppointmentsInManagerClinics($user, 'scheduled');
-        dd($query);
+        $query = $this->clinicsRepository->countScheduledAppointmentsInManagerClinics($clinic, 'scheduled');
 
         return new Response($query, 200, [
             'Content-Type' => 'application/json'

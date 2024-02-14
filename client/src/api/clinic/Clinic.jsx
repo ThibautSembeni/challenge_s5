@@ -216,3 +216,9 @@ export const getCountClinicsByManager = async () => {
         `${import.meta.env.VITE_API_URL}/clinics/manager/count`
     );
 };
+
+export const getCountScheduledAppointmentsByClinic = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/appointments`
+    );
+};

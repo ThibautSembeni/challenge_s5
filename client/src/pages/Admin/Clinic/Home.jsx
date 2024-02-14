@@ -1,13 +1,12 @@
-import React, { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     CalendarIcon,
     HomeIcon,
     UsersIcon,
-    CursorArrowRaysIcon,
-    EnvelopeOpenIcon,
     VideoCameraIcon,
     PencilSquareIcon,
     BookOpenIcon,
+    BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {
@@ -15,6 +14,7 @@ import {
     getOneClinics,
     getCountVeterinariesByClinic,
     getCountClinicsByManager,
+    getCountScheduledAppointmentsByClinic,
 } from "@/api/clinic/Clinic.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
 import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
@@ -66,10 +66,12 @@ export default function Home() {
 
     useEffect(() => {
         async function fetchStarts() {
+            setIsLoading(true);
+
             const vetCount = await getCountVeterinariesByClinic();
             const clinicCount = await getCountClinicsByManager();
-            const clinicAppointment = await getAllClinicsByManager(user.uuid);
-            console.log(clinicAppointment);
+            const appointmentCount =
+                await getCountScheduledAppointmentsByClinic();
 
             setStats([
                 {
@@ -82,19 +84,19 @@ export default function Home() {
                     id: 2,
                     name: "Nombre de cliniques",
                     stat: `${clinicCount.data} cliniques`,
-                    icon: BookOpenIcon,
+                    icon: BuildingOfficeIcon,
                 },
                 {
                     id: 3,
-                    name: "Avg. Click Rate",
-                    stat: ``,
-                    icon: CursorArrowRaysIcon,
+                    name: "Nombre de rendez-vous programmés",
+                    stat: `${appointmentCount.data} rendez-vous`,
+                    icon: BookOpenIcon,
                 },
             ]);
         }
 
-        fetchStarts();
-    }, [user.uuid]);
+        fetchStarts().then(() => setIsLoading(false));
+    }, []);
 
     const fetchAndSetClinicsData = async (userUuid) => {
         try {

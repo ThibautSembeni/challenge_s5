@@ -54,7 +54,6 @@ use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
             name: 'get_veterinarians_appointments',
             security: "is_granted('ROLE_MANAGER')",
             securityMessage: "You are not allowed to access this resource!",
-            normalizationContext: ['groups' => ['appointments:read:collections']]
         ),
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
