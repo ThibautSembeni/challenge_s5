@@ -15,3 +15,8 @@ chatbot:
     path: /api/chatbot
     methods: [POST]
     controller: App\Controller\Front\ChatbotController
+
+createPayments:
+    path: /api/createPayments
+    methods: [POST]
+    controller: App\Controller\PaymentController

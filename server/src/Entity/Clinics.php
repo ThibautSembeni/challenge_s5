@@ -8,6 +8,7 @@ use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Auth\User;
+use App\Entity\Traits\TimestampableTrait;
 use App\Filters\ClinicByManagerFilter;
 use App\Filters\CustomSearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -42,6 +43,7 @@ use Symfony\Component\Uid\Uuid;
 #[ApiFilter(ClinicByManagerFilter::class)]
 class Clinics
 {
+    use TimestampableTrait;
     #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item', 'payment:read:collection'])]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]

@@ -6,6 +6,7 @@ import Loading from "@/components/molecules/Loading.jsx";
 import { createClinics } from "@/api/clinic/Clinic.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
 const steps = [
   {
@@ -23,9 +24,13 @@ export default function ClinicRegisterInformations() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [showNotificationToast, setShowNotificationToast] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [message, setMessage] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //setIsLoading(true);
+    setIsLoading(true);
     const data = new FormData(e.currentTarget);
 
     const name = data.get("name");
@@ -49,7 +54,12 @@ export default function ClinicRegisterInformations() {
     });
 
     if (clinicResponse.success) {
-      console.log("Clinic created");
+      navigate("/inscription/cabinet/paiement");
+    } else {
+      setIsLoading(false);
+      setIsSuccess(false);
+      setMessage(clinicResponse.message);
+      setShowNotificationToast(true);
     }
   };
 
@@ -60,6 +70,13 @@ export default function ClinicRegisterInformations() {
       ) : (
         <>
           <Navbar />
+
+          <NotificationToast
+            show={showNotificationToast}
+            setShow={setShowNotificationToast}
+            message={message}
+            isSuccess={isSuccess}
+          />
 
           <div className="bg-gray-50">
             <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">

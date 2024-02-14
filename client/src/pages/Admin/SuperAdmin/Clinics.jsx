@@ -179,6 +179,7 @@ export default function Clinics() {
             className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">En attente</span>
             <span className="ml-2 cursor-pointer hover:text-blue-500 transform duration-100 ease-in"><EyeIcon className="w-5 l-5"/></span>
             <span className="ml-2 cursor-pointer hover:text-green-500 transform duration-100 ease-in" onClick={() => {
+              setIsLoading(true);
               checkClinic(row.uuid).then(() => fetchClinics().then(() => setIsLoading(false)));
             }}><CheckIcon className="w-5 l-5"/></span>
           </div>
