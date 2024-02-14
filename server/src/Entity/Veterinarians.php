@@ -10,14 +10,19 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\GenerateSchedulesController;
+use App\Entity\Auth\User;
 use App\Repository\VeterinariansRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
+use App\Dto\GenerateSchedulesRequest;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: VeterinariansRepository::class)]
+#[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['veterinarians:read']]),
@@ -25,23 +30,24 @@ use Symfony\Component\Uid\Uuid;
         new Get(normalizationContext: ['groups' => ['veterinarians:read']]),
         new Put(),
         new Delete(security: "is_granted('DELETE_VETERINARIAN', object)"),
-        new Patch()
+        new Patch(),
+        new Post(
+            uriTemplate: '/veterinarians/{uuid}/generate-schedules',
+            controller: GenerateSchedulesController::class,
+//            inputFormats: ['json' => ['application/ld+json']],
+//            outputFormats: ['json' => ['application/ld+json']]
+
+        )
     ],
     normalizationContext: ['groups' => ['veterinarians:read']],
     paginationPartial: false,
 )]
 class Veterinarians
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[ApiProperty(identifier: false)]
-    private ?int $id = null;
-
-    #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item'])]
-    #[ORM\GeneratedValue]
+    #[Groups(['veterinarians:read', 'clinics:read', 'appointments:read:item', 'user:read', 'user:read:full'])]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
+    #[ORM\Id]
     private Uuid $uuid;
 
     #[Groups(['veterinarians:read', 'veterinarians:write:create', 'clinics:read', 'clinics:read:collection', 'appointments:read:collections', 'appointments:read:item', 'feedbacks:read'])]
@@ -64,8 +70,13 @@ class Veterinarians
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialties = null;
 
-    #[Groups(['veterinarians:read', 'appointments:read:item', 'clinics:read:collection'])]
+    #[Groups(['veterinarians:read'])]
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $deletedAt = null;
+
+    #[Groups(['veterinarians:read', 'appointments:read:item'])]
     #[ORM\ManyToOne(inversedBy: 'veterinarians')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
     #[Groups(['clinics:read:collection'])]
@@ -81,6 +92,9 @@ class Veterinarians
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Services::class)]
     private Collection $services;
 
+    #[ORM\OneToOne(inversedBy: 'veterinarian', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->appointments = new ArrayCollection();
@@ -88,11 +102,6 @@ class Veterinarians
         $this->schedules = new ArrayCollection();
         $this->uuid = Uuid::v4();
         $this->services = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getUuid(): Uuid
@@ -289,6 +298,46 @@ class Veterinarians
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \DateTime|null $deletedAt
+     * @return self
+     */
+    public function setDeletedAt(?\DateTime $deletedAt): self
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
+
+    public function delete(): self
+    {
+        $this->deletedAt = new \DateTime();
+        return $this;
+    }
+  
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 }

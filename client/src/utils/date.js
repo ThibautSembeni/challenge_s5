@@ -40,3 +40,17 @@ export function displayTime(date) {
   const minutes = currentDate.getMinutes().toString().padStart(2, "0");
   return `${hours}h${minutes}`;
 }
+
+Date.prototype.startOfWeek = function () {
+  const diff = (this.getDay() + 6) % 7; // Ajuster le jour de la semaine (0 = Dimanche, 1 = Lundi, ..., 6 = Samedi)
+  return new Date(this.getFullYear(), this.getMonth(), this.getDate() - diff);
+};
+
+Date.prototype.endOfWeek = function () {
+  const startOfWeek = this.startOfWeek();
+  return new Date(
+    startOfWeek.getFullYear(),
+    startOfWeek.getMonth(),
+    startOfWeek.getDate() + 6,
+  );
+};

@@ -19,6 +19,7 @@ use App\Entity\Payments;
 use App\Entity\Pets;
 use App\Entity\Services;
 use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Veterinarians;
 use App\Repository\AuthRepository;
 use App\State\UserPasswordHasher;
 use DateTimeImmutable;
@@ -36,7 +37,7 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(normalizationContext: ['groups' => ['users:read:collection']]),
         new Post(processor: UserPasswordHasher::class),
         new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
         new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class),
@@ -59,14 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
     use TimestampableTrait;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'feedbacks:read', 'appointments:read:item'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
+    #[Groups(['users:read:collection'])]
     #[ORM\OneToMany(mappedBy: 'userID', targetEntity: Pets::class)]
     private Collection $pets;
 
@@ -76,19 +78,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userID', targetEntity: Notifications::class)]
     private Collection $notifications;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'users:read:collection'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'users:read:collection'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 
-    #[Groups(['user:read', 'user:write:update'])]
+    #[Groups(['user:read', 'user:write:update', 'users:read:collection'])]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $city = null;
 
-    #[Groups(['user:read', 'user:write:update'])]
+    #[Groups(['user:read', 'user:write:update', 'users:read:collection'])]
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $postalCode = null;
 
@@ -101,6 +103,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'person', targetEntity: Payments::class)]
     private Collection $payments;
+
+    #[Groups(['user:read', 'user:read:full'])]
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Veterinarians $veterinarian = null;
 
     public function __construct()
     {
@@ -368,6 +374,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getServices(): Collection
     {
         return $this->services;
+    }
+
+    public function getVeterinarian(): ?Veterinarians
+    {
+        return $this->veterinarian;
+    }
+
+    public function setVeterinarian(?Veterinarians $veterinarian): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($veterinarian === null && $this->veterinarian !== null) {
+            $this->veterinarian->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($veterinarian !== null && $veterinarian->getUser() !== $this) {
+            $veterinarian->setUser($this);
+        }
+
+        $this->veterinarian = $veterinarian;
+
+        return $this;
     }
 
 }

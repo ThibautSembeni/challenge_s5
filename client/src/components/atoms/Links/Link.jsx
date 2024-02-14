@@ -140,6 +140,6 @@ export const LinkBase = memo(function LinkBase({
   component: Component,
   ...props
 }) {
-  const classes = "bg-black text-white dark:bg-white dark:text-black";
+  const classes = "";
   return <Component className={classes} {...props} />;
 });

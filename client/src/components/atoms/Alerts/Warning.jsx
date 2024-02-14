@@ -16,14 +16,16 @@ export default function Warning({ title, close }) {
         </div>
         <div className="ml-auto pl-3">
           <div className="-mx-1.5 -my-1.5">
-            <button
-              type="button"
-              className="inline-flex rounded-md bg-yellow-50 p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 focus:ring-offset-yellow-50"
-              onClick={close}
-            >
-              <span className="sr-only">Dismiss</span>
-              <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
+            {close && (
+              <button
+                type="button"
+                className="inline-flex rounded-md bg-yellow-50 p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 focus:ring-offset-yellow-50"
+                onClick={close}
+              >
+                <span className="sr-only">Dismiss</span>
+                <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            )}
           </div>
         </div>
       </div>

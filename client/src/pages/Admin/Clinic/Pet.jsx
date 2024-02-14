@@ -17,7 +17,7 @@ import {
 import { getAllPets } from "@/api/pets/index.jsx";
 import { Link } from "react-router-dom";
 
-const userNavigation = [{ name: "Déconnexion", href: "#" }];
+const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
 
 export default function Pet() {
   const { user } = useAuth();
@@ -109,7 +109,7 @@ export default function Pet() {
           href: "/administration/informations-cabinet",
           icon: PencilSquareIcon,
           current: false,
-        }
+        },
       );
     }
     setNavigation(newNavigation);

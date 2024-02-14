@@ -1,0 +1,45 @@
+name: Mise en production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: ~
+
+concurrency:
+  group: ${{ github.workflows }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Deploi API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+#      - uses: kielabokkie/ssh-key-and-known-hosts-action@v1
+#        with:
+#          ssh-private-key: ${{ secrets.OVH_SSH_KEY }}
+#          ssh-host: ${{secrets.OVH_VM_IP}}
+      - name: Set environment variables from secrets
+        run: |
+          echo "APP_ENV=${{ secrets.SECRET_APP_ENV }}" >> $GITHUB_ENV
+          echo "APP_SECRET=${{ secrets.SECRET_APP_SECRET }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+
+      - name: Update docker compose image
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          known_hosts: |
+            ${{secrets.OVH_VM_IP}} ${{secrets.OVH_VM_KNOW_HOST}}
+          inventory: |
+            [all]
+            ${{secrets.OVH_VM_IP}} ansible_user=debian
+          # Required, playbook filepath
+          playbook: ovh-vm-update.yml
+          # Optional, directory where playbooks live
+          directory: ./ansible
+          # Optional, SSH private key
+          key: ${{secrets.OVH_SSH_KEY}}

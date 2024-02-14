@@ -43,33 +43,47 @@ export const refreshToken = async () => {
 export const getUser = async (uuid) => {
   return axiosInstance.get(`/users/${uuid}`);
 };
-export const updateOneUsers = async (
-  uuid,
-  {
-    firstname,
-    lastname,
-    email,
-    phone,
-    address,
-    city,
-    postalCode,
-    newPassword,
-    oldPassword,
-  },
-) => {
-  return axiosInstance.patch(`/users/${uuid}`, {
-    firstname,
-    lastname,
-    email,
-    phone,
-    address,
-    city,
-    postalCode,
-    newPassword,
-    oldPassword,
+
+export const getAllUsers = async ({
+      page = 1,
+      itemsPerPage = 30,
+      pagination = false,
+      ...filters
+    } = {}) => {
+  const params = new URLSearchParams({
+    page,
+    itemsPerPage,
+    pagination,
+    ...filters,
   });
+  return axios.get(
+    `${import.meta.env.VITE_API_URL}/users?${params.toString()}`,
+  );
+};
+
+export const updateOneUsers = async ( uuid, { firstname, lastname, email, phone, address, city, postalCode, newPassword, oldPassword }) => {
+  try {
+    const response = await axiosInstance.patch(`/users/${uuid}`, {
+      firstname, lastname, email, phone, address, city, postalCode, newPassword, oldPassword
+    }, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de l'utilisateur : ", error);
+    return { success: false, message: "Une erreur est survenue lors de la mise à jour de l'utilisateur" };
+  }
 };
 
 export const deleteUser = async (uuid) => {
-  return axiosInstance.delete(`/users/${uuid}`);
+  try {
+    await axiosInstance.delete(`/users/${uuid}`);
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue lors de la suppression du cabinet" };
+  }
 };

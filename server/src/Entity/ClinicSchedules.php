@@ -36,6 +36,7 @@ class ClinicSchedules
 
     #[Groups(['clinicSchedule:write:create', 'clinicSchedule:read:collection'])]
     #[ORM\ManyToOne(inversedBy: 'clinicSchedules')]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
     #[Groups(['clinics:read', 'clinicSchedule:write:create', 'clinicSchedule:read:collection'])]
