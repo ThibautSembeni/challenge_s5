@@ -14,11 +14,11 @@ import {IdentificationIcon, PencilSquareIcon, VideoCameraIcon} from "@heroicons/
 //translation
 import { useTranslation } from "react-i18next";
 
-import {
+/*import {
   IdentificationIcon,
   PencilSquareIcon,
   VideoCameraIcon,
-} from "@heroicons/react/24/outline/index.js";
+} from "@heroicons/react/24/outline/index.js";*/
 
 
 const userNavigation = [{ name: "Déconnexion", href: "/logout" }];

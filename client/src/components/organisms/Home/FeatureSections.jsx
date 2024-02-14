@@ -8,30 +8,32 @@ import VétérinairesSection from "@/components/organisms/Home/VétérinairesSec
 import { useTranslation } from "react-i18next";
 
 
-const features = [
-  {
-    name: "Prise de rendez-vous facile",
-    description:
-      "Planifiez rapidement des rendez-vous avec les vétérinaires de votre choix.",
-    icon: CalendarIcon,
-  },
-  {
-    name: "Suivi médical complet",
-    description:
-      "Gérez le suivi médical de vos animaux, y compris les rendez-vous, les traitements, et les informations de santé.",
-    icon: ClipboardDocumentListIcon,
-  },
-  {
-    name: "Communication facilitée",
-    description:
-      "Communiquez facilement avec les vétérinaires via la messagerie intégrée pour des échanges rapides et clairs.",
-    icon: ChatBubbleLeftEllipsisIcon,
-  },
-];
+
 
 export default function FeatureSections() {
   //translation
   const { t } = useTranslation();
+
+  const features = [
+    {
+      name: `${t("components.organisms.home.featureSections.featureName1")}`,
+      description:
+          `${t("components.organisms.home.featureSections.featureDescription1")}`,
+      icon: CalendarIcon,
+    },
+    {
+      name: `${t("components.organisms.home.featureSections.featureName2")}`,
+      description:
+          `${t("components.organisms.home.featureSections.featureDescription2")}`,
+      icon: ClipboardDocumentListIcon,
+    },
+    {
+      name: `${t("components.organisms.home.featureSections.featureName3")}`,
+      description:
+          `${t("components.organisms.home.featureSections.featureDescription3")}`,
+      icon: ChatBubbleLeftEllipsisIcon,
+    },
+  ];
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">

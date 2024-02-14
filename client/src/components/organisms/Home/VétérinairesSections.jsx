@@ -8,31 +8,32 @@ import {
 //translation
 import { useTranslation } from "react-i18next";
 
-const features = [
-  {
-    description:
-      "Libérez du temps médical grâce à la prise de rendez-vous en ligne et un logiciel moderne",
-    icon: ClockIcon,
-  },
-  {
-    description:
-      "Développez l'activité de votre cabinet selon vos besoins grâce à une meilleure visibilité en ligne",
-    icon: EyeIcon,
-  },
-  {
-    description:
-      "Gagnez en confort de travail au quotidien en réduisant les appels téléphoniques à votre cabinet",
-    icon: HeartIcon,
-  },
-  {
-    description:
-      "Améliorez l'accès aux soins pour vos patients en leur proposant la meilleure des expériences",
-    icon: HomeIcon,
-  },
-];
+
 export default function VétérinairesSection() {
   //translation
   const { t } = useTranslation();
+  const features = [
+    {
+      description:
+          `${t("components.organisms.home.veterinaireSection.featureDescription1")}`,
+      icon: ClockIcon,
+    },
+    {
+      description:
+          `${t("components.organisms.home.veterinaireSection.featureDescription2")}`,
+      icon: EyeIcon,
+    },
+    {
+      description:
+          `${t("components.organisms.home.veterinaireSection.featureDescription3")}`,
+      icon: HeartIcon,
+    },
+    {
+      description:
+          `${t("components.organisms.home.veterinaireSection.featureDescription4")}`,
+      icon: HomeIcon,
+    },
+  ];
   return (
     <div className="overflow-hidden bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">

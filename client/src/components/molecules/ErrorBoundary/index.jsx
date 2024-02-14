@@ -7,9 +7,10 @@ import { useTranslation } from "react-i18next";
 
 
 const ErrorBoundary = ({ children }) => {
+    const { t } = useTranslation();
   const [hasError, setHasError] = useState(false);
 
-  const { t } = useTranslation();
+
 
   useEffect(() => {
     const errorHandler = () => {

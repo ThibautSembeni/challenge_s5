@@ -194,6 +194,12 @@
       },
       "home": {
         "featureSections": {
+          "featureName1": "Prise de rendez-vous facile",
+          "featureDescription1": "Planifiez rapidement des rendez-vous avec les vétérinaires de votre choix.",
+          "featureName2": "Suivi médical complet",
+          "featureDescription2": "Gérez le suivi médical de vos animaux, y compris les rendez-vous, les traitements, et les informations de santé.",
+          "featureName3": "Communication facilitée",
+          "featureDescription3": "Communiquez facilement avec les vétérinaires via la messagerie intergrée pour des échanges rapides et clairs.",
           "h2": "Au service de ceux qui vous sont chers"
         },
         "heroSection": {
@@ -201,6 +207,10 @@
           "p": "Trouvez les vêterinaires proches de chez vous."
         },
         "veterinaireSection": {
+          "featureDescription1": "Libérez du temps médical grâce à la prise de rendez-vous en ligne et un logiciel moderne",
+          "featureDescription2": "Développez l'activité de votre cabinet selon vos besoins grâce à une meilleure visibilité en ligne",
+          "featureDescription3":  "Gagnez en confort de travail au quotidien en réduisant les appels téléphoniques à votre cabinet",
+          "featureDescription4": "Améliorez l'accès aux soins pour vos patients en leur proposant la meilleure des expériences",
           "h2": "Vous êtes vétérinaire ?",
           "p": " Équipez-vous du logiciel Vetolib pour gagner en confort de votre travail."
         }

@@ -12,7 +12,7 @@ export default function Footer() {
 
   const navigation = {
     solutions: [
-      { name: `${t("footer.solutions.analitycs")}`, href: "#" },
+
       { name: `${t("footer.solutions.analitycs")}`, href: "#" },
       { name: `${t("footer.solutions.commerce")}`, href: "#" },
       { name: `${t("footer.solutions.insight")}`, href: "#" },
@@ -36,6 +36,8 @@ export default function Footer() {
       { name: `${t("footer.legal.terms")}`, href: "#" },
     ],
   };
+
+
 
   return (
       <footer className="bg-white mt-10" aria-labelledby="footer-heading">
@@ -86,7 +88,7 @@ export default function Footer() {
               <div className="md:grid md:grid-cols-2 md:gap-8">
                 <div>
                   <h3 className="text-sm font-semibold leading-6 text-gray-900">
-                    {t("footer.company.h3")}
+                    {t("footer.Company.h3")}
                   </h3>
                   <ul role="list" className="mt-6 space-y-4">
                     {navigation.company.map((item) => (

@@ -193,6 +193,12 @@
       },
       "home": {
         "featureSections": {
+          "featureName1": "Easy way to schedule an appointment",
+          "featureDescription1": "Quickly schedule appointments with your prefered vetenarians.",
+          "featureName2": "Full medical follow up",
+          "featureDescription2": "Manage your animals records including appointments, treatments, and health information.",
+          "featureName3": "Communication made easy",
+          "featureDescription3": "Communicate easily with veterinarians with an integrated messaging system that make your exchanges fast and clear.",
           "h2": "Care about the ones you love"
         },
         "heroSection": {
@@ -200,6 +206,10 @@
           "p": "Find the vetenarians closest to your address."
         },
         "veterinaireSection": {
+          "featureDescription1": "Free some medical time for yourself with our online appointments and a modern software",
+          "featureDescription2": "Develop your clinic business based on your needs with a better online visibility",
+          "featureDescription3":  "Gain daily work comfort by reducing the amount of calls to your clinic",
+          "featureDescription4": "Improve your patients access to care by offering them one of the best experiences",
           "h2": "Are you a vetenarian?",
           "p": "Get the Vetolib software to gain comfort in your activity."
         }
