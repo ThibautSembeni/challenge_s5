@@ -12,10 +12,12 @@ import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+import {useTranslation} from "react-i18next";
 
 export default function Home() {
   const {user} = useAuth();
   const {selectedClinic, navigation} = useClinic();
+  const { t } = useTranslation();
 
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);

@@ -549,6 +549,7 @@ export default function Sidebar({
 
 export function TopSideBar({ setSidebarOpen }) {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
       <>
