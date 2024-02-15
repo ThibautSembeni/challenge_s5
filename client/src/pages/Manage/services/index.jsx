@@ -1,13 +1,9 @@
 import List from "@/pages/Manage/services/list.jsx";
-import { Fragment, useEffect, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 import Alert from "@/components/atoms/Alerts/index.jsx";
 import Add from "@/pages/Manage/services/add.jsx";
 import Edit from "@/pages/Manage/services/edit.jsx";
-import {
-  getAllServices,
-  getAllServicesFromVeterinarian,
-} from "@/api/services/index.jsx";
-import { useAuth } from "@/contexts/AuthContext.jsx";
+import {getAllServicesFromVeterinarian} from "@/api/services/index.jsx";
 
 export default function MyServices() {
   const [services, setServices] = useState([]);
