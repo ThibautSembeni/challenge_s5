@@ -124,6 +124,7 @@ class Clinics
     #[Vich\UploadableField(mapping: 'media_object', fileNameProperty: 'pathKbis')]
     public ?File $file = null;
 
+    #[Groups(['clinics:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $pathKbis = null;
 
