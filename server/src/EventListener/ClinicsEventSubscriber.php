@@ -5,8 +5,6 @@ namespace App\EventListener;
 use App\Entity\Clinics;
 use App\Service\Geocoder;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -102,7 +100,7 @@ class ClinicsEventSubscriber implements EventSubscriber
     private function sendEmail(Clinics $clinics): void
     {
         $email = (new Email())
-            ->from('confirmation@vetosia.fr')
+            ->from('confirmation@vetcare.fr')
             ->to($clinics->getEmail())
             ->subject('Profil confirmé !')
             ->text('Félécitations, votre profil a été confirmé ! Vous pouvez désormais vous connecter à votre espace personnel.');
