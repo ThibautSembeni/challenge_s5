@@ -28,183 +28,188 @@ import ClinicRegisterPayment from "@/pages/PracticienRegister/ClinicRegisterPaym
 import ClinicRegisterPaymentConfirmation from "@/pages/PracticienRegister/ClinicRegisterPaymentConfirmation.jsx";
 
 const list = [
-  {
-    path: "",
-    element: <Outlet />,
-    children: [
-      {
+    {
         path: "",
-        element: <Home />,
-      },
-      {
-        path: "inscription/informations",
-        element: <InformationRegister />,
-      },
-      {
-        path: "inscription/cabinet/information",
-        element: <ClinicRegisterInformations />,
-      },
-      {
-        path: "inscription/cabinet/paiement",
-        element: <ClinicRegisterPayment />,
-      },
-      {
-        path: "inscription/cabinet/confirmation",
-        element: <ClinicRegisterPaymentConfirmation />,
-      },
-      {
-        path: "a-propos",
-        element: <h1>About</h1>,
-      },
-      {
-        path: "search/:city",
-        element: <SearchResult />,
-      },
-      {
-        path: "cabinet/:uuid",
-        element: <Clinic />,
-      },
-      {
-        path: "veterinaire/:uuid",
-        element: <Veterinarian />,
-      },
-      {
-        path: "mon-compte",
-        element: <Account />,
-        roles: ["ROLE_USER"],
-      },
-      {
-        path: "mes-rendez-vous",
-        element: <Appointments />,
-        roles: ["ROLE_USER"],
-      },
-      {
-        path: "mon-espace",
-        roles: ["ROLE_USER"],
+        element: <Outlet />,
         children: [
-          {
-            path: "",
-            element: <MonEspace />,
-            roles: ["ROLE_USER"],
-          },
-          {
-            path: "mes-animaux",
-            element: <MonEspace />,
-            roles: ["ROLE_USER"],
-          },
+            {
+                path: "",
+                element: <Home />,
+            },
+            {
+                path: "inscription/informations",
+                element: <InformationRegister />,
+            },
+            {
+                path: "inscription/cabinet/information",
+                element: <ClinicRegisterInformations />,
+            },
+            {
+                path: "inscription/cabinet/paiement",
+                element: <ClinicRegisterPayment />,
+            },
+            {
+                path: "inscription/cabinet/confirmation",
+                element: <ClinicRegisterPaymentConfirmation />,
+            },
+            {
+                path: "a-propos",
+                element: <h1>About</h1>,
+            },
+            {
+                path: "search/:city",
+                element: <SearchResult />,
+            },
+            {
+                path: "cabinet/:uuid",
+                element: <Clinic />,
+            },
+            {
+                path: "veterinaire/:uuid",
+                element: <Veterinarian />,
+            },
+            {
+                path: "mon-compte",
+                element: <Account />,
+                roles: ["ROLE_USER"],
+            },
+            {
+                path: "mes-rendez-vous",
+                element: <Appointments />,
+                roles: ["ROLE_USER"],
+            },
+            {
+                path: "mon-espace",
+                roles: ["ROLE_USER"],
+                children: [
+                    {
+                        path: "",
+                        element: <MonEspace />,
+                        roles: ["ROLE_USER"],
+                    },
+                    {
+                        path: "mes-animaux",
+                        element: <MonEspace />,
+                        roles: ["ROLE_USER"],
+                    },
+                ],
+            },
+            {
+                path: "booking-appointment/:uuid",
+                element: <BookingAppointment />,
+                roles: ["ROLE_USER"],
+            },
         ],
-      },
-      {
-        path: "booking-appointment/:uuid",
-        element: <BookingAppointment />,
-        roles: ["ROLE_USER"],
-      },
-    ],
-  },
-  ////// CLINIC ADMINISTRATION //////
-  {
-    path: "administration",
-    element: <Outlet />,
-    context: 'clinicAdmin',
-    children: [
-      {
-        path: "accueil",
-        element: <ClinicAdminHome />,
-        roles: ["ROLE_MANAGER"],
-      },
-      {
-        path: "equipe",
-        element: <Teams />,
-        roles: ["ROLE_MANAGER"],
-      },
-      {
-        path: "calendrier-ouverture",
-        element: <ClinicAdminSchedule />,
-        roles: ["ROLE_MANAGER"],
-      },
-      {
-        path: "informations-cabinet",
-        element: <Information />,
-        roles: ["ROLE_MANAGER"],
-      },
-    ],
-  },
-  ////// CLINIC SUPER ADMINISTRATION //////
-  {
-    path: "full-administration",
-    element: <Outlet />,
-    context: 'superAdmin',
-    children: [
-      {
-        path: "accueil",
-        element: <FullAdminHome />,
-        roles: ["ROLE_ADMIN"],
-      },
-      {
-        path: "veterinaires",
-        element: <FullAdminVeterinarians />,
-        roles: ["ROLE_ADMIN"],
-      },
-      {
-        path: "cabinets",
-        element: <FullAdminClinics />,
-        roles: ["ROLE_ADMIN"],
-      },
-      {
-        path: "paiements",
-        element: <FullAdminPayments />,
-        roles: ["ROLE_ADMIN"],
-      },
-      {
-        path: "animaux",
-        element: <FullAdminPets />,
-        roles: ["ROLE_ADMIN"],
-      },
-      {
-        path: "utilisateurs",
-        element: <FullAdminUsers />,
-        roles: ["ROLE_ADMIN"],
-      },
-    ],
-  },
-  {
-    path: "gestion",
-    element: <Outlet />,
-    roles: ["ROLE_VETERINARIAN"],
-    children: [
-      {
-        path: "",
-        element: <Manage />,
+    },
+    ////// CLINIC ADMINISTRATION //////
+    {
+        path: "administration",
+        element: <Outlet />,
+        context: "clinicAdmin",
+        children: [
+            {
+                path: "accueil",
+                element: <ClinicAdminHome />,
+                roles: ["ROLE_MANAGER"],
+            },
+            {
+                path: "equipe",
+                element: <Teams />,
+                roles: ["ROLE_MANAGER"],
+            },
+            {
+                path: "calendrier-ouverture",
+                element: <ClinicAdminSchedule />,
+                roles: ["ROLE_MANAGER"],
+            },
+            {
+                path: "informations-cabinet",
+                element: <Information />,
+                roles: ["ROLE_MANAGER"],
+            },
+        ],
+    },
+    ////// CLINIC SUPER ADMINISTRATION //////
+    {
+        path: "full-administration",
+        element: <Outlet />,
+        context: "superAdmin",
+        children: [
+            {
+                path: "accueil",
+                element: <FullAdminHome />,
+                roles: ["ROLE_ADMIN"],
+            },
+            {
+                path: "veterinaires",
+                element: <FullAdminVeterinarians />,
+                roles: ["ROLE_ADMIN"],
+            },
+            {
+                path: "cabinets",
+                element: <FullAdminClinics />,
+                roles: ["ROLE_ADMIN"],
+            },
+            {
+                path: "paiements",
+                element: <FullAdminPayments />,
+                roles: ["ROLE_ADMIN"],
+            },
+            {
+                path: "animaux",
+                element: <FullAdminPets />,
+                roles: ["ROLE_ADMIN"],
+            },
+            {
+                path: "utilisateurs",
+                element: <FullAdminUsers />,
+                roles: ["ROLE_ADMIN"],
+            },
+        ],
+    },
+    {
+        path: "gestion",
+        element: <Outlet />,
         roles: ["ROLE_VETERINARIAN"],
-      },
-      {
-        path: "calendrier",
-        element: <Manage type={"calendar"} />,
-        roles: ["ROLE_VETERINARIAN"],
-      },
-      {
-        path: "services",
-        element: <Manage type={"services"} />,
-        roles: ["ROLE_VETERINARIAN"],
-      },
-    ],
-  },
-  {
-    path: "connexion",
-    element: <Login />,
-  },
-  {
-    path: "inscription",
-    element: <Register />,
-  },
-  {
-    path: "logout",
-    element: <Logout />,
-  },
-  {
-    path: "*",
-    element: <NotFound404 />,
-  },
+        children: [
+            {
+                path: "",
+                element: <Manage />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
+                path: "calendrier",
+                element: <Manage type={"calendar"} />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
+                path: "services",
+                element: <Manage type={"services"} />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
+                path: "rendez-vous",
+                element: <Manage type={"appointments"} />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+        ],
+    },
+    {
+        path: "connexion",
+        element: <Login />,
+    },
+    {
+        path: "inscription",
+        element: <Register />,
+    },
+    {
+        path: "logout",
+        element: <Logout />,
+    },
+    {
+        path: "*",
+        element: <NotFound404 />,
+    },
 ];
 
 export default list;
