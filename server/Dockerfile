@@ -42,6 +42,9 @@ RUN apk upgrade --update \
 
 COPY ./.docker/php/conf.d/custom.ini /usr/local/etc/php/conf.d/custom.ini
 
+COPY ./.docker/php/php-fpm.d/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+RUN mkdir -p /var/run/php
+
 WORKDIR /srv/app/
 
 #USER prod
@@ -75,3 +78,12 @@ COPY ./.docker/httpd/httpd.conf /usr/local/apache2/conf/httpd.conf
 
 COPY --from=php /srv/app/public /srv/app/public
 #<<<<<<<<<<End: Server Image Target>>>>>>>>>>#
+
+# Caddy image
+FROM caddy:2 AS app_caddy
+
+WORKDIR /srv/app
+
+COPY --from=app_caddy_builder /usr/bin/caddy /usr/bin/caddy
+COPY --from=php /srv/app/public public/
+COPY ./.docker/caddy/Caddyfile /etc/caddy/Caddyfile
