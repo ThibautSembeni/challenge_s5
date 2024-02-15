@@ -32,11 +32,11 @@ const ErrorBoundary = ({ children }) => {
             {t("components.molecules.errorbounderys.h1")}
         </h1>
         <p className="mt-6 text-base leading-7 text-gray-600">
-            {t("components.molecules.errorbounderys.link.p")}
+            {t("components.molecules.errorbounderys.p")}
         </p>
         <div className="mt-10">
           <Link to="/" className="text-sm font-semibold leading-7 text-orange">
-            <span aria-hidden="true">&larr;</span> {t("components.molecules.link.span")}
+            <span aria-hidden="true">&larr;</span> {t("components.molecules.errorbounderys.link.span")}
           </Link>
         </div>
       </main>

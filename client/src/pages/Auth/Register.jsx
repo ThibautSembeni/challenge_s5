@@ -45,7 +45,7 @@ export default function Page() {
                     htmlFor="firstname"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    {t("pages.auth.register.labelFirstname")}
+                    {t("pages.auth.register.labelFirstName")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -63,7 +63,7 @@ export default function Page() {
                     htmlFor="lastname"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    {t("pages.auth.register.labelLastname")}
+                    {t("pages.auth.register.labelLastName")}
                   </label>
                   <div className="mt-2">
                     <input
