@@ -32,6 +32,11 @@ jobs:
 
       - name: Update docker compose image
         uses: dawidd6/action-ansible-playbook@v2
+        env:
+          APP_ENV: ${{ secrets.APP_ENV }}
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SERVER_NAME: ${{ secrets.SERVER_NAME }}
         with:
           known_hosts: |
             ${{secrets.OVH_VM_IP}} ${{secrets.OVH_VM_KNOW_HOST}}
