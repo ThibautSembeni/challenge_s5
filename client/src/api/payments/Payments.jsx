@@ -1,5 +1,4 @@
 import axiosInstance from "@/utils/axiosInstance.js";
-import axios from "axios";
 
 export const getAllPayments = async ({
     page = 1,
@@ -32,22 +31,5 @@ export const updateOnePayments = async (id, { amount, status }) => {
   } catch (error) {
     console.error("Erreur lors de la mise à jour du paiement : ", error);
     return { success: false, message: "Une erreur est survenue lors de la mise à jour du paiement" };
-  }
-};
-
-export const createPayments = async ({
-    paymentMethod
-  }) => {
-  try {
-    const payment = axiosInstance.post(`/createPayments`, {
-      paymentMethod
-    });
-
-    return { success: true, payment };
-  } catch (error) {
-    return {
-      success: false,
-      message: "Une erreur est survenue lors du paiement",
-    };
   }
 };

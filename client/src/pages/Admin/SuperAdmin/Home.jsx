@@ -28,6 +28,20 @@ import {
 } from "@heroicons/react/24/outline/index.js";
 import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
 
+const userNavigation = [{ name: "Déconnexion", href: "#" }];
+
+const people = [
+    {
+        name: "Lindsay Walton",
+        title: "Front-end Developer",
+        department: "Optimization",
+        email: "lindsay.walton@example.com",
+        role: "Member",
+        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    },
+    // More people...
+];
+
 export default function Home() {
     const { user } = useAuth();
     const { navigation } = useSuperAdmin();
@@ -90,6 +104,7 @@ export default function Home() {
 
                         <div className="lg:pl-72">
                             <TopSideBar
+                                navigation={userNavigation}
                                 sidebarOpen={sidebarOpen}
                                 setSidebarOpen={setSidebarOpen}
                             />

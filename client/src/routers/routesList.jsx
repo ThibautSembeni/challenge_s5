@@ -7,7 +7,9 @@ import Clinic from "@/pages/Clinic/Clinic.jsx";
 import Veterinarian from "@/pages/Clinic/Veterinarian.jsx";
 import ClinicAdminHome from "@/pages/Admin/Clinic/Home.jsx";
 import Teams from "@/pages/Admin/Clinic/Teams.jsx";
+import Pet from "@/pages/Admin/Clinic/Pet.jsx";
 import Information from "@/pages/Admin/Clinic/Information.jsx";
+import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
 import FullAdminHome from "@/pages/Admin/SuperAdmin/Home.jsx";
 import FullAdminVeterinarians from "@/pages/Admin/SuperAdmin/Veterinarians.jsx";
 import FullAdminClinics from "@/pages/Admin/SuperAdmin/Clinics.jsx";
@@ -24,8 +26,6 @@ import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
 import Logout from "@/pages/Auth/Logout.jsx";
 import Manage from "@/pages/Manage/index.jsx";
-import ClinicRegisterPayment from "@/pages/PracticienRegister/ClinicRegisterPayment.jsx";
-import ClinicRegisterPaymentConfirmation from "@/pages/PracticienRegister/ClinicRegisterPaymentConfirmation.jsx";
 
 const list = [
     {

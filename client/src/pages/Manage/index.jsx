@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { BookOpenIcon, CalendarIcon } from "@heroicons/react/24/outline";
 
 import Sidebar from "@/components/molecules/Sidebar/index.jsx";
+import { useLocation } from "react-router-dom";
 import Schedules from "@/components/organisms/Schedules/index.jsx";
 import Appointments from "@/components/organisms/Appointment/index.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
@@ -31,6 +32,7 @@ const navigation = [
     },
 ];
 
+const userNavigation = [{ name: "Sign out", href: "/logout" }];
 export default function Manage({ type = "dashboard" }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { user } = useAuth();
