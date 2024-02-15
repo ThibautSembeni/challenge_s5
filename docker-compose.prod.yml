@@ -7,7 +7,7 @@ services:
       - "host.docker.internal:host-gateway"
     build:
       context: server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: php_dev
     volumes:
       - ./server/.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -45,7 +45,7 @@ services:
   caddy:
     build:
       context: server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: app_caddy
     depends_on:
       - php
