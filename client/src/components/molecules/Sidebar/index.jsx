@@ -1,28 +1,37 @@
-import {Dialog, Menu, Transition} from "@headlessui/react";
-import React, {Fragment} from "react";
-import {Bars3Icon, XMarkIcon,} from "@heroicons/react/24/outline/index.js";
-import {ChevronDownIcon,} from "@heroicons/react/20/solid/index.js";
+import { Dialog, Listbox, Menu, Transition } from "@headlessui/react";
+import React, { Fragment } from "react";
+import {
+  Bars3Icon,
+  BellIcon,
+  ChevronUpDownIcon,
+  Cog6ToothIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline/index.js";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid/index.js";
 import PropTypes from "prop-types";
 import logo from "@/assets/images/logo.png";
-import {Link as RouterLink, useLocation} from "react-router-dom";
-import {LinkBase} from "@/components/atoms/Links/Link.jsx";
-import {useAuth} from "@/contexts/AuthContext.jsx";
+import dogImg from "@/assets/images/dog.jpg";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import { LinkBase } from "@/components/atoms/Links/Link.jsx";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Sidebar({
-                                  navigation,
-                                  subNavigation,
-                                  topBarDisplay,
-                                  children,
-                                  topBarUserLabel = "User",
-                                  sidebarOpen,
-                                  setSidebarOpen,
-                                }) {
-
-  const { logout } = useAuth();
+  navigation,
+  subNavigation,
+  topBarUserNavigation,
+  topBarDisplay,
+  children,
+  topBarUserLabel = "User",
+  sidebarOpen,
+  setSidebarOpen,
+}) {
   return (
     <>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -40,7 +49,7 @@ export default function Sidebar({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-900/80"/>
+            <div className="fixed inset-0 bg-gray-900/80" />
           </Transition.Child>
 
           <div className="fixed inset-0 flex">
@@ -90,21 +99,20 @@ export default function Sidebar({
 
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <StaticSideBar navigation={navigation} subNavigation={subNavigation}/>
+        <StaticSideBar navigation={navigation} subNavigation={subNavigation} />
       </div>
 
       <div className="lg:pl-72">
         {/* Top bar */}
         {topBarDisplay && (
-          <div
-            className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+          <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button
               type="button"
               className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
             {/* Separator */}
             <div
@@ -141,16 +149,24 @@ export default function Sidebar({
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items
-                      className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      <Menu.Item>
-                        <button
-                          onClick={() => logout()}
-                          className="block px-3 py-1 text-sm leading-6 text-gray-900"
-                        >
-                          Déconnexion
-                        </button>
-                      </Menu.Item>
+                    <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                      {topBarUserNavigation &&
+                        topBarUserNavigation.map((item) => (
+                          <Menu.Item key={item.name}>
+                            {({ active }) => (
+                              <LinkBase
+                                to={item.href}
+                                component={RouterLink}
+                                className={classNames(
+                                  active ? "bg-gray-50" : "",
+                                  "block px-3 py-1 text-sm leading-6 text-gray-900",
+                                )}
+                              >
+                                {item.name}
+                              </LinkBase>
+                            )}
+                          </Menu.Item>
+                        ))}
                     </Menu.Items>
                   </Transition>
                 </Menu>
@@ -166,7 +182,7 @@ export default function Sidebar({
   );
 }
 
-function StaticSideBar({navigation, subNavigation}) {
+function StaticSideBar({ navigation, subNavigation }) {
   const location = useLocation();
 
   return (
@@ -178,7 +194,7 @@ function StaticSideBar({navigation, subNavigation}) {
             className="flex-grow flex items-center"
             component={RouterLink}
           >
-            <img className="h-12 w-auto" src={logo} alt="VetCare"/>
+            <img className="h-12 w-auto" src={logo} alt="VetCare" />
           </LinkBase>
         </div>
         <nav className="flex flex-1 flex-col">
@@ -269,6 +285,12 @@ Sidebar.propTypes = {
       href: PropTypes.string.isRequired,
       initial: PropTypes.string.isRequired,
       current: PropTypes.bool,
+    }),
+  ),
+  topBarUserNavigation: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      href: PropTypes.string.isRequired,
     }),
   ),
   topBarDisplay: PropTypes.bool,

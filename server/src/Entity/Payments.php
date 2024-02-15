@@ -19,7 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['payment:read:collection']]),
         new Get(normalizationContext: ['groups' => ['payment:read:item']]),
-        new Patch(normalizationContext: ['groups' => ['payment:write:item']]),
+        new Post(normalizationContext: ['groups' => ['payment:write:item']]),
+        new Patch(normalizationContext: ['groups' => ['payment:write:item']])
     ],
     normalizationContext: ['groups' => ['payment:read:collection']],
 )]

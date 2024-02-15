@@ -7,7 +7,9 @@ import Clinic from "@/pages/Clinic/Clinic.jsx";
 import Veterinarian from "@/pages/Clinic/Veterinarian.jsx";
 import ClinicAdminHome from "@/pages/Admin/Clinic/Home.jsx";
 import Teams from "@/pages/Admin/Clinic/Teams.jsx";
+import Pet from "@/pages/Admin/Clinic/Pet.jsx";
 import Information from "@/pages/Admin/Clinic/Information.jsx";
+import Appointment from "@/pages/Admin/Clinic/Appointment.jsx";
 import FullAdminHome from "@/pages/Admin/SuperAdmin/Home.jsx";
 import FullAdminVeterinarians from "@/pages/Admin/SuperAdmin/Veterinarians.jsx";
 import FullAdminClinics from "@/pages/Admin/SuperAdmin/Clinics.jsx";
@@ -24,8 +26,6 @@ import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
 import Logout from "@/pages/Auth/Logout.jsx";
 import Manage from "@/pages/Manage/index.jsx";
-import ClinicRegisterPayment from "@/pages/PracticienRegister/ClinicRegisterPayment.jsx";
-import ClinicRegisterPaymentConfirmation from "@/pages/PracticienRegister/ClinicRegisterPaymentConfirmation.jsx";
 
 const list = [
   {
@@ -43,14 +43,6 @@ const list = [
       {
         path: "inscription/cabinet/information",
         element: <ClinicRegisterInformations />,
-      },
-      {
-        path: "inscription/cabinet/paiement",
-        element: <ClinicRegisterPayment />,
-      },
-      {
-        path: "inscription/cabinet/confirmation",
-        element: <ClinicRegisterPaymentConfirmation />,
       },
       {
         path: "a-propos",
@@ -110,7 +102,7 @@ const list = [
       {
         path: "accueil",
         element: <ClinicAdminHome />,
-        roles: ["ROLE_MANAGER"],
+        roles: ["ROLE_MANAGER", "ROLE_VETERINARIAN"],
       },
       {
         path: "equipe",
@@ -121,6 +113,16 @@ const list = [
         path: "calendrier-ouverture",
         element: <ClinicAdminSchedule />,
         roles: ["ROLE_MANAGER"],
+      },
+      {
+        path: "rendez-vous",
+        element: <Appointment />,
+        roles: ["ROLE_MANAGER", "ROLE_VETERINARIAN"],
+      },
+      {
+        path: "animaux",
+        element: <Pet />,
+        roles: ["ROLE_MANAGER", "ROLE_VETERINARIAN"],
       },
       {
         path: "informations-cabinet",
@@ -168,7 +170,7 @@ const list = [
     ],
   },
   {
-    path: "gestion",
+    path: "manage",
     element: <Outlet />,
     roles: ["ROLE_VETERINARIAN"],
     children: [
@@ -178,7 +180,7 @@ const list = [
         roles: ["ROLE_VETERINARIAN"],
       },
       {
-        path: "calendrier",
+        path: "calendar",
         element: <Manage type={"calendar"} />,
         roles: ["ROLE_VETERINARIAN"],
       },
@@ -190,11 +192,11 @@ const list = [
     ],
   },
   {
-    path: "connexion",
+    path: "login",
     element: <Login />,
   },
   {
-    path: "inscription",
+    path: "register",
     element: <Register />,
   },
   {

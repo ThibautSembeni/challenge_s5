@@ -1,13 +1,14 @@
 import Navbar from "@/components/molecules/Navbar/index.jsx";
-import {Link as RouterLink, useParams} from "react-router-dom";
-import {Link, LinkBase} from "@/components/atoms/Links/Link.jsx";
-import React, {useEffect, useState} from "react";
-import {getOneVeterinarians} from "@/api/clinic/Veterinarian.jsx";
+import { useParams, Link as RouterLink } from "react-router-dom";
+import { Link, LinkBase } from "@/components/atoms/Links/Link.jsx";
+import React, { useEffect, useState } from "react";
+import { getOneVeterinarians } from "@/api/clinic/Veterinarian.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import imgDog from "@/assets/images/dogVeterinary.jpg";
+import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import Footer from "@/components/molecules/Footer/index.jsx";
 import MapInfo from "@/components/molecules/Map/MapInfo.jsx";
-import {useAuth} from "@/contexts/AuthContext.jsx";
+import { useAuth } from "@/contexts/AuthContext.jsx";
 
 export default function Veterinarian() {
   const { uuid } = useParams();
@@ -58,7 +59,7 @@ export default function Veterinarian() {
                       to={
                         isAuthenticated
                           ? `/booking-appointment/${uuid}`
-                          : "/connexion"
+                          : "/login"
                       }
                       className="rounded-md bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100"
                     >
