@@ -34,7 +34,10 @@ export default function ClinicRegisterPayment() {
 
           <ProgressSteps steps={steps} />
 
-          <div className="lg:grid lg:grid-cols-1 lg:gap-x-12 xl:gap-x-16">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+            <div>
+
+            </div>
             {/* Order summary */}
             <div className="mt-10 lg:mt-0">
               <h2 className="text-lg font-medium text-gray-900">Informations de paiement</h2>

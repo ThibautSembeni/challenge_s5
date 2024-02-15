@@ -47,10 +47,10 @@ class ClinicsRepository extends ServiceEntityRepository
     public function countVeterinariansInClinic($clinic): int
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.uuid = :clinic')
+            ->andWhere('c.id = :clinic')
             ->setParameter('clinic', $clinic)
             ->leftJoin('c.veterinarians', 'v')
-            ->select('COUNT(v.uuid)')
+            ->select('COUNT(v.id)')
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -78,7 +78,7 @@ class ClinicsRepository extends ServiceEntityRepository
             ->andWhere('c IN (:clinics)')
             ->setParameter('clinics', $clinics)
             ->leftJoin('c.veterinarians', 'v')
-            ->select('COUNT(v.uuid)')
+            ->select('COUNT(v.id)')
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -92,7 +92,7 @@ class ClinicsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.manager = :manager')
             ->setParameter('manager', $manager)
-            ->select('COUNT(c.uuid)')
+            ->select('COUNT(c.id)')
             ->getQuery()
             ->getSingleScalarResult()
         ;

@@ -104,7 +104,7 @@ export default function Page() {
               className={
                 "font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               }
-              to="/inscription"
+              to="/register"
             >
               S'inscrire
             </Link>

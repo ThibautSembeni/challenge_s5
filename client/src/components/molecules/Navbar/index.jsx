@@ -64,27 +64,9 @@ export default function Navbar() {
                 </div>
                 {isAuthenticated ? (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
-                    {user.roles.includes("ROLE_ADMIN") && (
-                      <Link
-                        to={"/full-administration/accueil"}
-                        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        Administration
-                      </Link>
-                    )}
-
-                    {user.roles.includes("ROLE_MANAGER") && (
+                    {user.roles.includes("ROLE_VETERINARIAN") || user.roles.includes("ROLE_MANAGER") ? (
                       <Link
                         to={"/administration/accueil"}
-                        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                      >
-                        Administration
-                      </Link>
-                    )}
-
-                    {user.roles.includes("ROLE_VETERINARIAN") ? (
-                      <Link
-                        to={"/gestion/calendrier"}
                         className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
                         Administration
@@ -139,7 +121,7 @@ export default function Navbar() {
                 ) : (
                   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
                     <Link
-                      to="/connexion"
+                      to="/login"
                       className="text-sm font-semibold leading-6 text-gray-900"
                     >
                       Se connecter <span aria-hidden="true">&rarr;</span>
@@ -197,10 +179,10 @@ export default function Navbar() {
               <>
                 <div className="py-4">
                   <Link
-                    to="/connexion"
+                    to="/login"
                     className="block py-2 pl-3 pr-4 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Se connecter
+                    Log in
                   </Link>
                 </div>
               </>
