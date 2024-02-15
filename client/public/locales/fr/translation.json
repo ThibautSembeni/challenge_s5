@@ -8,6 +8,29 @@
         "fr": "Français"
       }
     },
+    "solutions": {
+      "analitycs": "Analytique",
+      "commerce": "Commerce",
+      "insight": "Recherche"
+    },
+    "support": {
+      "pricing": "Tarification",
+      "Documentation": "Documentation",
+      "Guides": "Guides",
+      "ApiSatus": "Statut de l'API"
+    },
+    "company": {
+      "about": "À propos",
+      "blog": "Blog",
+      "jobs": "Emplois",
+      "press": "Presse",
+      "partners": "Partenaires"
+    },
+    "legal": {
+      "claim": "Revendications",
+      "privacy": "Confidentialité",
+        "terms": "Conditions"
+    },
     "Footer": {
       "h2": "Pied de page"
     },
@@ -15,7 +38,364 @@
       "h3": "Société"
     },
     "newsletter": {
-      "h3": "Inscrivez-vous à notre newsletter"
+      "h3": "Inscrivez-vous à notre newsletter",
+      "p": "Les dernières news, articles, et ressources, envoyées à votre adresse email.",
+      "labelEmailAddress": "Adresse email",
+      "button": "S'inscrire"
+    }
+  },
+  "components" : {
+    "atoms": {
+      "error": {
+        "buttonSpanDismiss": "Fermer"
+      },
+      "success": {
+        "buttonSpanDismiss": "Fermer"
+      },
+      "warning":  {
+        "buttonSpanDismiss": "Dismiss"
+      }
+    },
+    "molecules" : {
+      "errorbounderys" : {
+        "erreur": "Erreur",
+        "h1": "Oupsi, une erreur est survenue",
+        "p": "Désolé, une erreur est survenue. Veuillez réessayer plus tard.",
+        "link": {
+          "span": "Retour à l'accueil"
+        }
+      },
+      "navbar": {
+        "index": {
+          "navigation": {
+            "nameMonCompte": "Mon compte",
+            "nameMonEspace": "Mon espace",
+            "nameDeconnexion": "Déconnexion"
+          },
+          "options": {
+            "nameMonCompte": "Mon compte",
+            "nameMonEspace": "Mon espace",
+            "nameDeconnexion": "Déconnexion"
+          },
+          "disclosureButton": {
+            "span": "Ouvrir menu principal"
+          },
+          "isAthenticated": {
+            "link": "Mes rendez-vous"
+          },
+          "isVeterinaire": {
+            "link": "Vous êtes vétérinaire ?"
+          },
+          "seConnecter": {
+            "link": "Se connecter"
+          }
+        },
+        "sidebar" : {
+          "sidebar": {
+            "spanFermer": "Fermer",
+            "listboxCabinet": "Cabinet",
+            "lesVeterinaires" : "Les véterinaires",
+            "spanVoirTousLesCabinets": "Voir tous les cabinets"
+          },
+          "topSidebar": {
+            "spanOpenSideBar": "Ouvrir le menu",
+            "voirLesNotifications" : "Voir les notifications",
+            "ouvrirMenuUtilisateurs" : "Ouvrir le menu utilisateurs"
+
+          }
+        }
+      }
+
+    },
+    "organisms": {
+      "account" : {
+        "deletedAccount" : {
+          "title" : "Supprimer votre compte",
+          "body": "Êtes-vous sûr de vouloir désactiver votre compte ? Toutes vos données seront définitivement supprimées. Cette action ne peut être annulée.\n",
+          "annuler" : "Annuler",
+          "supprimer" : "Supprimer",
+          "h2" : "Supprimer votre compte",
+          "p" : "Attention, cette action est irréversible.",
+          "button": "Oui, je souhaite supprimer mon compte"
+        },
+        "updatedAccount": {
+          "h2": "Modifier votre mot de passe",
+          "p": "Les mots de passe ne correspondent pas",
+          "labelCurrentPassword": "Mot de passe actuel",
+          "labelNewPassword": "Nouveau mot de passe",
+          "labelConfirmPassword": "Confirmez le nouveau mot de passe",
+          "buttonEnregistrer": "Enregistrer"
+        },
+        "updatedUserInfo": {
+          "h2": "Informations personnelles",
+          "button": "Sauvegarder"
+        }
+      },
+      "appointment": {
+        "emptyPage": {
+          "h3": "Aucun rendez-vous à venir",
+          "p": "Trouvez un prtaicien et prenez rendez-vous en ligne à tout moment",
+          "plusIcon": "Prendre un rendez vous"
+          },
+        "preview": {
+          "h2RendezVous": "Rendez-vous",
+          "divDtSatus": "Status",
+          "divDtDD": "A venir",
+          "divDtDD2": "Passé",
+          "divDtDD3": "Annulé",
+          "divDtSpanVeterinaire": "Vétérinaire",
+          "divDtSpanDueDate": "Date d'écheance",
+          "divDtSpanSatus": "Status",
+          "divDDPaidWithMastercard": "Payé avec Mastercard"
+        },
+        "show": {
+          "divDtStatus": "Status",
+          "divDtDDaVenir":  "A venir",
+          "divDtDD2Passé": "Passé",
+          "divDtDD3Annulé": "Annulé",
+          "divDlDivDtPraticien": "Praticien",
+          "divDt1Patient": "Patient",
+          "divDt2RendreEnConsultation": "Se rendre à la consultation",
+          "divDtMoyensPaiement": "Moyens de paiement",
+          "divDDChequeEspeceCarte": "Chèques, espèces et cartes bancaires",
+          "divDtRaison": "Raison",
+          "divDtPiecesJointes": "Pièces jointes",
+          "divSpanAjouterCalendrier": "Ajouter à votre calendrier",
+          "divButtonSpanTelecharger": "Télécharger",
+          "divDtLaisserAvis": "Laisser un avis",
+          "divDtAvis : ": "Avis"
+        }
+      },
+      "bookingAppointment": {
+        "cabinet": {
+          "h2Cabinet": "Cabinet",
+          "pChoisissezCabinet":  "Choisissez le cabinet dans lequel vous souhaitez prendre rendez-vous.",
+          "labelChoisissezCabinet": "Choisissez un cabinet"
+        },
+        "typeConsultation": {
+          "h2TypeConsultation": "Type de consultation",
+          "pChoisissezCabinetVideo": "Choisissez si vous souhaitez consulter en cabinet ou réaliser une consultation vidéo.",
+          "buttonCameraIconRDVVideo": "Rendez-vous en vidéo",
+          "buttonHomeIconRDVCabinet": "Rendez-vous au cabinet"
+        }
+      },
+      "feedback": {
+        "createFeedback": {
+          "labelComment": "Ajoute ton commentaire...",
+          "textAreaPlaceholder": "Ajoute ton commentaire...",
+          "button":"Publier"
+        }
+      },
+      "payment": {
+        "stripePayment": {
+          "p": "Paiement par carte bancaire",
+          "button": "Confirmer le paiement"
+        }
+      },
+      "home": {
+        "featureSections": {
+          "featureName1": "Prise de rendez-vous facile",
+          "featureDescription1": "Planifiez rapidement des rendez-vous avec les vétérinaires de votre choix.",
+          "featureName2": "Suivi médical complet",
+          "featureDescription2": "Gérez le suivi médical de vos animaux, y compris les rendez-vous, les traitements, et les informations de santé.",
+          "featureName3": "Communication facilitée",
+          "featureDescription3": "Communiquez facilement avec les vétérinaires via la messagerie intergrée pour des échanges rapides et clairs.",
+          "h2": "Au service de ceux qui vous sont chers"
+        },
+        "heroSection": {
+          "h1": "Trouvez un vêterinaire",
+          "p": "Trouvez les vêterinaires proches de chez vous."
+        },
+        "veterinaireSection": {
+          "featureDescription1": "Libérez du temps médical grâce à la prise de rendez-vous en ligne et un logiciel moderne",
+          "featureDescription2": "Développez l'activité de votre cabinet selon vos besoins grâce à une meilleure visibilité en ligne",
+          "featureDescription3":  "Gagnez en confort de travail au quotidien en réduisant les appels téléphoniques à votre cabinet",
+          "featureDescription4": "Améliorez l'accès aux soins pour vos patients en leur proposant la meilleure des expériences",
+          "h2": "Vous êtes vétérinaire ?",
+          "p": " Équipez-vous du logiciel Vetolib pour gagner en confort de votre travail."
+        }
+      },
+      "search": {
+        "praticienSection": {
+          "p": "Spécialité :"
+        },
+        "resultSection": {
+            "h2": "Vétérinaires à : ",
+            "pTrouvez": "Trouvez à ",
+            "pVet": "un vétérinaire proposant la prise de rendez-vous en ligne",
+            "pResultat": "Résultats",
+            "pAucunResultat": "Aucun résultat"
+        },
+        "searchInput": {
+          "label": "Rechercher",
+          "placeholder": "rechercher par adresse ou vêterinaire",
+          "button": "Rechercher"
+        }
+      },
+      "vetenarian": {
+        "calendarOpenClose": {
+          "h2": "Horaires d'ouverture",
+          "p": "Attention, ces horaires peuvent varier en fonction des jours fériés.",
+          "buttonLundi": "L",
+          "buttonMardi": "M",
+          "buttonMercredi": "M",
+          "buttonJeudi": "J",
+          "buttonVendredi": "V",
+          "buttonSamedi": "S",
+          "buttonDimanche": "D",
+          "Lundi": "Lundi",
+          "Mardi": "Mardi",
+          "Mercredi": "Mercredi",
+          "Jeudi": "Jeudi",
+          "Vendredi": "Vendredi",
+          "Samedi": "Samedi",
+          "Dimanche": "Dimanche"
+        },
+        "complementaryInformation": {
+          "h2": "Informations complémentaires"
+        },
+        "informationComponent": {
+          "h2": "À propos"
+        },
+        "teamSectionComponent": {
+          "h2": "Notre équipe"
+        },
+        "testimonialComponent": {
+          "h2": "Avis",
+          "p": "Avis clients"
+        }
+      }
+    }
+  },
+  "pages": {
+    "admin": {
+      "clinic": {
+        "appointment": {
+          "navAcuueil": "Accueil",
+          "navRDV": "Rendez-vous",
+          "navTeleconsultation": "Teleconsultation",
+          "navAnimaux": "Animaux",
+          "navManagerEquipe": "Equipes",
+          "navManagerCalendrier": "Calendrier d'ouvertue",
+          "navManagerInfoCabinet": "Informations cabinet",
+          "h1": "Les rendez-vous",
+          "thNom": "Nom",
+          "thType": "Type",
+          "thStatus": "Status",
+          "thAnimal": "Animal",
+          "thSpanModifier": "Modifier",
+          "tdSpanActif": "Actif",
+          "tdHrefModifier": "Modifier"
+        },
+        "information": {
+          "h1": "Informations sur le cabinet",
+          "buttonModiferInfoCabinet": "Modifier les informations du cabinet",
+          "labelName": "Nom du cabinet",
+          "labelPhone": "Téléphone",
+          "labelAddress": "Adresse postal",
+          "labelCodePostal": "Code postal",
+          "labelCity": "Ville",
+          "labelDescription": "Description",
+          "buttonSubmit": "Enregistrer",
+          "buttonAnnuler": "Annuler",
+          "h1InfosComplementaires": "Informations complémentaires sur le cabinet",
+          "buttonAjouterInfoSurCabinet": "Ajouter des informations complémentaires sur le cabinet",
+          "titleAjouterInfoCabinet": "Ajouter des informations complémentaires",
+          "labelNameSimple": "Nom"
+        },
+        "home": {
+          "h3": "Statistiques",
+          "divHrefTTVoir": "Tout voir",
+          "h1": " Les prochains rendez-vous",
+          "p": "Retrouvez ici les prochains rendez-vous de la clinique.",
+          "divHrefAjouter": "Ajouter un rdv",
+          "thNom": "Nom",
+          "thType": "Type",
+          "thStatus": "Status",
+          "thAnimal": "Animal",
+          "thModifier": "Modifier"
+        },
+        "pet": {
+          "h1": "Animaux",
+          "h2": "Animaux"
+        },
+        "schedule": {
+          "labelStartTime": "Horaire de début",
+          "labelEndTime": "Horaire de fin",
+          "h1": "Les horaires d'ouverture",
+          "buttonAddHoraireOuverture": "Ajouter des horaires d'ouverture",
+          "modalAttrTitle": "Ajouter des horaires d'ouverture",
+          "labelDay": "Jour",
+          "labelIsOpen": "Ouverture",
+          "optionOpen": "Ouvert",
+          "optionClose": "Ferme",
+          "buttonSubmit": "Enregistrer",
+          "buttonCancel": "Annuler"
+        },
+        "teams": {
+          "h1": "Vétérinaires",
+          "buttonAddVeterinaire": "Ajouter un vêterinaire",
+          "modalAttrTitle": "Ajouter des vétérinaires au cabinet",
+          "labelFirstName": "Prénom",
+          "labelLastName": "Nom",
+          "labelEmail": "Email",
+          "buttonSubmit": "Enregistrer",
+          "buttonCancel": "Annuler"
+        }
+      }
+
+    },
+    "appointment": {
+      "index": {
+
+      }
+    },
+    "auth": {
+      "login": {
+        "h2": "Se connecter à votre compte",
+        "labelEmail": "Adresse email",
+        "labelPassword": "Mot de passe",
+        "divHrefMotDePasseOublie": "Mot de passe oublie ?",
+        "buttonSubmit": "Se connecter",
+        "pNouveau": "Nouveau sur VetCare ?",
+        "linkRegister": "S'inscrire"
+      },
+      "register": {
+        "h2": "Créez votre compte",
+        "labelFirstName": "Prénom",
+        "labelLastName": "Nom de famille",
+        "labelEmail": "Adresse email",
+        "labelPassword": "Mot de passe",
+        "buttonSubmit": "S'inscrire",
+        "pDejaMembre": "Deja membre ?",
+        "linkLogin": "Se connecter"
+      }
+    },
+    "clinic": {
+      "clinicFile": {
+        "h2": "Trouver nous"
+      },
+      "vetenarian": {
+        "buttonRDV": "Prendre RDV",
+        "h2": "Nous trouver"
+      }
+    },
+    "praticienRegister": {
+      "index": {
+        "h2": "La nouvelle génération de solutions pour les vétérinaires",
+        "p": "  Équipez vous de VétoLib et gagnez du temps au quotidien, gagnez en confort de travail et renforcez la communication avec vos patients !",
+        "li1": "Des solutions tout-en-un, conçues avec vous",
+        "li2": " L'innovation au coeur de notre ADN Un service client haut de gamme",
+        "li3": "Le plus haut niveau de protection des données de santé",
+        "button": "Sauvegarder"
+      }
+    },
+    "notFound404": {
+      "h1": "Page introuvable",
+      "p": "La page que vous recherchez n'existe pas.",
+      "aSpan": "Retour à l'accueil"
     }
   }
 }
+
+

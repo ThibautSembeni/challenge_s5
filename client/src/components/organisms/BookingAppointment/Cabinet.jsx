@@ -1,16 +1,17 @@
 import Select from "@/components/atoms/Select/index.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Cabinet({ clinic }) {
+    const { t } = useTranslation();
   return (
     <div className="space-y-12">
       <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
         <div>
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Cabinet
+            {t("components.organisms.bookingAppointment.h2Cabinet")}
           </h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            Choisissez le cabinet dans lequel vous souhaitez prendre
-            rendez-vous.{" "}
+            {t("components.organisms.bookingAppointment.pChoisissezCabinet")}{" "}
           </p>
         </div>
 
@@ -18,7 +19,7 @@ export default function Cabinet({ clinic }) {
           <div className="sm:col-span-6">
             <Select
               type={"secondary-text"}
-              label={"Choisissez un cabinet"}
+              label={t("components.organisms.bookingAppointment.labelChoisissezCabinet")}
               name={"clinic"}
               selected={clinic.uuid}
               list={[

@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 export default function UpdatePassword({ onSubmit, additionnalInfo }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  //translation
+  const { t } = useTranslation();
 
   return (
     <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>
         <h2 className="text-base font-semibold leading-7">
-          Changement de mot de passe
+          {t("components.organisms.account.updatedAccount.h2")}
         </h2>
         {additionnalInfo && (
           <p
@@ -25,7 +29,7 @@ export default function UpdatePassword({ onSubmit, additionnalInfo }) {
           newPasswordConfirm !== "" &&
           newPassword !== newPasswordConfirm && (
             <p className="mt-1 text-sm text-red-500">
-              Les mots de passe ne correspondent pas
+              {t("components.organisms.account.updatedAccount.p")}
             </p>
           )}
       </div>
@@ -37,7 +41,7 @@ export default function UpdatePassword({ onSubmit, additionnalInfo }) {
               htmlFor="current-password"
               className="block text-sm font-medium leading-6"
             >
-              Mot de passe actuel
+              {t("components.organisms.account.updatedAccount.labelCurrentPassword")}
             </label>
             <div className="mt-2">
               <input
@@ -56,7 +60,7 @@ export default function UpdatePassword({ onSubmit, additionnalInfo }) {
               htmlFor="new-password"
               className="block text-sm font-medium leading-6"
             >
-              Nouveau mot de passe
+              {t("components.organisms.account.updatedAccount.labelNewPassword")}
             </label>
             <div className="mt-2">
               <input
@@ -75,7 +79,7 @@ export default function UpdatePassword({ onSubmit, additionnalInfo }) {
               htmlFor="confirm-password"
               className="block text-sm font-medium leading-6"
             >
-              Confirmer le nouveau mot de passe
+              {t("components.organisms.account.updatedAccount.labelConfirmPassword")}
             </label>
             <div className="mt-2">
               <input
@@ -102,7 +106,7 @@ export default function UpdatePassword({ onSubmit, additionnalInfo }) {
               newPassword !== newPasswordConfirm
             }
           >
-            Enregistrer
+            {t("components.organisms.account.updatedAccount.buttonEnregistrer")}
           </Button>
         </div>
       </form>

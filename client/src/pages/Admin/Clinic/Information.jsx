@@ -1,34 +1,22 @@
-import React, { Fragment, useEffect, useState } from "react";
-import {
-  CalendarDaysIcon,
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
+import React, {Fragment, useEffect, useState} from "react";
 import {
   createComplementaryInformation,
   getAllClinicsByManager,
   getOneClinics,
   updateOneClinics,
 } from "@/api/clinic/Clinic.jsx";
-import { useAuth } from "@/contexts/AuthContext.jsx";
-import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
+import {useAuth} from "@/contexts/AuthContext.jsx";
+import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {
-  IdentificationIcon,
-  PencilSquareIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
-import ComplementaryInformationComponent from "@/components/organisms/Veterinarian/ComplementaryInformationComponent.jsx";
+import ComplementaryInformationComponent
+  from "@/components/organisms/Veterinarian/ComplementaryInformationComponent.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
-import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
-
-const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
+import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
 export default function Pet() {
   const { user } = useAuth();
-  const { selectedClinic } = useClinic();
+  const { selectedClinic, navigation } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);
   const [modifyInformation, setModifyInformation] = useState(false);
@@ -38,7 +26,6 @@ export default function Pet() {
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
-  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     if (user && user.uuid) {
@@ -194,59 +181,6 @@ export default function Pet() {
     }
   };
 
-  useEffect(() => {
-    let newNavigation = [
-      {
-        name: "Accueil",
-        href: "/administration/accueil",
-        icon: HomeIcon,
-        current: false,
-      },
-      {
-        name: "Rendez-vous",
-        href: "/administration/rendez-vous",
-        icon: CalendarDaysIcon,
-        current: false,
-      },
-      {
-        name: "Téléconsultation",
-        href: "/administration/animaux",
-        icon: VideoCameraIcon,
-        current: false,
-      },
-      {
-        name: "Animaux",
-        href: "/administration/animaux",
-        icon: IdentificationIcon,
-        current: false,
-      },
-    ];
-
-    if (user.roles.includes("ROLE_MANAGER")) {
-      newNavigation.push(
-        {
-          name: "Équipe",
-          href: "/administration/equipe",
-          icon: UsersIcon,
-          current: false,
-        },
-        {
-          name: "Calendrier d'ouverture",
-          href: "/administration/calendrier-ouverture",
-          icon: CalendarIcon,
-          current: false,
-        },
-        {
-          name: "Informations cabinet",
-          href: "/administration/informations-cabinet",
-          icon: PencilSquareIcon,
-          current: true,
-        },
-      );
-    }
-    setNavigation(newNavigation);
-  }, [user.roles]);
-
   return (
     <>
       {isLoading ? (
@@ -271,7 +205,6 @@ export default function Pet() {
 
             <div className="lg:pl-72">
               <TopSideBar
-                navigation={userNavigation}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
               />

@@ -8,14 +8,390 @@
         "fr": "French"
       }
     },
+    "solutions": {
+      "analitycs": "Analytics",
+      "commerce": "Commerce",
+      "insight": "Insights"
+    },
+    "support": {
+      "pricing": "Pricing",
+      "Documentation": "Documentation",
+      "Guides": "Documentation",
+      "ApiSatus": "API Status"
+    },
+    "company": {
+      "about": "About",
+      "blog": "Blog",
+      "jobs": "Jobs",
+      "press": "Press",
+      "partners": "Partners"
+    },
+    "legal": {
+      "claim": "Claim",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
     "Footer": {
       "h2": "Footer"
     },
-    "company": {
+    "Company": {
       "h3": "Company"
     },
     "newsletter": {
-      "h3": "Subscribe to our newsletter"
+      "h3": "Subscribe to our newsletter",
+      "p": "The latest news, articles, and resources, sent to your inbox every month.",
+      "labelEmailAddress": "Email address",
+      "button": "Subscribe"
+    }
+  },
+  "components" : {
+    "atoms": {
+      "error": {
+        "buttonSpanDismiss": "Dismiss"
+      },
+      "success": {
+        "buttonSpanDismiss": "Dismiss"
+      },
+      "warning":  {
+        "buttonSpanDismiss": "Dismiss"
+      }
+    },
+    "molecules" : {
+      "errorbounderys" : {
+        "erreur": "Error",
+        "h1": "Oupsi, an error has occured",
+        "p": "Sorru something went wrong, please try again later",
+        "link": {
+          "span": "Back to home page"
+        }
+      },
+      "navbar": {
+        "index": {
+          "navigation": {
+            "nameMonCompte": "My account",
+            "nameMonEspace": "My space",
+            "nameDeconnexion": "Log out"
+          },
+          "options": {
+            "nameMonCompte": "My account",
+            "nameMonEspace": "My space",
+            "nameDeconnexion": "Log out"
+          },
+          "disclosureButton": {
+            "span": "Open main menu"
+          },
+          "isAthenticated": {
+            "link": "My appointments"
+          },
+          "isVeterinaire": {
+            "link": "Are you a vetenarian ?"
+          },
+          "seConnecter": {
+            "link": "Log in"
+          }
+        },
+        "sidebar" : {
+          "sidebar": {
+            "spanFermer": "Close",
+            "listboxCabinet": "Clinic",
+            "lesVeterinaires" : "The vetenarians",
+            "spanVoirTousLesCabinets": "See all clinics"
+
+          },
+          "topSidebar": {
+            "spanOpenSideBar": "Open side bar",
+            "voirLesNotifications" : "See notifications",
+            "ouvrirMenuUtilisateurs" : "Open users menu"
+          }
+        }
+      }
+    },
+    "organisms": {
+      "account" : {
+        "deletedAccount" : {
+          "title" : "Delete your account",
+          "body": "Are you really sure you want to deactivate your account? All your data will be permanently erased. This action cannot be undone.\n",
+          "annuler" : "Cancel",
+          "supprimer" : "delete",
+          "h2" : "Delete your account",
+          "p" : "Becareful, this action cannot be undone.",
+          "button": "Yes, i want to delete my account"
+        },
+        "updatedAccount": {
+          "h2": "Update your password",
+          "p": "Passwords don't match",
+          "labelCurrentPassword": "Current password",
+          "labelNewPassword": "New password",
+          "labelConfirmPassword": "Confirm new password",
+          "buttonEnregistrer": "Save"
+        },
+        "updatedUserInfo": {
+          "h2": "Update your user info",
+          "button": "Save"
+        }
+      },
+      "appointment": {
+        "emptyPage": {
+          "h3": "Next appointments",
+          "p": "Find a practician and schedule your next appointment online",
+          "plusIcon": "Schedule an appointment"
+        },
+        "preview": {
+          "h2RendezVous": "Appointments",
+          "divDtSatus": "Status",
+          "divDtDD": "Coming next",
+          "divDtDD2": "Past appointment",
+          "divDtDD3": "Cancelled",
+          "divDtSpanVeterinaire": "Vetenarian",
+          "divDtSpanDueDate": "Due date",
+          "divDtSpanSatus": "Status",
+          "divDDPaidWithMastercard": "Paid with MasterCard"
+        },
+        "show": {
+          "divDtStatus": "Status",
+          "divDtDDaVenir":  "Coming next",
+          "divDtDD2Passé": "Past appointment",
+          "divDtDD3Annulé": "Cancelled",
+          "divDlDivDtPraticien": "Practician",
+          "divDt1Patient": "Patient",
+          "divDt2RendreEnConsultation": "Go to your consultaltion",
+          "divDtMoyensPaiement": "Payment methods",
+          "divDDChequeEspeceCarte": "Check, cash, credit card",
+          "divDtRaison": "Reason",
+          "divDtPiecesJointes": "Attachments files",
+          "divSpanAjouterCalendrier": "Add to calendar",
+          "divButtonSpanTelecharger": "Download",
+          "divDtLaisserAvis": "Leave a review",
+          "divDtAvis": "Review"
+        }
+      },
+      "bookingAppointment": {
+        "cabinet": {
+          "h2Cabinet": "Clinic",
+          "pChoisissezCabinet":  "Choose the clinic where you want to schedule your next appointment",
+          "labelChoisissezCabinet": "Choose a clinic"
+        },
+        "typeConsultation": {
+          "h2TypeConsultation": "Type of consultation",
+          "pChoisissezCabinetVideo": "Choose the type of consultation, video or at the clinic.",
+          "buttonCameraIconRDVVideo": "Video appointment",
+          "buttonHomeIconRDVCabinet": "Clinic appointment"
+        }
+      },
+      "feedback": {
+        "createFeedback": {
+          "labelComment": "Add a comment ...",
+          "textAreaPlaceholder": "Add a comment ...",
+          "button": "Publish"
+        }
+      },
+      "payment": {
+        "stripePayment": {
+          "p": "Payment by card",
+          "button": "Confirm payment"
+        }
+      },
+      "home": {
+        "featureSections": {
+          "featureName1": "Easy way to schedule an appointment",
+          "featureDescription1": "Quickly schedule appointments with your prefered vetenarians.",
+          "featureName2": "Full medical follow up",
+          "featureDescription2": "Manage your animals records including appointments, treatments, and health information.",
+          "featureName3": "Communication made easy",
+          "featureDescription3": "Communicate easily with veterinarians with an integrated messaging system that make your exchanges fast and clear.",
+          "h2": "Care about the ones you love"
+        },
+        "heroSection": {
+          "h1": "Find a vetenarian",
+          "p": "Find the vetenarians closest to your address."
+        },
+        "veterinaireSection": {
+          "featureDescription1": "Free some medical time for yourself with our online appointments and a modern software",
+          "featureDescription2": "Develop your clinic business based on your needs with a better online visibility",
+          "featureDescription3":  "Gain daily work comfort by reducing the amount of calls to your clinic",
+          "featureDescription4": "Improve your patients access to care by offering them one of the best experiences",
+          "h2": "Are you a vetenarian?",
+          "p": "Get the Vetolib software to gain comfort in your activity."
+        }
+      },
+      "search": {
+        "praticienSection": {
+          "p": "Sepcialty :"
+        },
+        "resultSection": {
+          "h2": "Vetenarians at : ",
+          "pTrouvez": "Find at ",
+          "pVet": "Vetenarian offering online appointments",
+          "pResultat": "Results",
+          "pAucunResultat": "No result"
+        },
+        "searchInput": {
+          "label": "Search",
+          "placeholder": "search by address or vetenarian",
+          "button": "Search"
+        }
+      },
+      "vetenarian": {
+        "calendarOpenClose": {
+          "h2": "Opening hours",
+          "p": "Be careful these hours can change during bank days.",
+          "buttonLundi": "M",
+          "buttonMardi": "T",
+          "buttonMercredi": "W",
+          "buttonJeudi": "T",
+          "buttonVendredi": "F",
+          "buttonSamedi": "Sa",
+          "buttonDimanche": "Su",
+          "Lundi": "Monday",
+          "Mardi": "Tuesday",
+          "Mercredi": "Wednesday",
+          "Jeudi": "Thursday",
+          "Vendredi": "Friday",
+          "Samedi": "Saturday",
+          "Dimanche": "Sunday"
+        },
+        "complementaryInformation": {
+          "h2": "More information"
+        },
+        "informationComponent": {
+          "h2": "About"
+        },
+        "teamSectionComponent": {
+          "h2": "Our team "
+        },
+        "testimonialComponent": {
+          "h2": "Testimonial",
+          "p": "Customers testimonies"
+        }
+      }
+    }
+  },
+  "pages": {
+    "admin": {
+      "clinic": {
+        "appointment": {
+          "navAcuueil": "Home",
+          "navRDV": "Appointments",
+          "navTeleconsultation": "Teleconsultation",
+          "navAnimaux": "Animals",
+          "navManagerEquipe": "Teams",
+          "navManagerCalendrier": "Openings calendar",
+          "navManagerInfoCabinet": "Clinic details",
+          "h1": "Appointments",
+          "thNom": "Name",
+          "thType": "Type",
+          "thStatus": "Status",
+          "thAnimal": "Animal",
+          "thSpanModifier": "Modify",
+          "tdSpanActif": "Active",
+          "tdHrefModifier": "Modify"
+        },
+        "information": {
+          "h1": "Clinic details",
+          "buttonModiferInfoCabinet": "Modify clinic details",
+          "labelName": "Name of the clinic",
+          "labelPhone": "Phone",
+          "labelAddress": "Postal address",
+          "labelCodePostal": "Postal code",
+          "labelCity": "City",
+          "labelDescription": "Description",
+          "buttonSubmit": "Save",
+          "buttonAnnuler": "Cancel",
+          "h1InfosComplementaires": "Additional information about the clinic",
+          "buttonAjouterInfoSurCabinet": "Add additional information about the clinic",
+          "titleAjouterInfoCabinet": "Add additional information",
+          "labelNameSimple": "Name"
+        },
+        "home": {
+          "h3": "Statistics",
+          "divHrefTTVoir": "See all",
+          "h1": "The next appointments",
+          "p": "Find here the next clinic appointments",
+          "divHrefAjouter": "Add an appointment",
+          "thNom": "Name",
+          "thType": "Type",
+          "thStatus": "Status",
+          "thAnimal": "Animal",
+          "thModifier": "Modify"
+        },
+        "pet": {
+          "h1": "Pets",
+          "h2": "Pets"
+        },
+        "schedule": {
+          "labelStartTime": "Start time",
+          "labelEndTime": "End time",
+          "h1": "Opening hours",
+          "buttonAddHoraireOuverture": "Add opening hours",
+          "modalAttrTitle": "Add opening hours",
+          "labelDay": "Day",
+          "labelIsOpen": "Opening",
+          "optionOpen": "Open",
+          "optionClose": "Closed",
+          "buttonSubmit": "Save",
+          "buttonCancel": "Cancel"
+        },
+        "teams": {
+          "h1": "Veterinaries",
+          "buttonAddVeterinaire": "Add a veterinarian",
+          "modalAttrTitle": "Add a veterinarian",
+          "labelFirstName": "First name",
+          "labelLastName": "Last name",
+          "labelEmail": "Email",
+          "buttonSubmit": "Save",
+          "buttonCancel": "Cancel"
+        }
+      }
+    },
+    "auth": {
+      "login": {
+        "h2": "Log into your account",
+        "labelEmail": "Email address",
+        "labelPassword": "Password",
+        "divHrefMotDePasseOublie": "Forgot your password ?",
+        "buttonSubmit": "Log in",
+        "pNouveau": "New on VetCare ?",
+        "linkRegister": "Register"
+      },
+      "register": {
+        "h2": "Create an account",
+        "labelFirstName": "first name",
+        "labelLastName": "last name",
+        "labelEmail": "Email address",
+        "labelPassword": "Password",
+        "buttonSubmit": "Register",
+        "pDejaMembre": "Already a member ? ",
+        "linkLogin": "Log in"
+      }
+    },
+    "clinic": {
+      "clinicFile": {
+        "h2": "Find us"
+      },
+      "vetenarian": {
+        "buttonRDV": "Book an appointment",
+        "h2": "Find us"
+      }
+
+    },
+    "praticienRegister": {
+      "index": {
+        "h2": "The new generation of solutions for veterinaries",
+        "p": "Equip yourself with VetoLib and reclaim precious time in your daily routine. Elevate your work comfort and enhance communication with your patients like never before!",
+        "li1": "All-in one solutions designed for you",
+        "li2": "Innovation at the heart of our DNA. A first class customer service.",
+        "li3": "The highest level of data privacy",
+        "button": "Save"
+      }
+    },
+    "notFound404": {
+      "h1": "Page not found",
+      "p": "The page you are looking for does not exist.",
+      "aSpan": "Back to home"
     }
   }
 }
+
+
+
+

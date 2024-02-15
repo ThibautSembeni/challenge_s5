@@ -1,9 +1,11 @@
 import { createFeedback } from "@/api/feedbacks";
 import { useState } from "react";
 import StarRating from "@/components/organisms/Feedback/starRating";
+import { useTranslation } from "react-i18next";
 
 export default function CreateFeedbacks(props) {
     const [rating, setRating] = useState(0);
+    const { t } = useTranslation();
 
     const handleSetRating = (rate) => {
         setRating(rate);
@@ -34,14 +36,14 @@ export default function CreateFeedbacks(props) {
                 >
                     <div className="overflow-hidden rounded-lg shadow-md ring-1 ring-inset ring-gray-400 focus-within:ring-2 focus-within:ring-blue-500 transition duration-150 ease-in-out">
                         <label htmlFor="comment" className="sr-only">
-                            Ajoute ton commentaire...
+                            {t("components.organisms.feedback.createFeedback.labelComment")}
                         </label>
                         <textarea
                             rows={3}
                             name="comment"
                             id="comment"
                             className="block w-full resize-none border-0 bg-gray-50 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-0 sm:text-sm sm:leading-6 transition duration-150 ease-in-out"
-                            placeholder="Ajoute ton commentaire..."
+                            placeholder={t("components.organisms.feedback.createFeedback.textAreaPlaceholder")}
                             defaultValue={""}
                             minLength={5}
                             maxLength={255}
@@ -58,7 +60,7 @@ export default function CreateFeedbacks(props) {
                                 type="submit"
                                 className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition duration-150 ease-in-out"
                             >
-                                Publier
+                                {t("components.organisms.feedback.createFeedback.button")}
                             </button>
                         </div>
                     </div>
