@@ -220,3 +220,21 @@ export const checkClinic = async (uuid) => {
     return { success: false, message: "Une erreur est survenue lors de la récupération des données" };
   }
 }
+
+export const getCountVeterinariesByClinic = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/count`
+    );
+};
+
+export const getCountClinicsByManager = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/manager/count`
+    );
+};
+
+export const getCountScheduledAppointmentsByClinic = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/appointments`
+    );
+};

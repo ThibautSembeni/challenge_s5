@@ -28,6 +28,9 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\Back\Clinics\VeterinariansCountController;
+use App\Controller\Back\Clinics\ClinicsCountController;
+use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
 
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
@@ -38,7 +41,28 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(inputFormats: ['multipart' => ['multipart/form-data']], normalizationContext: ['groups' => ['clinics:write:create']]),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Delete(security: "is_granted('DELETE_CLINIC', object)"),
-        new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)")
+        new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)"),
+        new GetCollection(
+            uriTemplate: '/clinics/veterinarians/count',
+            controller: VeterinariansCountController::class,
+            name: 'get_veterinarians_count',
+            security: "is_granted('ROLE_MANAGER')",
+            securityMessage: "You are not allowed to access this resource!"
+        ),
+        new GetCollection(
+            uriTemplate: '/clinics/manager/count',
+            controller: ClinicsCountController::class,
+            name: 'get_clinics_count',
+            security: "is_granted('ROLE_MANAGER')",
+            securityMessage: "You are not allowed to access this resource!"
+        ),
+        new GetCollection(
+            uriTemplate: '/clinics/veterinarians/appointments',
+            controller: VeterinariansAndAppointmentsController::class,
+            name: 'get_veterinarians_appointments',
+            security: "is_granted('ROLE_MANAGER')",
+            securityMessage: "You are not allowed to access this resource!",
+        ),
     ],
     normalizationContext: ['groups' => ['clinics:read:collection']],
     paginationPartial: false,
