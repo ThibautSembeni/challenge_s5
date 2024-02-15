@@ -80,6 +80,15 @@ COPY --from=php /srv/app/public /srv/app/public
 #<<<<<<<<<<End: Server Image Target>>>>>>>>>>#
 
 # Caddy image
+# Build Caddy with the Mercure and Vulcain modules
+FROM caddy:2-builder-alpine AS app_caddy_builder
+
+RUN xcaddy build \
+	--with github.com/dunglas/mercure \
+	--with github.com/dunglas/mercure/caddy \
+	--with github.com/dunglas/vulcain \
+	--with github.com/dunglas/vulcain/caddy \
+
 FROM caddy:2 AS app_caddy
 
 WORKDIR /srv/app
