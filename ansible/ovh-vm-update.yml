@@ -14,6 +14,9 @@
     - name: Basic usage
       ansible.builtin.debug:
         msg: "'{{ lookup('ansible.builtin.env', 'APP_ENV') }}' is the APP_ENV environment variable."
+    - name: Get cors configuration
+      ansible.builtin.debug:
+        msg: "'{{ lookup('ansible.builtin.env', 'CORS_ALLOW_ORIGIN') }}' is the CORS_ALLOW_ORIGIN environment variable."
     - name: Template a file
       ansible.builtin.template:
         src: ./env.j2
