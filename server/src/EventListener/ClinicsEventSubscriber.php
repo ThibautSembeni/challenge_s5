@@ -5,8 +5,6 @@ namespace App\EventListener;
 use App\Entity\Clinics;
 use App\Service\Geocoder;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -30,7 +28,6 @@ class ClinicsEventSubscriber implements EventSubscriber
         return [
             Events::prePersist,
             Events::preUpdate,
-            Events::postUpdate
         ];
     }
 
@@ -53,21 +50,6 @@ class ClinicsEventSubscriber implements EventSubscriber
         }
 
         $this->handleEvent($args);
-    }
-
-    public function postUpdate(LifecycleEventArgs $args)
-    {
-        $entity = $args->getObject();
-        $entityManager = $args->getObjectManager();
-
-        if ($entity instanceof Clinics && $entity->isIsActif()) {
-            $manager = $entity->getManager();
-            if ($manager && !in_array('ROLE_MANAGER', $manager->getRoles())) {
-                $manager->setRoles(array_merge($manager->getRoles(), ['ROLE_MANAGER']));
-                $entityManager->persist($manager);
-                $entityManager->flush();
-            }
-        }
     }
 
     private function handleEvent(LifecycleEventArgs $args)

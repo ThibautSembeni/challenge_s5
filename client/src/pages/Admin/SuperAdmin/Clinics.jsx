@@ -142,18 +142,6 @@ export default function Clinics() {
     setIsDeleteModalOpen(true);
   };
 
-  const openFileInNewTab = (kbisPath) => {
-    if (!kbisPath) {
-      console.log("Aucun fichier à afficher.");
-      return;
-    }
-    const baseUrl = `${import.meta.env.VITE_DOCUMENT_URL}/media/kbis/`;
-    const fileUrl = `${baseUrl}${kbisPath}`;
-
-    window.open(fileUrl, '_blank');
-  };
-
-
   const columns = [
     {
       Header: 'Nom',
@@ -189,11 +177,8 @@ export default function Clinics() {
           <div className="flex">
           <span
             className="inline-flex items-center rounded-md bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700">En attente</span>
-            <span onClick={() => openFileInNewTab(row.pathKbis)} className="ml-2 cursor-pointer hover:text-blue-500 transform duration-100 ease-in">
-              <EyeIcon className="w-5 l-5"/>
-            </span>
+            <span className="ml-2 cursor-pointer hover:text-blue-500 transform duration-100 ease-in"><EyeIcon className="w-5 l-5"/></span>
             <span className="ml-2 cursor-pointer hover:text-green-500 transform duration-100 ease-in" onClick={() => {
-              setIsLoading(true);
               checkClinic(row.uuid).then(() => fetchClinics().then(() => setIsLoading(false)));
             }}><CheckIcon className="w-5 l-5"/></span>
           </div>
