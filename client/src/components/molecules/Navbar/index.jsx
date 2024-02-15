@@ -101,13 +101,10 @@ export default function Navbar() {
                                                 >
                                                     {t("components.molecules.navbar.index.isVeterinaire.link")}
                                                 </Link>
-
                                                 <Link
                                                     to={"/mes-rendez-vous"}>{t("components.molecules.navbar.index.isAthenticated.link")}</Link>
                                             </>
                                         )}
-
-
                                         <RadiosButtonsWithIcons
                                             placeholder={`${user.firstname} ${user.lastname}`}
                                             className={

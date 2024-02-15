@@ -120,30 +120,20 @@ export const createClinics = async ({
   city,
   description,
   manager,
-  file
 }) => {
   try {
-    // Création d'un objet FormData
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('phone', phone);
-    formData.append('email', email);
-    formData.append('address', address);
-    formData.append('postalCode', postalCode);
-    formData.append('city', city);
-    formData.append('description', description);
-    formData.append('manager', manager);
-
-    // Ajouter le fichier si présent
-    if (file) formData.append('file', file);
-
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/clinics`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const clinic = axios.post(`${import.meta.env.VITE_API_URL}/clinics`, {
+      name,
+      phone,
+      email,
+      address,
+      postalCode,
+      city,
+      description,
+      manager,
     });
 
-    return { success: true, clinic: response.data };
+    return { success: true, clinic };
   } catch (error) {
     return {
       success: false,

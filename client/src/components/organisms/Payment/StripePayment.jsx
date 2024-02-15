@@ -1,25 +1,24 @@
-import React, {useState} from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import React from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
 import { useTranslation } from "react-i18next";
 
-import {createPayments} from "@/api/payments/Payments.jsx";
-import { useNavigate } from 'react-router-dom';
+import { createPayments } from "@/api/payments/Payments.jsx";
+import { useNavigate } from "react-router-dom";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
-
-const stripePromise = loadStripe('pk_test_51Kt9jqCaPgMXzB1GxtcgITeWvh9Z0o9DXQd6XoG5fHreEOIRWRR1FrFjYI50nTeSfG6TYDTiz2siAVc3r9gv8rEr00jWHdM6iC');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate()
-
-  const [showNotificationToast, setShowNotificationToast] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(null);
-  const [message, setMessage] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,29 +30,19 @@ const CheckoutForm = () => {
     const cardElement = elements.getElement(CardElement);
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
+      type: "card",
       card: cardElement,
     });
 
     if (error) {
-      console.log('[error]', error);
+      console.log("[error]", error);
     } else {
-      const response = await createPayments({
-        paymentMethod
-      })
-
-      if (response.success) {
-        navigate("/inscription/cabinet/confirmation");
-      } else {
-        setIsSuccess(false);
-        setMessage("Erreur lors du paiement");
-        setShowNotificationToast(true);
-      }
+      console.log("[PaymentMethod]", paymentMethod);
+      // Vous pouvez ici envoyer le paymentMethod.id à votre serveur pour finaliser le paiement.
     }
   };
 
   return (
-
     <>
       <NotificationToast
         show={showNotificationToast}
@@ -64,8 +53,10 @@ const CheckoutForm = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="p-4">
-          <p className="mb-4">{t("components.organisms.payment.stripePayment.p")}</p>
-          <CardElement/>
+          <p className="mb-4">
+            {t("components.organisms.payment.stripePayment.p")}
+          </p>
+          <CardElement />
         </div>
 
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -79,13 +70,12 @@ const CheckoutForm = () => {
         </div>
       </form>
     </>
-
   );
 };
 
 const StripePayment = () => (
   <Elements stripe={stripePromise}>
-    <CheckoutForm/>
+    <CheckoutForm />
   </Elements>
 );
 

@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 use ApiPlatform\Doctrine\Odm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Auth\User;
-use App\Entity\Traits\TimestampableTrait;
 use App\Filters\ClinicByManagerFilter;
 use App\Filters\CustomSearchFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -27,18 +25,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\Back\Clinics\VeterinariansCountController;
 use App\Controller\Back\Clinics\ClinicsCountController;
 use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
 
 #[ORM\Entity(repositoryClass: ClinicsRepository::class)]
 #[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
-#[Vich\Uploadable]
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['clinics:read', 'clinics:read:collection']]),
-        new Post(inputFormats: ['multipart' => ['multipart/form-data']], normalizationContext: ['groups' => ['clinics:write:create']]),
+        new Post(normalizationContext: ['groups' => ['clinics:write:create']]),
         new Get(normalizationContext: ['groups' => ['clinics:read']]),
         new Delete(security: "is_granted('DELETE_CLINIC', object)"),
         new Patch(securityPostDenormalize: "is_granted('EDIT_CLINIC', object)"),
@@ -70,7 +66,6 @@ use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
 #[ApiFilter(ClinicByManagerFilter::class)]
 class Clinics
 {
-    use TimestampableTrait;
     #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item', 'payment:read:collection'])]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]
@@ -140,17 +135,6 @@ class Clinics
 
     #[ORM\OneToMany(mappedBy: 'clinic', targetEntity: Payments::class)]
     private Collection $payments;
-
-    #[Assert\File(
-        mimeTypes: ['application/pdf', 'image/jpeg', 'image/png'],
-        mimeTypesMessage: 'Please upload a valid PDF, JPG or PNG'
-    )]
-    #[Vich\UploadableField(mapping: 'media_object', fileNameProperty: 'pathKbis')]
-    public ?File $file = null;
-
-    #[Groups(['clinics:read'])]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pathKbis = null;
 
     public function __construct()
     {
@@ -442,18 +426,6 @@ class Clinics
     public function delete(): self
     {
         $this->deletedAt = new \DateTime();
-        return $this;
-    }
-
-    public function getPathKbis(): ?string
-    {
-        return $this->pathKbis;
-    }
-
-    public function setPathKbis(?string $pathKbis): static
-    {
-        $this->pathKbis = $pathKbis;
-
         return $this;
     }
 }
