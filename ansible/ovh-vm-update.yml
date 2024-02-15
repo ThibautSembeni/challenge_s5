@@ -7,14 +7,21 @@
         dest: ~/app
         clone: yes
         update: yes
+        force: yes
     - name: install pip docker
       import_tasks: docker/docker-pip.yml
       become: yes
+    - name: Basic usage
+      ansible.builtin.debug:
+        msg: "'{{ lookup('ansible.builtin.env', 'APP_ENV') }}' is the APP_ENV environment variable."
+    - name: Template a file
+      ansible.builtin.template:
+        src: ./env.j2
+        dest: ~/app/.env
+        mode: "0600"
 
 - hosts: all
   name: Run using a project directory
-  become: true
-  gather_facts: false
   tasks:
     - name: Create and pull compose services
       community.docker.docker_compose:

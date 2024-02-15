@@ -1,36 +1,14 @@
-import React, { Fragment, useEffect, useState } from "react";
-import {
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-  IdentificationIcon,
-} from "@heroicons/react/24/outline";
-import {
-  createClinicSchedules,
-  getAllClinicsByManager,
-  getOneClinics,
-} from "@/api/clinic/Clinic.jsx";
-import { useAuth } from "@/contexts/AuthContext.jsx";
-import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
+import React, {useEffect, useState} from "react";
+import {createClinicSchedules, getAllClinicsByManager, getOneClinics,} from "@/api/clinic/Clinic.jsx";
+import {useAuth} from "@/contexts/AuthContext.jsx";
+import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
-import {
-  CalendarDaysIcon,
-  PencilSquareIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
-
-
 //translation
-import { useTranslation } from "react-i18next";
-
+import {useTranslation} from "react-i18next";
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
-
-
-
-const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
 
 
 export default function Schedule () {
@@ -38,76 +16,21 @@ export default function Schedule () {
   const { t } = useTranslation();
 
   const { user } = useAuth();
-  const { selectedClinic } = useClinic();
+  const { selectedClinic, navigation } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);
-  const [modifyInformation, setModifyInformation] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [modalsOpen, setModalsOpen] = useState({});
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
-  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     if (user && user.uuid) {
       fetchAndSetClinicsData(user.uuid).then(() => setIsLoading(false));
     }
   }, [user.uuid, selectedClinic]);
-
-  useEffect(() => {
-    let newNavigation = [
-      {
-        name: "Accueil",
-        href: "/administration/accueil",
-        icon: HomeIcon,
-        current: false,
-      },
-      {
-        name: "Rendez-vous",
-        href: "/administration/rendez-vous",
-        icon: CalendarDaysIcon,
-        current: false,
-      },
-      {
-        name: "Téléconsultation",
-        href: "/administration/animaux",
-        icon: VideoCameraIcon,
-        current: false,
-      },
-      {
-        name: "Animaux",
-        href: "/administration/animaux",
-        icon: IdentificationIcon,
-        current: false,
-      },
-    ];
-
-    if (user.roles.includes("ROLE_MANAGER")) {
-      newNavigation.push(
-        {
-          name: "Équipe",
-          href: "/administration/equipe",
-          icon: UsersIcon,
-          current: false,
-        },
-        {
-          name: "Calendrier d'ouverture",
-          href: "/administration/calendrier-ouverture",
-          icon: CalendarIcon,
-          current: true,
-        },
-        {
-          name: "Informations cabinet",
-          href: "/administration/informations-cabinet",
-          icon: PencilSquareIcon,
-          current: false,
-        },
-      );
-    }
-    setNavigation(newNavigation);
-  }, [user.roles]);
 
   const fetchAndSetClinicsData = async (userUuid) => {
     if (!userUuid) {
@@ -331,7 +254,6 @@ export default function Schedule () {
 
             <div className="lg:pl-72">
               <TopSideBar
-                navigation={userNavigation}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
               />

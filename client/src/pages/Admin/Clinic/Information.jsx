@@ -1,36 +1,30 @@
-import React, { Fragment, useEffect, useState } from "react";
-import {
-  CalendarDaysIcon,
-  CalendarIcon,
-  HomeIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
+import React, {Fragment, useEffect, useState} from "react";
 import {
   createComplementaryInformation,
   getAllClinicsByManager,
   getOneClinics,
   updateOneClinics,
 } from "@/api/clinic/Clinic.jsx";
-import { useAuth } from "@/contexts/AuthContext.jsx";
-import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
+import {useAuth} from "@/contexts/AuthContext.jsx";
+import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {
-  IdentificationIcon,
-  PencilSquareIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
-import ComplementaryInformationComponent from "@/components/organisms/Veterinarian/ComplementaryInformationComponent.jsx";
+import ComplementaryInformationComponent
+  from "@/components/organisms/Veterinarian/ComplementaryInformationComponent.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
-import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
+
+
 import { useTranslation } from "react-i18next";
 
 const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
 
+import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+
+
 export default function Pet() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { selectedClinic } = useClinic();
+  const { selectedClinic, navigation } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);
   const [modifyInformation, setModifyInformation] = useState(false);
@@ -40,7 +34,6 @@ export default function Pet() {
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
   const [message, setMessage] = useState(null);
-  const [navigation, setNavigation] = useState([]);
 
   useEffect(() => {
     if (user && user.uuid) {
@@ -196,100 +189,48 @@ export default function Pet() {
     }
   };
 
-  useEffect(() => {
-    let newNavigation = [
-      {
-        name: "Accueil",
-        href: "/administration/accueil",
-        icon: HomeIcon,
-        current: false,
-      },
-      {
-        name: "Rendez-vous",
-        href: "/administration/rendez-vous",
-        icon: CalendarDaysIcon,
-        current: false,
-      },
-      {
-        name: "Téléconsultation",
-        href: "/administration/animaux",
-        icon: VideoCameraIcon,
-        current: false,
-      },
-      {
-        name: "Animaux",
-        href: "/administration/animaux",
-        icon: IdentificationIcon,
-        current: false,
-      },
-    ];
-
-    if (user.roles.includes("ROLE_MANAGER")) {
-      newNavigation.push(
-          {
-            name: "Équipe",
-            href: "/administration/equipe",
-            icon: UsersIcon,
-            current: false,
-          },
-          {
-            name: "Calendrier d'ouverture",
-            href: "/administration/calendrier-ouverture",
-            icon: CalendarIcon,
-            current: false,
-          },
-          {
-            name: "Informations cabinet",
-            href: "/administration/informations-cabinet",
-            icon: PencilSquareIcon,
-            current: true,
-          },
-      );
-    }
-    setNavigation(newNavigation);
-  }, [user.roles]);
 
   return (
-      <>
-        {isLoading ? (
-            <Loading />
-        ) : (
-            <>
-              <div>
-                <NotificationToast
-                    show={showNotificationToast}
-                    setShow={setShowNotificationToast}
-                    message={message}
-                    isSuccess={isSuccess}
-                />
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <div>
+            <NotificationToast
+              show={showNotificationToast}
+              setShow={setShowNotificationToast}
+              message={message}
+              isSuccess={isSuccess}
+            />
 
-                <SideBar
-                    navigation={navigation}
-                    teams={veterinariansData}
-                    sidebarOpen={sidebarOpen}
-                    setSidebarOpen={setSidebarOpen}
-                    uuid={user.uuid}
-                />
+            <SideBar
+              navigation={navigation}
+              teams={veterinariansData}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+              uuid={user.uuid}
+            />
 
-                <div className="lg:pl-72">
-                  <TopSideBar
-                      navigation={userNavigation}
-                      sidebarOpen={sidebarOpen}
-                      setSidebarOpen={setSidebarOpen}
-                  />
+            <div className="lg:pl-72">
+              <TopSideBar
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
 
-                  <main className="py-10">
-                    {clinicsData.map((clinic) => (
-                        <div
-                            key={clinic.clinicInfo.uuid}
-                            className="px-4 sm:px-6 lg:px-8"
-                        >
-                          <div className="sm:flex sm:items-center">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <h1 className="text-xl font-semibold leading-6 text-gray-900">
-                                {t("pages.admin.clinic.information.h1")}
-                              </h1>
-                              <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+              <main className="py-10">
+                {clinicsData.map((clinic) => (
+                  <div
+                    key={clinic.clinicInfo.uuid}
+                    className="px-4 sm:px-6 lg:px-8"
+                  >
+                    <div className="sm:flex sm:items-center">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h1 className="text-xl font-semibold leading-6 text-gray-900">
+                          {t("pages.admin.clinic.information.h1")}
+                        </h1>
+                        <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+
                           {clinic.clinicInfo.name}
                         </span>
                             </div>

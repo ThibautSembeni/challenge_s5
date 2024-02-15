@@ -120,20 +120,30 @@ export const createClinics = async ({
   city,
   description,
   manager,
+  file
 }) => {
   try {
-    const clinic = axios.post(`${import.meta.env.VITE_API_URL}/clinics`, {
-      name,
-      phone,
-      email,
-      address,
-      postalCode,
-      city,
-      description,
-      manager,
+    // Création d'un objet FormData
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('address', address);
+    formData.append('postalCode', postalCode);
+    formData.append('city', city);
+    formData.append('description', description);
+    formData.append('manager', manager);
+
+    // Ajouter le fichier si présent
+    if (file) formData.append('file', file);
+
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}/clinics`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
 
-    return { success: true, clinic };
+    return { success: true, clinic: response.data };
   } catch (error) {
     return {
       success: false,
@@ -210,3 +220,21 @@ export const checkClinic = async (uuid) => {
     return { success: false, message: "Une erreur est survenue lors de la récupération des données" };
   }
 }
+
+export const getCountVeterinariesByClinic = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/count`
+    );
+};
+
+export const getCountClinicsByManager = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/manager/count`
+    );
+};
+
+export const getCountScheduledAppointmentsByClinic = async () => {
+    return axiosInstance.get(
+        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/appointments`
+    );
+};

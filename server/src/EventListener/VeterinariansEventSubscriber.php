@@ -12,7 +12,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use JetBrains\PhpStorm\NoReturn;
 use Random\RandomException;
-use Symfony\Component\HttpKernel\Log\Logger;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -92,9 +91,9 @@ class VeterinariansEventSubscriber implements EventSubscriber
         $entityManager->flush();
 
         $email = (new Email())
-            ->from('inscription@vetosia.fr')
+            ->from('inscription@vetcare.fr')
             ->to($veterinarian->getEmail())
-            ->subject('Bienvenue chez VetoSia')
+            ->subject('Bienvenue chez VetCare')
             ->text('Voici ton mot de passe temporaire, je te conseille de le changer dès ta première connexion : '. $password .' Bienvenue chez VetoSia !');
 
         $this->mailer->send($email);

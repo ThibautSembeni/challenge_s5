@@ -79,6 +79,7 @@ class Veterinarians
     #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     private ?Clinics $clinic = null;
 
+    #[Groups(['clinics:read:collection'])]
     #[ORM\OneToMany(mappedBy: 'veterinarian', targetEntity: Appointments::class)]
     private Collection $appointments;
 

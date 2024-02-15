@@ -1,10 +1,10 @@
 import React from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import {useAuth} from "@/contexts/AuthContext";
 import Loading from "@/components/molecules/Loading";
-import { Link } from "react-router-dom";
-import Input from "@/components/atoms/Inputs/Input.jsx";
+import {Link} from "react-router-dom";
 //translation
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
+
 
 export default function Page() {
   //translation
@@ -137,7 +137,7 @@ export default function Page() {
               className={
                 "font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               }
-              to="/login"
+              to="/connexion"
             >
               {t("pages.auth.register.linkLogin")}
             </Link>

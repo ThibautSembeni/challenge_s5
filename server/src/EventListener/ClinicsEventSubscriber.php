@@ -28,6 +28,7 @@ class ClinicsEventSubscriber implements EventSubscriber
         return [
             Events::prePersist,
             Events::preUpdate,
+            Events::postUpdate
         ];
     }
 
@@ -50,6 +51,21 @@ class ClinicsEventSubscriber implements EventSubscriber
         }
 
         $this->handleEvent($args);
+    }
+
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+        $entity = $args->getObject();
+        $entityManager = $args->getObjectManager();
+
+        if ($entity instanceof Clinics && $entity->isIsActif()) {
+            $manager = $entity->getManager();
+            if ($manager && !in_array('ROLE_MANAGER', $manager->getRoles())) {
+                $manager->setRoles(array_merge($manager->getRoles(), ['ROLE_MANAGER']));
+                $entityManager->persist($manager);
+                $entityManager->flush();
+            }
+        }
     }
 
     private function handleEvent(LifecycleEventArgs $args)
@@ -84,7 +100,7 @@ class ClinicsEventSubscriber implements EventSubscriber
     private function sendEmail(Clinics $clinics): void
     {
         $email = (new Email())
-            ->from('confirmation@vetosia.fr')
+            ->from('confirmation@vetcare.fr')
             ->to($clinics->getEmail())
             ->subject('Profil confirmé !')
             ->text('Félécitations, votre profil a été confirmé ! Vous pouvez désormais vous connecter à votre espace personnel.');

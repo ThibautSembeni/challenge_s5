@@ -1,20 +1,8 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-import {
-  getAuthenticated,
-  getLogout,
-  postLogin,
-  postRegister,
-  refreshToken,
-} from "@/api/auth";
-import { useNavigate } from "react-router-dom";
+import React, {createContext, useCallback, useContext, useEffect, useState,} from "react";
+import {getAuthenticated, getLogout, postLogin, postRegister, refreshToken,} from "@/api/auth";
+import {useNavigate} from "react-router-dom";
 import axiosInstance from "@/utils/axiosInstance.js";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 const AuthContext = createContext(null);
 
@@ -74,7 +62,7 @@ const AuthProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 201) {
           setError(null);
-          navigate("/login");
+          navigate("/connexion");
         }
       })
       .catch((err) => {

@@ -1,32 +1,29 @@
-import React, { Fragment, useState } from "react";
-import { CalendarIcon, HomeIcon } from "@heroicons/react/24/outline";
+import React, {Fragment, useState} from "react";
+import {CalendarIcon} from "@heroicons/react/24/outline";
 
 import Sidebar from "@/components/molecules/Sidebar/index.jsx";
-import { useLocation } from "react-router-dom";
 import Schedules from "@/components/organisms/Schedules/index.jsx";
-import { useAuth } from "@/contexts/AuthContext.jsx";
+import {useAuth} from "@/contexts/AuthContext.jsx";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
-import { generateSchedules } from "@/api/schedules/index.jsx";
+import {generateSchedules} from "@/api/schedules/index.jsx";
 import Alert from "@/components/atoms/Alerts/index.jsx";
 import MyServices from "@/pages/Manage/services/index.jsx";
 
 const navigation = [
-  { name: "Dashboard", href: "/manage", icon: HomeIcon, current: true },
   {
-    name: "Calendar",
-    href: "/manage/calendar",
+    name: "Calendrier",
+    href: "/gestion/calendrier",
     icon: CalendarIcon,
     current: false,
   },
   {
     name: "Services",
-    href: "/manage/services",
+    href: "/gestion/services",
     icon: CalendarIcon,
     current: false,
   },
 ];
 
-const userNavigation = [{ name: "Sign out", href: "/logout" }];
 export default function Manage({ type = "dashboard" }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
@@ -37,7 +34,7 @@ export default function Manage({ type = "dashboard" }) {
     e.preventDefault();
     const dataInfo = new FormData(e.currentTarget);
     const data = Object.fromEntries(dataInfo.entries());
-    console.log(data);
+
     generateSchedules(user.veterinarian.uuid, {
       end_date: data.endDate,
       start_date: data.startDate,
@@ -80,7 +77,6 @@ export default function Manage({ type = "dashboard" }) {
         <Sidebar
           navigation={navigation}
           topBarDisplay={true}
-          topBarUserNavigation={userNavigation}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         >

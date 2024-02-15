@@ -109,7 +109,7 @@ export default function Page() {
               className={
                 "font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               }
-              to="/register"
+              to="/inscription"
             >
               {t("pages.auth.login.linkRegister")}
             </Link>
