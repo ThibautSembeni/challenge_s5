@@ -28,8 +28,6 @@ export default function Month({
     [schedules, date],
   );
 
-  console.log(filteredSchedules);
-
   return (
     <>
       <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">

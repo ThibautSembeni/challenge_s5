@@ -20,7 +20,6 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const isAccessTokenExpired = useCallback((access_token) => {
-    console.log(access_token);
     if (!access_token) {
       return true;
     }
@@ -28,7 +27,7 @@ const AuthProvider = ({ children }) => {
     if (!exp) {
       return true;
     }
-    console.log("le token expire à", exp);
+
     const currentTime = Math.round(Date.now() / 1000);
     return currentTime > exp;
   }, []);
@@ -142,7 +141,6 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const renewToken = (access_token) => {
       if (!isLoading && isAccessTokenExpired(access_token)) {
-        console.log("renewToken", "le token est expiré");
         signInSilent();
       }
     };
@@ -152,10 +150,6 @@ const AuthProvider = ({ children }) => {
       clearInterval(intervalId);
     };
   }, []);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <AuthContext.Provider

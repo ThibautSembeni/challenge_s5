@@ -23,7 +23,6 @@ export default function DeleteAccount({ user }) {
     setLoading(true);
     deleteUser(user.uuid)
       .then(async (res) => {
-        console.log(res);
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem('selectedClinic');
