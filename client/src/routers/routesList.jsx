@@ -158,7 +158,7 @@ const list = [
     ],
   },
   {
-    path: "manage",
+    path: "gestion",
     element: <Outlet />,
     roles: ["ROLE_VETERINARIAN"],
     children: [
@@ -168,7 +168,7 @@ const list = [
         roles: ["ROLE_VETERINARIAN"],
       },
       {
-        path: "calendar",
+        path: "calendrier",
         element: <Manage type={"calendar"} />,
         roles: ["ROLE_VETERINARIAN"],
       },
