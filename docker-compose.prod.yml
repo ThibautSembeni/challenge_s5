@@ -18,6 +18,7 @@ services:
       - DATABASE_URL=${DATABASE_URL:-postgresql://app:password@database:5432/app?serverVersion=15&charset=utf8}
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
+      - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN}
   database:
     container_name: database
     image: postgres:latest

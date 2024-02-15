@@ -60,11 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     use Auth;
     use TimestampableTrait;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection', 'feedbacks:read', 'appointments:read:collections'])]
     #[ORM\Column(length: 180)]
     private ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'pets:read:collection', 'pets:read:item', 'users:read:collection', 'payment:read:collection', 'feedbacks:read', 'appointments:read:item', 'schedules:read:collection', 'feedbacks:read', 'appointments:read:collections'])]
     #[ORM\Column(length: 180)]
     private ?string $lastname = null;
 
@@ -82,7 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 
-    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'users:read:collection'])]
+    #[Groups(['user:read', 'user:write', 'user:write:update', 'user:read:full', 'users:read:collection', 'appointments:read:collections'])]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $phone = null;
 

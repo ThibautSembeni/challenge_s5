@@ -34,8 +34,6 @@ function ClinicScheduleComponent({ clinicInformation, admin = false, titleClinic
     }
   }, [clinicInfo.clinicSchedules]);
 
-  console.log(clinicInfo);
-
   // Helper functions
   const totalRows = clinicInfo.latestEnd - clinicInfo.earliestStart;
   const formatTime = date => `${date.getHours()}h${date.getMinutes() === 0 ? '00' : date.getMinutes()}`;

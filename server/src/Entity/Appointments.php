@@ -80,7 +80,7 @@ class Appointments
     private ?Veterinarians $veterinarian = null;
 
 
-    #[Groups(['feedbacks:read', 'appointments:read:item', 'schedules:read:collection'])]
+    #[Groups(['feedbacks:read', 'appointments:read:item', 'schedules:read:collection', 'appointments:read:collections'])]
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     private ?User $userID = null;
 

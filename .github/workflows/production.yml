@@ -40,6 +40,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CORS_ALLOW_ORIGIN: ${{ secrets.CORS_ALLOW_ORIGIN }}
         with:
           known_hosts: |
             ${{secrets.OVH_VM_IP}} ${{secrets.OVH_VM_KNOW_HOST}}
