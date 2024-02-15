@@ -25,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['appointments:read:collections']]),
         new GetCollection(uriTemplate: '/appointments/history', normalizationContext: ['groups' => ['appointments:read:collections']], name: 'get_appointments_history'),
+        new GetCollection(uriTemplate: '/appointments/scheduled', normalizationContext: ['groups' => ['appointments:read:collections']], name: 'get_scheduled_appointments', security: 'is_granted("ROLE_MANAGER")'),
         new Get(normalizationContext: ['groups' => ['appointments:read:item']], name: 'getOneAppointment'),
         new Get(
             uriTemplate: '/appointments/{uuid}/ics',
