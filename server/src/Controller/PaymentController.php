@@ -2,17 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Auth\User;
 use App\Entity\Clinics;
+use App\Entity\Payments;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\PaymentIntent;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Stripe\Stripe;
-use App\Entity\Payments;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -61,7 +58,7 @@ class PaymentController extends AbstractController
             $this->entityManager->flush();
 
             $email = (new Email())
-                ->from('confirmation@vetosia.fr')
+                ->from('confirmation@vetcare.fr')
                 ->to($_ENV['ADMIN_EMAIL'])
                 ->subject('Nouveau paiement')
                 ->text('Un nouveau paiement a été effectué sur le site. Connectez-vous à votre espace admin pour plus de détails.');

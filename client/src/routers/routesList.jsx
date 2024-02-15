@@ -190,11 +190,11 @@ const list = [
     ],
   },
   {
-    path: "login",
+    path: "connexion",
     element: <Login />,
   },
   {
-    path: "register",
+    path: "inscription",
     element: <Register />,
   },
   {
