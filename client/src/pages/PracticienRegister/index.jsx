@@ -54,7 +54,6 @@ export default function PracticienRegister() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(form);
     createVeterinarians(form)
       .then((r) => console.log(r))
       .catch((e) => console.log(e));

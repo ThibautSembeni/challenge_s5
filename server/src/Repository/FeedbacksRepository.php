@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Auth\User;
 use App\Entity\Feedbacks;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,6 +20,19 @@ class FeedbacksRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Feedbacks::class);
+    }
+
+    public function getFeedbacksByVeterinarianId(User $user): array
+    {
+        $veterinarianUuid = $user->getVeterinarian()->getUuid();
+
+        return $this->createQueryBuilder('feedback')
+            ->innerJoin('feedback.appointment', 'appointment')
+            ->innerJoin('appointment.veterinarian', 'veterinarian')
+            ->where('veterinarian.uuid = :veterinarianUuid')
+            ->setParameter('veterinarianUuid', $veterinarianUuid)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

@@ -54,7 +54,6 @@ export default function Week({
     [schedules, date],
   );
 
-  console.log(filteredSchedules);
   useEffect(() => {
     // Set the container scroll position based on the current time.
     const currentMinute = new Date().getHours() * 60;

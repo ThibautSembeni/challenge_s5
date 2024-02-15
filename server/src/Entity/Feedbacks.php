@@ -9,6 +9,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use App\Controller\Back\Clinics\FeedbacksController;
+use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
 use App\Repository\FeedbacksRepository;
 use App\Entity\Appointments;
 use Doctrine\DBAL\Types\Types;
@@ -24,6 +26,13 @@ use App\Entity\Traits\TimestampableTrait;
     validationContext: ['groups' => ['feedbacks:write:item', 'feedbacks:write:modify']],
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['feedbacks:read']]),
+        new GetCollection(
+            uriTemplate: '/feedbacks/veterinarians/',
+            controller: FeedbacksController::class,
+            name: 'get_feedbacks_veterinarians',
+            security: "is_granted('ROLE_VETERINARIAN')",
+            securityMessage: "You are not allowed to access this resource!",
+        ),
         new Post(denormalizationContext: ['groups' => ['feedbacks:write']], normalizationContext: ['groups' => ['feedbacks:read']], validationContext: ['groups' => ['feedbacks:write:item']]),
         new Get(normalizationContext: ['groups' => ['feedbacks:read']]),
         new Patch(denormalizationContext: ['groups' => ['feedbacks:update']], normalizationContext: ['groups' => ['feedbacks:read']], validationContext: ['groups' => ['feedbacks:write:modify']]),
@@ -37,6 +46,7 @@ class Feedbacks
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['feedbacks:read'])]
     private ?int $id = null;
 
     #[Assert\Range(min: 1, max: 5, groups: ['feedbacks:write:item'])]

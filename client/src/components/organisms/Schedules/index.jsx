@@ -14,6 +14,5 @@ export default function Schedules({ view = "week", addEvent, veterinarian }) {
     fetchSchedules();
   }, []);
 
-  console.log(schedules);
   return <Calendar view={view} addEvent={addEvent} schedules={schedules} />;
 }

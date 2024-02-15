@@ -146,8 +146,6 @@ export default function Schedule () {
       clinic,
     });
 
-    console.log(createClinic);
-
     if (createClinic.success) {
       await fetchAndSetClinicsData(user.uuid);
       setModalsOpen({});

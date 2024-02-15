@@ -154,8 +154,6 @@ export default function Account() {
     return <Loading />;
   }
 
-  console.log(user);
-
   return (
     <>
       <Navbar />
