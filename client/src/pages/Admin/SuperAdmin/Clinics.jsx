@@ -237,7 +237,6 @@ export default function Clinics() {
 
             <div className="lg:pl-72">
               <TopSideBar
-                navigation={userNavigation}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
               />
