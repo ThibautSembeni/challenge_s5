@@ -1,8 +1,11 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
+//translation
+import { useTranslation } from "react-i18next";
 
 const PracticienSection = forwardRef(
   ({ clinic, veterinarian, onMouseEnter, onMouseLeave, className }, ref) => {
+    const { t } = useTranslation();
     return (
       <Link to={`/veterinaire/${veterinarian.uuid}`}>
         <article
@@ -23,7 +26,7 @@ const PracticienSection = forwardRef(
                     </a>
                   </p>
                   <p className="text-gray-600">
-                    Spécialité : {veterinarian.specialties}
+                    {t("components.organisms.search.practicienSection.p")} {veterinarian.specialties}
                   </p>
                 </div>
               </div>

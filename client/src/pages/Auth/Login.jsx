@@ -3,10 +3,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import Loading from "@/components/molecules/Loading.jsx";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+//translation
+import { useTranslation } from "react-i18next";
 
 export default function Page() {
+
   const { login, isLoading, error, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  //translation
+  const { t } = useTranslation();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,7 +30,7 @@ export default function Page() {
             alt="Your Company"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Se connecter à votre compte
+            {t("pages.auth.login.h2")}
           </h2>
         </div>
 
@@ -38,7 +43,7 @@ export default function Page() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Adresse email
+                  {t("pages.auth.login.labelEmail")}
                 </label>
                 <div className="mt-2">
                   <input
@@ -59,14 +64,14 @@ export default function Page() {
                     htmlFor="password"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
-                    Mot de passe
+                    {t("pages.auth.login.labelPassword")}
                   </label>
                   <div className="text-sm leading-6">
                     <a
                       href="#"
                       className="font-semibold text-indigo-600 hover:text-indigo-500"
                     >
-                      Mot de passe oublié?
+                      {t("pages.auth.login.divHrefMotDePasseOublie")}
                     </a>
                   </div>
                 </div>
@@ -92,21 +97,21 @@ export default function Page() {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Se connecter
+                  {t("pages.auth.login.buttonSubmit")}
                 </button>
               </div>
             </form>
           </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Nouveau sur VetCare ?{" "}
+            {t("pages.auth.login.pNouveau")} {" "}
             <Link
               className={
                 "font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               }
               to="/inscription"
             >
-              S'inscrire
+              {t("pages.auth.login.linkRegister")}
             </Link>
           </p>
         </div>

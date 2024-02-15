@@ -1,22 +1,20 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {CalendarIcon, HomeIcon, UsersIcon} from "@heroicons/react/24/outline";
 import {getAllClinicsByManager, getOneClinics} from "@/api/clinic/Clinic.jsx";
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
 import TeamSectionComponent from "@/components/organisms/Veterinarian/TeamSectionComponent.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
-import {
-  CalendarDaysIcon,
-  IdentificationIcon,
-  PencilSquareIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/24/outline/index.js";
 import Modal from "@/components/organisms/Modal/Modal.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 import {createVeterinarianByClinic} from "@/api/clinic/Veterinarian.jsx";
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+import {useTranslation} from "react-i18next";
+
 
 export default function Teams() {
+
+  //translation
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { selectedClinic, navigation } = useClinic();
   const [clinicsData, setClinicsData] = useState([]);
@@ -194,9 +192,11 @@ export default function Teams() {
                   <div className="mb-20">
                     <div className="sm:flex sm:items-center">
                       <div className="sm:flex-auto">
+
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                          Vétérinaires
+                          {t("pages.admin.clinic.teams.h1")}
                         </h1>
+
                       </div>
                       <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <button
@@ -204,16 +204,18 @@ export default function Teams() {
                           onClick={openModal}
                           className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                          Ajouter un vétérinaire
+                          {t("pages.admin.clinic.teams.buttonAddVeterinaire")}
                         </button>
                       </div>
                     </div>
 
+
                     <Modal
                       isOpen={isModalOpen}
                       onClose={closeModal}
-                      title="Ajouter des vétérinaires au cabinet"
+                      title={t('pages.admin.clinic.teams.modalAttrTitle')}
                     >
+
                       <form onSubmit={handleSubmit}>
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                           {inputClinic && (
@@ -244,11 +246,13 @@ export default function Teams() {
                             </div>
                           )}
                           <div className="sm:col-span-3">
+
                             <label
                               htmlFor="firstname"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                              Prénom
+                              {t("pages.admin.clinic.teams.labelFirstName")}
+
                             </label>
                             <div className="mt-2">
                               <input
@@ -263,11 +267,13 @@ export default function Teams() {
                           </div>
 
                           <div className="sm:col-span-3">
+
                             <label
                               htmlFor="lastname"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                              Nom
+                              {t("pages.admin.clinic.teams.labelLastName")}
+
                             </label>
                             <div className="mt-2">
                               <input
@@ -282,11 +288,13 @@ export default function Teams() {
                           </div>
 
                           <div className="col-span-full">
+
                             <label
                               htmlFor="email"
                               className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                              Email
+                              {t("pages.admin.clinic.teams.labelEmail")}
+
                             </label>
                             <div className="mt-2">
                               <input
@@ -305,14 +313,14 @@ export default function Teams() {
                             type="submit"
                             className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
                           >
-                            Enregistrer
+                            {t("pages.admin.clinic.teams.buttonSubmit")}
                           </button>
                           <button
                             type="button"
                             className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
                             onClick={closeModal}
                           >
-                            Annuler
+                            {t("pages.admin.clinic.teams.buttonCancel")}
                           </button>
                         </div>
                       </form>

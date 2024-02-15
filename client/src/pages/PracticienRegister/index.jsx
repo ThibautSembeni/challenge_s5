@@ -2,8 +2,11 @@ import Input from "@/components/atoms/Inputs/Input.jsx";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import { useEffect, useState } from "react";
 import { createVeterinarians } from "@/api/clinic/Veterinarian.jsx";
-
+//translation
+import { useTranslation } from "react-i18next";
 export default function PracticienRegister() {
+  //translation
+  const { t } = useTranslation();
   const [form, setForm] = useState({});
   const inputs = [
     {
@@ -75,21 +78,18 @@ export default function PracticienRegister() {
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             <div className="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-blue-100 ring-1 ring-blue-900/10 lg:w-1/2"></div>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-              La nouvelle génération de solutions pour les vétérinaires
+              {t("pages.praticienRegister.index.h2")}
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Équipez vous de VétoLib et gagnez du temps au quotidien, gagnez en
-              confort de travail et renforcez la communication avec vos patients
-              !
+              {t("pages.praticienRegister.index.p")}
             </p>
             <ul className="mt-10 space-y-4 text-base leading-7 text-gray-600">
-              <li> Des solutions tout-en-un, conçues avec vous</li>
+              <li>{t("pages.praticienRegister.index.li1")}</li>
               <li>
                 {" "}
-                L'innovation au coeur de notre ADN Un service client haut de
-                gamme
+                {t("pages.praticienRegister.index.li2")}
               </li>
-              <li> Le plus haut niveau de protection des données de santé</li>
+              <li> {t("pages.praticienRegister.index.li3")}</li>
             </ul>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function PracticienRegister() {
                 onClick={handleSubmit}
                 disabled={canBeSubmitted}
               >
-                Sauvegarder
+                {t("pages.praticienRegister.index.button")}
               </Button>
             </div>
           </div>

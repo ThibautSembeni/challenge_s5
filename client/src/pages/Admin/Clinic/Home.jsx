@@ -1,13 +1,5 @@
 import {useEffect, useState} from "react";
-import {
-  BookOpenIcon,
-  BuildingOfficeIcon,
-  CalendarIcon,
-  HomeIcon,
-  PencilSquareIcon,
-  UsersIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/24/outline";
+import {BookOpenIcon, BuildingOfficeIcon, UsersIcon,} from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {
   getAllClinicsByManager,
@@ -19,12 +11,12 @@ import {
 import {useAuth} from "@/contexts/AuthContext.jsx";
 import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {CalendarDaysIcon, IdentificationIcon,} from "@heroicons/react/24/outline/index.js";
 import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
 
 export default function Home() {
   const {user} = useAuth();
   const {selectedClinic, navigation} = useClinic();
+
   const [clinicsData, setClinicsData] = useState([]);
   const [veterinariansData, setVeterinariansData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -151,10 +143,11 @@ export default function Home() {
 
               <main className="py-10">
                 <div className="px-4 sm:px-6 lg:px-8">
+
                   {user.roles.includes("ROLE_MANAGER") && (
                     <div className="mb-20">
                       <h3 className="text-base font-semibold leading-6 text-gray-900">
-                        Statistiques
+                        {t("pages.admin.clinic.home.h3")}
                       </h3>
 
                       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -169,6 +162,7 @@ export default function Home() {
                                   className="h-6 w-6 text-white"
                                   aria-hidden="true"
                                 />
+
                               </div>
                               <p className="ml-16 truncate text-sm font-medium text-gray-500">
                                 {item.name}
@@ -178,7 +172,9 @@ export default function Home() {
                               <p className="text-2xl font-semibold text-gray-900">
                                 {item.stat}
                               </p>
+
                               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6"></div>
+
                             </dd>
                           </div>
                         ))}
@@ -187,6 +183,8 @@ export default function Home() {
                   )}
 
                   <div className="mb-20">
+
+
                     {clinicsData.map((clinic) => (
                       <div key={clinic.clinicInfo.uuid}>
                         <CalendarOpenCloseComponent

@@ -1,4 +1,8 @@
+//translation
+import { useTranslation } from "react-i18next";
 export default function Example() {
+    //translation
+  const { t } = useTranslation();
   return (
     <>
       <main className="relative isolate h-[100vh] w-full">
@@ -9,11 +13,11 @@ export default function Example() {
         />
         <div className="mx-auto max-w-7xl px-6 py-32 text-center sm:py-40 lg:px-8">
           <p className="text-base font-semibold leading-8 text-white">404</p>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">Page not found</h1>
-          <p className="mt-4 text-base text-white/70 sm:mt-6">Désolé, la page demandée n'existe pas</p>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">{t("pages.notFound404.h1")}</h1>
+          <p className="mt-4 text-base text-white/70 sm:mt-6">{t("pages.notFound404.p")}.</p>
           <div className="mt-10 flex justify-center">
             <a href="/" className="text-sm font-semibold leading-7 text-white">
-              <span aria-hidden="true">&larr;</span> Retour à l'accueil
+              <span aria-hidden="true">&larr;</span> {t("pages.notFound404.aSpan")}
             </a>
           </div>
         </div>
