@@ -1,17 +1,22 @@
-import React from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import React from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
 import { useTranslation } from "react-i18next";
 
-import {createPayments} from "@/api/payments/Payments.jsx";
-import { useNavigate } from 'react-router-dom';
+import { createPayments } from "@/api/payments/Payments.jsx";
+import { useNavigate } from "react-router-dom";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
 
-const stripePromise = loadStripe(import.meta.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -25,14 +30,14 @@ const CheckoutForm = () => {
     const cardElement = elements.getElement(CardElement);
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
+      type: "card",
       card: cardElement,
     });
 
     if (error) {
-      console.log('[error]', error);
+      console.log("[error]", error);
     } else {
-      console.log('[PaymentMethod]', paymentMethod);
+      console.log("[PaymentMethod]", paymentMethod);
       // Vous pouvez ici envoyer le paymentMethod.id à votre serveur pour finaliser le paiement.
     }
   };
@@ -48,8 +53,10 @@ const CheckoutForm = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="p-4">
-          <p className="mb-4">{t("components.organisms.payment.stripePayment.p")}</p>
-          <CardElement/>
+          <p className="mb-4">
+            {t("components.organisms.payment.stripePayment.p")}
+          </p>
+          <CardElement />
         </div>
 
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -63,7 +70,6 @@ const CheckoutForm = () => {
         </div>
       </form>
     </>
-
   );
 };
 
