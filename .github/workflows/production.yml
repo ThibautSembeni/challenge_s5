@@ -25,8 +25,8 @@ jobs:
 #          ssh-host: ${{secrets.OVH_VM_IP}}
       - name: Set environment variables from secrets
         run: |
-          echo "APP_ENV=${{ secrets.SECRET_APP_ENV }}" >> $GITHUB_ENV
-          echo "APP_SECRET=${{ secrets.SECRET_APP_SECRET }}" >> $GITHUB_ENV
+          echo "APP_ENV=${{ secrets.APP_ENV }}" >> $GITHUB_ENV
+          echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> $GITHUB_ENV
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
           echo "SERVER_NAME=${{ secrets.SERVER_NAME }}" >> $GITHUB_ENV
 
