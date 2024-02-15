@@ -28,6 +28,7 @@ jobs:
           echo "APP_ENV=${{ secrets.SECRET_APP_ENV }}" >> $GITHUB_ENV
           echo "APP_SECRET=${{ secrets.SECRET_APP_SECRET }}" >> $GITHUB_ENV
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "SERVER_NAME=${{ secrets.SERVER_NAME }}" >> $GITHUB_ENV
 
       - name: Update docker compose image
         uses: dawidd6/action-ansible-playbook@v2
