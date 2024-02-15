@@ -14,8 +14,6 @@
 
 - hosts: all
   name: Run using a project directory
-  become: true
-  gather_facts: false
   tasks:
     - name: Create and pull compose services
       community.docker.docker_compose:
