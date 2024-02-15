@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from "react";
-import {CalendarIcon} from "@heroicons/react/24/outline";
+import {CalendarIcon, ChatBubbleLeftEllipsisIcon} from "@heroicons/react/24/outline";
 
 import Sidebar from "@/components/molecules/Sidebar/index.jsx";
 import Schedules from "@/components/organisms/Schedules/index.jsx";
@@ -8,6 +8,7 @@ import Modal from "@/components/organisms/Modal/Modal.jsx";
 import {generateSchedules} from "@/api/schedules/index.jsx";
 import Alert from "@/components/atoms/Alerts/index.jsx";
 import MyServices from "@/pages/Manage/services/index.jsx";
+import Comments from "@/pages/Manage/comments/index.jsx";
 
 const navigation = [
   {
@@ -22,9 +23,15 @@ const navigation = [
     icon: CalendarIcon,
     current: false,
   },
+  {
+    name: "Commentaires",
+    href: "/gestion/commentaires",
+    icon: ChatBubbleLeftEllipsisIcon,
+    current: false,
+  },
 ];
 
-export default function Manage({ type = "dashboard" }) {
+export default function Manage({ type = "calendar" }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
   const [openModal, setOpenModal] = useState(false);
@@ -159,6 +166,7 @@ export default function Manage({ type = "dashboard" }) {
             </>
           )}
           {type === "services" && <MyServices />}
+          {type === "comments" && <Comments />}
         </Sidebar>
       </div>
     </>

@@ -187,6 +187,11 @@ const list = [
         element: <Manage type={"services"} />,
         roles: ["ROLE_VETERINARIAN"],
       },
+      {
+        path: "commentaires",
+        element: <Manage type={"comments"} />,
+        roles: ["ROLE_VETERINARIAN"],
+      },
     ],
   },
   {
