@@ -24,6 +24,8 @@ import BookingAppointment from "@/pages/BookingAppointment/index.jsx";
 import { Outlet } from "react-router-dom";
 import Logout from "@/pages/Auth/Logout.jsx";
 import Manage from "@/pages/Manage/index.jsx";
+import ClinicRegisterPayment from "@/pages/PracticienRegister/ClinicRegisterPayment.jsx";
+import ClinicRegisterPaymentConfirmation from "@/pages/PracticienRegister/ClinicRegisterPaymentConfirmation.jsx";
 
 const list = [
   {
@@ -41,6 +43,14 @@ const list = [
       {
         path: "inscription/cabinet/information",
         element: <ClinicRegisterInformations />,
+      },
+      {
+        path: "inscription/cabinet/paiement",
+        element: <ClinicRegisterPayment />,
+      },
+      {
+        path: "inscription/cabinet/confirmation",
+        element: <ClinicRegisterPaymentConfirmation />,
       },
       {
         path: "a-propos",
