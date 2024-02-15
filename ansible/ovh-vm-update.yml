@@ -29,4 +29,20 @@
         files: docker-compose.prod.yml
         pull: true
         state: present
+        build: true
       register: output
+    - name: Run JWT key generation
+      community.docker.docker_container_exec:
+        container: php
+        command: php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
+      register: result
+    - name: Create database if not exists
+      community.docker.docker_container_exec:
+        container: php
+        command: php bin/console doctrine:database:create --if-not-exists
+      register: result
+    - name: Execute migrations
+      community.docker.docker_container_exec:
+        container: php
+        command: php bin/console doctrine:migrations:migrate --no-interaction
+      register: result

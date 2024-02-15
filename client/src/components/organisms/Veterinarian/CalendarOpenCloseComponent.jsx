@@ -4,8 +4,13 @@ import {
 } from '@heroicons/react/24/outline'
 import {deleteClinicsSchedules} from "@/api/clinic/Clinic.jsx";
 import NotificationToast from "@/components/atoms/Notifications/NotificationToast.jsx";
+//translation
+import { useTranslation } from "react-i18next";
+
 
 function ClinicScheduleComponent({ clinicInformation, admin = false, titleClinic = false }) {
+    //translation
+    const { t } = useTranslation();
   const [clinicInfo, setClinicInfo] = useState(clinicInformation);
   const [showNotificationToast, setShowNotificationToast] = useState(false);
   const [isSuccess, setIsSuccess] = useState(null);
@@ -82,16 +87,18 @@ function ClinicScheduleComponent({ clinicInformation, admin = false, titleClinic
 
       <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0 mb-4">
+
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Horaires d'ouverture</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t("components.organisms.vetenarian.calendarOpenClose.h2")}</h2>
             {titleClinic && (
               <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
                 {clinicInfo.clinicInfo.name}
               </span>
             )}
           </div>
+
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Attention, ces horaires peuvent varier en fonction des jours fériés.
+            {t("components.organisms.vetenarian.calendarOpenClose.p")}
           </p>
         </div>
         <div className="flex h-full flex-col">
@@ -100,25 +107,25 @@ function ClinicScheduleComponent({ clinicInformation, admin = false, titleClinic
               <div className="sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8"
               >
                 <div className="grid grid-cols-7 text-sm leading-6 text-gray-500 sm:hidden">
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">L</button>
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">M</button>
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">M</button>
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">J</button>
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">V</button>
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">S</button>
-                  <button type="button" className="flex flex-col items-center pb-3 pt-2">D</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonLundi")}</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonMardi")}</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonMercredi")}</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonJeudi")}</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonVendredi")}</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonSamedi")}</button>
+                  <button type="button" className="flex flex-col items-center pb-3 pt-2">{t("components.organisms.vetenarian.calendarOpenClose.buttonDimanche")}</button>
                 </div>
 
                 <div
                   className="-mr-px hidden grid-cols-7 divide-x divide-gray-100 border-r border-gray-100 text-sm leading-6 text-gray-500 sm:grid">
                   <div className="col-end-1 w-14"/>
-                  <div className="flex items-center justify-center py-3">Lundi</div>
-                  <div className="flex items-center justify-center py-3">Mardi</div>
-                  <div className="flex items-center justify-center py-3">Mercredi</div>
-                  <div className="flex items-center justify-center py-3">Jeudi</div>
-                  <div className="flex items-center justify-center py-3">Vendredi</div>
-                  <div className="flex items-center justify-center py-3">Samedi</div>
-                  <div className="flex items-center justify-center py-3">Dimanche</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Lundi")}</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Mardi")}</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Mercredi")}</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Jeudi")}</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Vendredi")}</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Samedi")}</div>
+                  <div className="flex items-center justify-center py-3">{t("components.organisms.vetenarian.calendarOpenClose.Dimanche")}</div>
                 </div>
               </div>
               <div className="flex flex-auto">

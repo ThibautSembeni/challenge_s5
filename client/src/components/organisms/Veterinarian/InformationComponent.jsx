@@ -1,10 +1,14 @@
 import React from 'react';
+//translation
+import { useTranslation } from "react-i18next";
 
 function InformationComponent({ clinicDescription, informations }) {
+    //translation
+    const { t } = useTranslation();
   return (
     <div className="mx-auto mt-12 max-w-7xl px-6 lg:px-8">
       <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">À propos</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t("components.organisms.vetenarian.informationComponent.h2")}</h2>
         <div className="mt-6 flex flex-col gap-x-8 gap-y-20 xl:flex-row">
           <div className="xl:w-full xl:max-w-2xl xl:flex-auto">
             <p className="text-xl leading-8 text-gray-600">

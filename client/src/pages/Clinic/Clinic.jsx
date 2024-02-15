@@ -12,6 +12,8 @@ import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/Cale
 import TeamSectionComponent from "@/components/organisms/Veterinarian/TeamSectionComponent.jsx";
 import TestimonialsComponent from "@/components/organisms/Veterinarian/TestimonialsComponent.jsx";
 import MapInfo from "@/components/molecules/Map/MapInfo.jsx";
+//translation
+import { useTranslation } from "react-i18next";
 
 const featuredTestimonial = {
   body: "Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.",
@@ -78,6 +80,8 @@ const testimonials = [
   ],
 ];
 export default function ClinicProfil() {
+  //translation
+  const { t } = useTranslation();
   const { uuid } = useParams();
   const [clinicInfo, setClinicInfo] = useState({
     clinic: null,
@@ -156,7 +160,7 @@ export default function ClinicProfil() {
             <div className="mx-auto mt-12 max-w-7xl px-6 lg:px-8 h-[50vh]">
               <div className="mx-auto max-w-2xl lg:mx-0 mb-4">
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                  Nous trouver
+                  {t("pages.clinic.clinicFile.h2")}
                 </h2>
               </div>
               <div className="w-full flex border-2 border-gray-900/5 rounded-3xl">

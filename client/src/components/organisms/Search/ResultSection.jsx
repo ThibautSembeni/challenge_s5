@@ -13,12 +13,15 @@ import {
 import { getAllClinics } from "@/api/clinic/Clinic.jsx";
 import Pagination from "@/components/molecules/Pagination/index.jsx";
 import { useLocation } from "react-router-dom";
+//translation
+import { useTranslation } from "react-i18next";
 function useQuery() {
   const { search } = useLocation();
 
   return useMemo(() => new URLSearchParams(search), [search]);
 }
 export default function ResultSection({ city }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [clinics, setClinics] = useState([]);
   const [clinicId, setClinicId] = useState(null);
@@ -76,14 +79,13 @@ export default function ResultSection({ city }) {
     <div className="bg-white py-10 sm:py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Vétérinaires à : <span className="text-blue-500">{city}</span>
+          {t("components.organisms.search.resultSection.h2")} <span className="text-blue-500">{city}</span>
         </h2>
         <p className="mt-2 text-lg leading-8 text-gray-600">
-          Trouvez à {city} un vétérinaire proposant la prise de rendez-vous en
-          ligne
+          {t("components.organisms.search.resultSection.pTrouvez")} {city} {t("components.organisms.search.resultSection.pVet")}
         </p>
         <p className="mt-2 text-lg leading-8 text-black">
-          {clinics["hydra:totalItems"]} résultats
+          {clinics["hydra:totalItems"]} {t("components.organisms.search.resultSection.pResultat")}
         </p>
 
         {loading ? (
@@ -112,7 +114,7 @@ export default function ResultSection({ city }) {
                   </Fragment>
                 ))
               ) : (
-                <div className="text-center text-gray-500">Aucun résultat</div>
+                <div className="text-center text-gray-500">{t("components.organisms.search.resultSection.pAucunResultat")}</div>
               )}
             </div>{" "}
             <SideMap

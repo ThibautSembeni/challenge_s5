@@ -10,6 +10,8 @@ import {
 } from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {
+    CalendarDaysIcon,
+    IdentificationIcon,
     getAllClinicsByManager,
     getOneClinics,
     getCountVeterinariesByClinic,
@@ -19,11 +21,9 @@ import {
 import { useAuth } from "@/contexts/AuthContext.jsx";
 import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {
-    CalendarDaysIcon,
-    IdentificationIcon,
-} from "@heroicons/react/24/outline/index.js";
-import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
+import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
+import {useTranslation} from "react-i18next";
+
 
 const userNavigation = [{ name: "Déconnexion", href: "/logout" }];
 
@@ -42,6 +42,7 @@ const people = [
 export default function Home() {
     const { user } = useAuth();
     const { selectedClinic } = useClinic();
+    const { t } = useTranslation();
     const [clinicsData, setClinicsData] = useState([]);
     const [veterinariansData, setVeterinariansData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

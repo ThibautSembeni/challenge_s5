@@ -1,6 +1,8 @@
 import Input from "@/components/atoms/Inputs/Input.jsx";
 import { Button } from "@/components/atoms/Buttons/Button.jsx";
 import React from "react";
+//translation
+import { useTranslation } from "react-i18next";
 
 export default function UpdateUserInfo({
   onSubmit,
@@ -8,11 +10,13 @@ export default function UpdateUserInfo({
   disabledSubmit,
   onChange,
 }) {
+  //translation
+  const { t } = useTranslation();
   return (
     <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>
         <h2 className="text-base font-semibold leading-7">
-          Informations personnelles
+          {t("components.organisms.account.updatedUserInfo.h2")}
         </h2>
       </div>
 
@@ -40,7 +44,7 @@ export default function UpdateUserInfo({
             btnType={"submit"}
             disabled={disabledSubmit}
           >
-            Sauvegarder
+            {t("components.organisms.account.updatedUserInfo.button")}
           </Button>
         </div>
       </form>
