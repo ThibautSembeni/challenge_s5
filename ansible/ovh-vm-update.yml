@@ -29,7 +29,7 @@
     - name: Install dependencies
       community.docker.docker_container_exec:
         container: php
-        command: composer install -o --verbose
+        command: composer install --no-dev --optimize-autoloader
       register: result
     - name: Create and pull compose services
       community.docker.docker_compose:
