@@ -103,4 +103,4 @@ jobs:
         run: echo "DEPLOYMENT_URL=$(vercel --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_ENV
 
       - name: Promote deployment
-        run: vercel promote ${{ env.DEPLOYMENT_URL }} --yes --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel alias ${{ env.DEPLOYMENT_URL }} vetcare.thibautsbn.fr --yes --token=${{ secrets.VERCEL_TOKEN }}

@@ -46,6 +46,7 @@ jobs:
           STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PUBLIC_APP_URL: ${{ secrets.PUBLIC_APP_URL }}
         with:
           known_hosts: |
             ${{secrets.OVH_VM_IP}} ${{secrets.OVH_VM_KNOW_HOST}}
