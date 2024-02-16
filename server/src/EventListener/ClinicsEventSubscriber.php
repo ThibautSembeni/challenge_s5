@@ -3,11 +3,13 @@
 namespace App\EventListener;
 
 use App\Entity\Clinics;
+use App\Event\ClinicActivatedEvent;
 use App\Service\Geocoder;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -16,11 +18,13 @@ class ClinicsEventSubscriber implements EventSubscriber
 {
     private MailerInterface $mailer;
     private Geocoder $geocoderService;
+    private $dispatcher;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(MailerInterface $mailer, EventDispatcherInterface $dispatcher)
     {
         $this->geocoderService = new Geocoder();
         $this->mailer = $mailer;
+        $this->dispatcher = $dispatcher;
     }
 
     public function getSubscribedEvents()
@@ -56,15 +60,9 @@ class ClinicsEventSubscriber implements EventSubscriber
     public function postUpdate(LifecycleEventArgs $args)
     {
         $entity = $args->getObject();
-        $entityManager = $args->getObjectManager();
-
         if ($entity instanceof Clinics && $entity->isIsActif()) {
-            $manager = $entity->getManager();
-            if ($manager && !in_array('ROLE_MANAGER', $manager->getRoles())) {
-                $manager->setRoles(array_merge($manager->getRoles(), ['ROLE_MANAGER']));
-                $entityManager->persist($manager);
-                $entityManager->flush();
-            }
+            $event = new ClinicActivatedEvent($entity);
+            $this->dispatcher->dispatch($event, ClinicActivatedEvent::NAME);
         }
     }
 
@@ -91,6 +89,14 @@ class ClinicsEventSubscriber implements EventSubscriber
                 $entity->setLongitude($coordinates[1]);
             }
 
+        }
+    }
+
+    private function updateRoles(Clinics $clinics)
+    {
+        $manager = $clinics->getManager();
+        if ($manager && !in_array('ROLE_MANAGER', $manager->getRoles())) {
+            $manager->setRoles(array_merge($manager->getRoles(), ['ROLE_MANAGER']));
         }
     }
 
