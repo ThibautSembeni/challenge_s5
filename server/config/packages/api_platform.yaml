@@ -2,6 +2,11 @@ api_platform:
     title: Hello API Platform
     version: 1.0.0
 
+    enable_docs: false
+    enable_swagger: false
+    enable_swagger_ui: false
+    enable_re_doc: false
+
     defaults:
         stateless: true
         cache_headers:

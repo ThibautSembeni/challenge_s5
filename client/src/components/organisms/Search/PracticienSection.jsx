@@ -1,13 +1,14 @@
 import { forwardRef } from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 //translation
 import { useTranslation } from "react-i18next";
+import { LinkBase } from "@/components/atoms/Links/Link.jsx";
 
 const PracticienSection = forwardRef(
   ({ clinic, veterinarian, onMouseEnter, onMouseLeave, className }, ref) => {
     const { t } = useTranslation();
     return (
-      <Link to={`/veterinaire/${veterinarian.uuid}`}>
+      <LinkBase to={`/veterinaire/${veterinarian.uuid}`} component={RouterLink}>
         <article
           ref={ref}
           key={veterinarian["@id"]}
@@ -20,10 +21,10 @@ const PracticienSection = forwardRef(
               <div className="relative flex items-center gap-x-4">
                 <div className="text-sm leading-6">
                   <p className="font-semibold text-gray-900">
-                    <a href={veterinarian["@id"]}>
+                    <LinkBase to={veterinarian["@id"]} component={RouterLink}>
                       <span className="absolute inset-0" />
                       {veterinarian.lastname} {veterinarian.firstname}
-                    </a>
+                    </LinkBase>
                   </p>
                   <p className="text-gray-600">{veterinarian.specialties}</p>
                 </div>
@@ -36,7 +37,7 @@ const PracticienSection = forwardRef(
             </div>
           </div>
         </article>
-      </Link>
+      </LinkBase>
     );
   },
 );

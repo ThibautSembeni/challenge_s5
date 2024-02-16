@@ -57,6 +57,10 @@ RUN composer install --no-dev --no-scripts
 COPY . /srv/app/
 
 RUN APP_ENV=prod composer run auto-scripts
+RUN chmod -R 777 /srv/app/var/cache
+RUN mkdir -p /srv/app/public/media/kbis
+RUN chmod -R 777 /srv/app/public/media/kbis
+
 
 #<<<<<<<<<<End: PHP-FPM Image Target>>>>>>>>>>#
 

@@ -81,8 +81,9 @@ export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <a
-                                href={item.href}
+                              <LinkBase
+                                to={item.href}
+                                component={RouterLink}
                                 className={classNames(
                                   item.current
                                     ? "bg-gray-50 text-indigo-600"
@@ -100,7 +101,7 @@ export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
                                   aria-hidden="true"
                                 />
                                 {item.name}
-                              </a>
+                              </LinkBase>
                             </li>
                           ))}
                         </ul>
@@ -129,8 +130,9 @@ export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
-                        href={item.href}
+                      <LinkBase
+                        to={item.href}
+                        component={RouterLink}
                         className={classNames(
                           item.current
                             ? "bg-gray-50 text-indigo-600"
@@ -154,7 +156,7 @@ export default function Sidebar({ navigation, sidebarOpen, setSidebarOpen }) {
                             {item.clinicStayValidation}
                           </span>
                         )}
-                      </a>
+                      </LinkBase>
                     </li>
                   ))}
                 </ul>

@@ -2,7 +2,8 @@ import logo from "@/assets/images/logo.png";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-
+import { LinkBase } from "@/components/atoms/Links/Link.jsx";
+import { Link as RouterLink } from "react-router-dom";
 export default function Footer() {
   const {
     t,
@@ -55,12 +56,13 @@ export default function Footer() {
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.solutions.map((item) => (
                     <li key={item.name}>
-                      <a
-                        href={item.href}
+                      <LinkBase
+                        to={item.href}
+                        component={RouterLink}
                         className="text-sm leading-6 text-gray-600 hover:text-gray-900"
                       >
                         {item.name}
-                      </a>
+                      </LinkBase>
                     </li>
                   ))}
                 </ul>
