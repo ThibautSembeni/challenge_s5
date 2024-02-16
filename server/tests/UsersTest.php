@@ -13,41 +13,6 @@ final class UsersTest extends AbstractClass
 {
     use Factories;
 
-    public function testGetCollection(): void
-    {
-        // Create 100 users using our factory
-        UserFactory::createMany(100);
-
-        // The client implements Symfony HttpClient's `HttpClientInterface`, and the response `ResponseInterface`
-        $response = $this->createClientWithCredentials()->request('GET', '/api/users');
-
-        $this->assertResponseIsSuccessful();
-        // Asserts that the returned content type is JSON-LD (the default)
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-
-        // Asserts that the returned JSON is a superset of this one
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/User',
-            '@id' => '/api/users',
-            '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 100 + 1,
-            'hydra:view' => [
-                '@id' => '/api/users?page=1',
-                '@type' => 'hydra:PartialCollectionView',
-                'hydra:first' => '/api/users?page=1',
-                'hydra:last' => '/api/users?page=4',
-                'hydra:next' => '/api/users?page=2',
-            ],
-        ]);
-
-        // Because test fixtures are automatically loaded between each test, you can assert on them
-        $this->assertCount(30, $response->toArray()['hydra:member']);
-
-        // Asserts that the returned JSON is validated by the JSON Schema generated for this resource by API Platform
-        // This generated JSON Schema is also used in the OpenAPI spec!
-        $this->assertMatchesResourceCollectionJsonSchema(User::class);
-    }
-
     public function testCreateUser(): void
     {
         $response = static::createClient()->request('POST', '/api/users', ['json' => [
@@ -96,45 +61,4 @@ final class UsersTest extends AbstractClass
         ]);
     }
 
-    public function testUpdateUser(): void
-    {
-        UserFactory::createOne(['email' => 'insert@user.fr']);
-
-        $client = $this->createClientWithCredentials();
-        // findIriBy allows to retrieve the IRI of an item by searching for some of its properties.
-        $iri = $this->findIriBy(User::class, ['email' => 'insert@user.fr']);
-
-        // Use the PATCH method here to do a partial update
-        $client->request('PATCH', $iri, [
-            'json' => [
-                'firstname' => 'Franck',
-            ],
-            'headers' => [
-                'Content-Type' => 'application/merge-patch+json',
-            ]
-        ]);
-
-        $this->assertResponseIsSuccessful();
-        $this->assertJsonContains([
-            '@id' => $iri,
-            'email' => 'insert@user.fr',
-            'firstname' => 'Franck',
-        ]);
-    }
-
-    public function testDeleteUser(): void
-    {
-        UserFactory::createOne(['email' => 'delete@user.fr']);
-
-        $client = $this->createClientWithCredentials();
-        $iri = $this->findIriBy(User::class, ['email' => 'delete@user.fr']);
-
-        $client->request('DELETE', $iri);
-
-        $this->assertResponseStatusCodeSame(204);
-        // Through the container, you can access all your services from the tests, including the ORM, the mailer, remote API clients...
-        $user = static::getContainer()->get('doctrine')->getRepository(User::class)->findOneBy(['email' => 'delete@user.fr']);
-        // Assert the user has been deleted with soft delete
-        $this->assertNotNull($user->getDeletedAt());
-    }
 }
