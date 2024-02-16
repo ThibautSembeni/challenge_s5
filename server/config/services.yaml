@@ -36,6 +36,10 @@ services:
             - { name: 'doctrine.event_listener', event: 'postPersist' }
             - { name: 'doctrine.event_listener', event: 'postRemove' }
 
+    App\EventListener\ClinicActivatedListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'clinic.activated', method: 'onClinicActivated' }
+
     App\State\UserPasswordHasher:
         bind:
             $processor: '@api_platform.doctrine.orm.state.persist_processor'
