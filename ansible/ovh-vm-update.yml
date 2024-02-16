@@ -26,6 +26,11 @@
 - hosts: all
   name: Run using a project directory
   tasks:
+    - name: Install dependencies
+      community.docker.docker_container_exec:
+        container: php
+        command: composer install -o --verbose
+      register: result
     - name: Create and pull compose services
       community.docker.docker_compose:
         project_src: app
@@ -34,11 +39,6 @@
         state: present
         build: true
       register: output
-    - name: Install dependencies
-      community.docker.docker_container_exec:
-        container: php
-        command: composer install -o
-      register: result
     - name: Run JWT key generation
       community.docker.docker_container_exec:
         container: php
