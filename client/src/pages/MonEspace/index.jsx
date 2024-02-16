@@ -23,17 +23,13 @@ import { Icon } from "@/components/atoms/Icons/_index.jsx";
 import MyPets from "@/pages/MonEspace/mes-animaux/index.jsx";
 
 const navigation = [
-  { name: "Dashboard", href: "/mon-espace", icon: HomeIcon, current: true },
+  { name: "Accueil", href: "/mon-espace", icon: HomeIcon, current: true },
   {
     name: "Mes animaux",
     href: "/mon-espace/mes-animaux",
     icon: () => <Icon icon="pets" />,
     current: false,
   },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
 ];
 const teams = [
   { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
@@ -59,7 +55,9 @@ export default function MonEspace() {
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         >
-          {location.pathname === "/mon-espace" && <h1>bonjour</h1>}
+          {location.pathname === "/mon-espace" && (
+            <h1>Bienvenue sur votre espace client</h1>
+          )}
           {location.pathname === "/mon-espace/mes-animaux" && <MyPets />}
         </Sidebar>
       </div>

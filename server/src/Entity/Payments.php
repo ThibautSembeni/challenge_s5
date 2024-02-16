@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: false)]
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['payment:read:collection']]),
-        new Get(normalizationContext: ['groups' => ['payment:read:item']]),
-        new Patch(normalizationContext: ['groups' => ['payment:write:item']]),
+        new GetCollection(normalizationContext: ['groups' => ['payment:read:collection']], security: "is_granted('ROLE_ADMIN')"),
+        new Get(normalizationContext: ['groups' => ['payment:read:item']], security: "is_granted('ROLE_ADMIN')"),
+        new Patch(normalizationContext: ['groups' => ['payment:write:item']], security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['payment:read:collection']],
 )]

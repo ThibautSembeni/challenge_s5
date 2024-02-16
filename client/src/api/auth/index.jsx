@@ -29,7 +29,7 @@ export const getLogout = async () => {
 export const getAuthenticated = async (token) => {
   return axiosInstance.get(`/users/current/me`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: token && `Bearer ${token}`,
     },
   });
 };
@@ -45,11 +45,11 @@ export const getUser = async (uuid) => {
 };
 
 export const getAllUsers = async ({
-      page = 1,
-      itemsPerPage = 30,
-      pagination = false,
-      ...filters
-    } = {}) => {
+  page = 1,
+  itemsPerPage = 30,
+  pagination = false,
+  ...filters
+} = {}) => {
   const params = new URLSearchParams({
     page,
     itemsPerPage,
@@ -61,20 +61,49 @@ export const getAllUsers = async ({
   );
 };
 
-export const updateOneUsers = async ( uuid, { firstname, lastname, email, phone, address, city, postalCode, newPassword, oldPassword }) => {
+export const updateOneUsers = async (
+  uuid,
+  {
+    firstname,
+    lastname,
+    email,
+    phone,
+    address,
+    city,
+    postalCode,
+    newPassword,
+    oldPassword,
+  },
+) => {
   try {
-    const response = await axiosInstance.patch(`/users/${uuid}`, {
-      firstname, lastname, email, phone, address, city, postalCode, newPassword, oldPassword
-    }, {
-      headers: {
-        'Content-Type': 'application/merge-patch+json'
-      }
-    });
+    const response = await axiosInstance.patch(
+      `/users/${uuid}`,
+      {
+        firstname,
+        lastname,
+        email,
+        phone,
+        address,
+        city,
+        postalCode,
+        newPassword,
+        oldPassword,
+      },
+      {
+        headers: {
+          "Content-Type": "application/merge-patch+json",
+        },
+      },
+    );
 
     return { success: true };
   } catch (error) {
     console.error("Erreur lors de la mise à jour de l'utilisateur : ", error);
-    return { success: false, message: "Une erreur est survenue lors de la mise à jour de l'utilisateur" };
+    return {
+      success: false,
+      message:
+        "Une erreur est survenue lors de la mise à jour de l'utilisateur",
+    };
   }
 };
 
@@ -84,6 +113,9 @@ export const deleteUser = async (uuid) => {
 
     return { success: true };
   } catch (error) {
-    return { success: false, message: "Une erreur est survenue lors de la suppression du cabinet" };
+    return {
+      success: false,
+      message: "Une erreur est survenue lors de la suppression du cabinet",
+    };
   }
 };

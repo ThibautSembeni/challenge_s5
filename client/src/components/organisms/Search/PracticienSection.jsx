@@ -25,9 +25,7 @@ const PracticienSection = forwardRef(
                       {veterinarian.lastname} {veterinarian.firstname}
                     </a>
                   </p>
-                  <p className="text-gray-600">
-                    {t("components.organisms.search.practicienSection.p")} {veterinarian.specialties}
-                  </p>
+                  <p className="text-gray-600">{veterinarian.specialties}</p>
                 </div>
               </div>
             </div>

@@ -40,7 +40,7 @@ class ClinicComplementaryInformationVoter extends Voter
             case 'CREATE_CLINIC_COMPLEMENTARY_INFORMATION':
                 return $this->canCreate($subject, $user);
             case 'EDIT_CLINIC_COMPLEMENTARY_INFORMATION':
-                return $this->canEdit($subject, $user);
+                return $this->canCreate($subject, $user);
             case 'DELETE_CLINIC_COMPLEMENTARY_INFORMATION':
                 return $this->canDelete($subject, $user);
         }

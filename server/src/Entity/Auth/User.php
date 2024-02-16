@@ -37,10 +37,10 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['users:read:collection']]),
+        new GetCollection(normalizationContext: ['groups' => ['users:read:collection']], security: 'is_granted("ROLE_ADMIN")'),
         new Post(processor: UserPasswordHasher::class),
-        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']]),
-        new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class),
+        new Get(normalizationContext: ['groups' => ['user:read', 'user:read:full']], security: 'is_granted("READ_USER", object)'),
+        new Patch(denormalizationContext: ['groups' => ['user:write:update']], processor: UserPasswordHasher::class, securityPostDenormalize: 'is_granted("UPDATE_USER", object)'),
         new GetCollection(
             uriTemplate: '/users/current/me',
             controller: GetCurrentUserController::class,
@@ -49,7 +49,7 @@ use Gedmo\Mapping\Annotation\SoftDeleteable;
             securityMessage: 'Only authenticated users can access this resource.',
             name: 'current_user_get'
         ),
-        new Delete()
+        new Delete(security: 'is_granted("DELETE_USER", object)')
         // new Put(), // I don't use PUT, only PATCH
     ],
     normalizationContext: ['groups' => ['user:read']],

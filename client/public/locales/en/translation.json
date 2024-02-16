@@ -56,7 +56,7 @@
         "buttonSpanDismiss": "Dismiss"
       }
     },
-    "molecules" : {
+    "molecules": {
       "errorbounderys" : {
         "erreur": "Error",
         "h1": "Oupsi, an error has occured",
@@ -90,13 +90,12 @@
             "link": "Log in"
           }
         },
-        "sidebar" : {
+        "sidebar": {
           "sidebar": {
             "spanFermer": "Close",
             "listboxCabinet": "Clinic",
-            "lesVeterinaires" : "The vetenarians",
+            "lesVeterinaires": "The vetenarians",
             "spanVoirTousLesCabinets": "See all clinics"
-
           },
           "topSidebar": {
             "spanOpenSideBar": "Open side bar",

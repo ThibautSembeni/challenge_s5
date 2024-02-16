@@ -66,7 +66,7 @@ export const createComplementaryInformation = async ({
       {
         name,
         description,
-        clinicId: clinicId,
+        clinic: clinicId,
       },
     );
 
@@ -120,28 +120,32 @@ export const createClinics = async ({
   city,
   description,
   manager,
-  file
+  file,
 }) => {
   try {
     // Création d'un objet FormData
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('phone', phone);
-    formData.append('email', email);
-    formData.append('address', address);
-    formData.append('postalCode', postalCode);
-    formData.append('city', city);
-    formData.append('description', description);
-    formData.append('manager', manager);
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("email", email);
+    formData.append("address", address);
+    formData.append("postalCode", postalCode);
+    formData.append("city", city);
+    formData.append("description", description);
+    formData.append("manager", manager);
 
     // Ajouter le fichier si présent
-    if (file) formData.append('file', file);
+    if (file) formData.append("file", file);
 
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/clinics`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/clinics`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       },
-    });
+    );
 
     return { success: true, clinic: response.data };
   } catch (error) {
@@ -181,19 +185,35 @@ export const deleteClinics = async (uuid) => {
 
     return { success: true };
   } catch (error) {
-    return { success: false, message: "Une erreur est survenue lors de la suppression du cabinet" };
+    return {
+      success: false,
+      message: "Une erreur est survenue lors de la suppression du cabinet",
+    };
   }
 };
 
-export const updateOneClinics = async (uuid, { name, email, phone, address, postalCode, city, description }) => {
+export const updateOneClinics = async (
+  uuid,
+  { name, email, phone, address, postalCode, city, description },
+) => {
   try {
-    const response = await axiosInstance.patch(`/clinics/${uuid}`, {
-      name, email, phone, address, postalCode, city, description
-    }, {
-      headers: {
-        'Content-Type': 'application/merge-patch+json'
-      }
-    });
+    const response = await axiosInstance.patch(
+      `/clinics/${uuid}`,
+      {
+        name,
+        email,
+        phone,
+        address,
+        postalCode,
+        city,
+        description,
+      },
+      {
+        headers: {
+          "Content-Type": "application/merge-patch+json",
+        },
+      },
+    );
 
     return { success: true };
   } catch (error) {
@@ -207,34 +227,41 @@ export const updateOneClinics = async (uuid, { name, email, phone, address, post
 
 export const checkClinic = async (uuid) => {
   try {
-    const response = await axiosInstance.patch(`/clinics/${uuid}`, {
-      isActif: true,
-    }, {
-      headers: {
-        'Content-Type': 'application/merge-patch+json'
-      }
-    });
+    const response = await axiosInstance.patch(
+      `/clinics/${uuid}`,
+      {
+        isActif: true,
+      },
+      {
+        headers: {
+          "Content-Type": "application/merge-patch+json",
+        },
+      },
+    );
 
     return { success: true };
   } catch (error) {
-    return { success: false, message: "Une erreur est survenue lors de la récupération des données" };
+    return {
+      success: false,
+      message: "Une erreur est survenue lors de la récupération des données",
+    };
   }
-}
+};
 
 export const getCountVeterinariesByClinic = async () => {
-    return axiosInstance.get(
-        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/count`
-    );
+  return axiosInstance.get(
+    `${import.meta.env.VITE_API_URL}/clinics/veterinarians/count`,
+  );
 };
 
 export const getCountClinicsByManager = async () => {
-    return axiosInstance.get(
-        `${import.meta.env.VITE_API_URL}/clinics/manager/count`
-    );
+  return axiosInstance.get(
+    `${import.meta.env.VITE_API_URL}/clinics/manager/count`,
+  );
 };
 
 export const getCountScheduledAppointmentsByClinic = async () => {
-    return axiosInstance.get(
-        `${import.meta.env.VITE_API_URL}/clinics/veterinarians/appointments`
-    );
+  return axiosInstance.get(
+    `${import.meta.env.VITE_API_URL}/clinics/veterinarians/appointments`,
+  );
 };

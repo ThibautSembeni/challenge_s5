@@ -18,7 +18,7 @@ export default function Edit({ setEditPet, setState, uuid }) {
       medicalHistory: data.medicalHistory,
     })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.success) {
           setState({
             type: "success",
             title: "Votre animal a bien été modifié",
@@ -41,7 +41,7 @@ export default function Edit({ setEditPet, setState, uuid }) {
   const handleDelete = () => {
     deletePets(uuid)
       .then((res) => {
-        if (res.status === 204) {
+        if (res.success) {
           setState({
             type: "success",
             title: "Votre animal a bien été supprimé",

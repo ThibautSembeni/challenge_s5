@@ -71,6 +71,7 @@ use App\Controller\Back\Clinics\VeterinariansAndAppointmentsController;
 class Clinics
 {
     use TimestampableTrait;
+
     #[Groups(['veterinarians:read', 'user:read:full', 'clinics:read:collection', 'clinics:write:create', 'clinics:read', 'appointments:read:item', 'payment:read:collection'])]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ApiProperty(identifier: true)]

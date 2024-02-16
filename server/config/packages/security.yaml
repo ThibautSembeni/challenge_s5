@@ -42,7 +42,6 @@ security:
         - { path: ^/api/clinics/[a-zA-Z0-9_-]+$, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/clinics, method: POST, roles: PUBLIC_ACCESS }
-        - { path: ^/api/pets, method: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/feedbacks, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs,       roles: PUBLIC_ACCESS }
         - { path: ^/api/chatbot, method: POST, roles: PUBLIC_ACCESS }

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import Navbar from "@/components/molecules/Navbar/index.jsx";
 import Footer from "@/components/molecules/Footer/index.jsx";
 import { useAuth } from "@/contexts/AuthContext.jsx";
@@ -19,71 +19,74 @@ export default function Account() {
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState({});
-  const inputsInformation = [
-    {
-      type: "text",
-      label: "Prénom",
-      required: true,
-      name: "firstname",
-      className: "col-span-full",
-      value: currentUser?.firstname,
-      autoComplete: "given-name",
-    },
-    {
-      type: "text",
-      label: "Nom",
-      required: true,
-      name: "lastname",
-      className: "col-span-full",
-      value: currentUser?.lastname,
-      autoComplete: "family-name",
-    },
-    {
-      type: "email",
-      label: "Email",
-      required: true,
-      name: "email",
-      className: "col-span-full",
-      value: currentUser?.email,
-      autoComplete: "email",
-    },
-    {
-      type: "phone",
-      label: "Téléphone",
-      required: false,
-      name: "phone",
-      className: "col-span-full",
-      value: currentUser?.phone,
-      autoComplete: "tel",
-    },
-    {
-      type: "text",
-      label: "Adresse",
-      required: false,
-      name: "address",
-      className: "col-span-full",
-      value: currentUser?.address,
-      autoComplete: "street-address",
-    },
-    {
-      type: "text",
-      label: "Ville",
-      required: false,
-      name: "city",
-      className: "col-span-full",
-      value: currentUser?.city,
-      autoComplete: "address-level2",
-    },
-    {
-      type: "text",
-      label: "Code Postal",
-      required: false,
-      name: "postalCode",
-      className: "col-span-full",
-      value: currentUser?.postalCode,
-      autoComplete: "postal-code",
-    },
-  ];
+  const inputsInformation = useMemo(
+    () => [
+      {
+        type: "text",
+        label: "Prénom",
+        required: true,
+        name: "firstname",
+        className: "col-span-full",
+        value: currentUser?.firstname,
+        autoComplete: "given-name",
+      },
+      {
+        type: "text",
+        label: "Nom",
+        required: true,
+        name: "lastname",
+        className: "col-span-full",
+        value: currentUser?.lastname,
+        autoComplete: "family-name",
+      },
+      {
+        type: "email",
+        label: "Email",
+        required: true,
+        name: "email",
+        className: "col-span-full",
+        value: currentUser?.email,
+        autoComplete: "email",
+      },
+      {
+        type: "phone",
+        label: "Téléphone",
+        required: false,
+        name: "phone",
+        className: "col-span-full",
+        value: currentUser?.phone,
+        autoComplete: "tel",
+      },
+      {
+        type: "text",
+        label: "Adresse",
+        required: false,
+        name: "address",
+        className: "col-span-full",
+        value: currentUser?.address,
+        autoComplete: "street-address",
+      },
+      {
+        type: "text",
+        label: "Ville",
+        required: false,
+        name: "city",
+        className: "col-span-full",
+        value: currentUser?.city,
+        autoComplete: "address-level2",
+      },
+      {
+        type: "text",
+        label: "Code Postal",
+        required: false,
+        name: "postalCode",
+        className: "col-span-full",
+        value: currentUser?.postalCode,
+        autoComplete: "postal-code",
+      },
+    ],
+    [currentUser],
+  );
   const [updatePasswordState, setUpdatePasswordState] = useState(null);
 
   const handleChange = (key, value) => {

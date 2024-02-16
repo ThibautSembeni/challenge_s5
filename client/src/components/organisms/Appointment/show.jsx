@@ -1,7 +1,7 @@
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import {
-    downloadIcsFile,
-    getOneAppointment,
+  downloadIcsFile,
+  getOneAppointment,
 } from "@/api/appointments/index.jsx";
 import { useEffect, useState } from "react";
 import { displayDay, displayTime } from "@/utils/date.js";
@@ -11,23 +11,26 @@ import CreateFeedbacks from "@/components/organisms/Feedback/CreateFeedbacks.jsx
 import { useTranslation } from "react-i18next";
 
 export default function Show({ uuid }) {
-    const [appointment, setAppointment] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const { t } = useTranslation();
+  const [appointment, setAppointment] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
+  const [comments, setComments] = useState([]);
+  const addComment = (comment) => {
+    setComments([...comments, comment]);
+    handleGetAppointmentDetail();
+  };
+  const handleGetAppointmentDetail = async () => {
+    setLoading(true);
+    const result = await getOneAppointment(uuid);
+    setAppointment(result.data);
+    setLoading(false);
+  };
 
-    const handleGetAppointmentDetail = async () => {
-        setLoading(true);
-        const result = await getOneAppointment(uuid);
-        setAppointment(result.data);
-        setLoading(false);
-    };
+  useEffect(() => {
+    if (uuid) handleGetAppointmentDetail();
+  }, [uuid]);
 
-    useEffect(() => {
-        if (uuid) handleGetAppointmentDetail();
-    }, [uuid]);
-  
   if (loading) return <Skeleton />;
-
 
   return (
     <div className={`overflow-hidden sm:rounded-lg bg-white`}>
@@ -43,20 +46,22 @@ export default function Show({ uuid }) {
           </div>
         </div>
         <div className="flex-none self-start px-6 pt-4">
-          <dt className="sr-only">{t("components.organisms.appointment.show.divDtSatus")}</dt>
+          <dt className="sr-only">
+            {t("components.organisms.appointment.show.divDtSatus")}
+          </dt>
           {appointment.status === "scheduled" && (
             <dd className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                {t("components.organisms.appointment.show.divDtDDaVenir")}
+              {t("components.organisms.appointment.show.divDtDDaVenir")}
             </dd>
           )}
           {appointment.status === "completed" && (
             <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                {t("components.organisms.appointment.show.divDtDD2Passé")}
+              {t("components.organisms.appointment.show.divDtDD2Passé")}
             </dd>
           )}{" "}
           {appointment.status === "cancelled" && (
             <dd className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
-                {t("components.organisms.appointment.show.divDtDD3Annulé")}
+              {t("components.organisms.appointment.show.divDtDD3Annulé")}
             </dd>
           )}
         </div>
@@ -64,7 +69,9 @@ export default function Show({ uuid }) {
       <div className="border-t border-gray-100">
         <dl className="divide-y divide-gray-100">
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-900">{t("components.organisms.appointment.show.divDlDivDtPraticien")}</dt>
+            <dt className="text-sm font-medium text-gray-900">
+              {t("components.organisms.appointment.show.divDlDivDtPraticien")}
+            </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {appointment.veterinarian.lastname +
                 " " +
@@ -72,14 +79,18 @@ export default function Show({ uuid }) {
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-900">{t("components.organisms.appointment.show.divDt1Patient")}</dt>
+            <dt className="text-sm font-medium text-gray-900">
+              {t("components.organisms.appointment.show.divDt1Patient")}
+            </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {appointment.pet.name}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-900">
-                {t("components.organisms.appointment.show.divDt2RendreEnConsultation")}
+              {t(
+                "components.organisms.appointment.show.divDt2RendreEnConsultation",
+              )}
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-col">
               <span className={"font-semibold"}>
@@ -107,21 +118,25 @@ export default function Show({ uuid }) {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-900">
-                {t("components.organisms.appointment.show.divDtMoyensPaiement")}
+              {t("components.organisms.appointment.show.divDtMoyensPaiement")}
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                {t("components.organisms.appointment.show.divDDChequeEspeceCarte")}
+              {t(
+                "components.organisms.appointment.show.divDDChequeEspeceCarte",
+              )}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-900">{t("components.organisms.appointment.show.divDtRaison")} </dt>
+            <dt className="text-sm font-medium text-gray-900">
+              {t("components.organisms.appointment.show.divDtRaison")}{" "}
+            </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
               {appointment.service.description}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium leading-6 text-gray-900">
-                {t("components.organisms.appointment.show.divDtPiecesJointes")}
+              {t("components.organisms.appointment.show.divDtPiecesJointes")}
             </dt>
             <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               <ul
@@ -136,103 +151,99 @@ export default function Show({ uuid }) {
                     />
                     <div className="ml-4 flex min-w-0 flex-1 gap-2">
                       <span className="truncate font-medium">
-                         {t("components.organisms.appointment.show.divSpanAjouterCalendrier")}
+                        {t(
+                          "components.organisms.appointment.show.divSpanAjouterCalendrier",
+                        )}
                       </span>
                       <span className="flex-shrink-0 text-gray-400">2.4mb</span>
-
-                                        </div>
-                                    </div>
-                                    <div className="ml-4 flex-shrink-0">
-                                        <button
-                                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                                            onClick={() => {
-                                                downloadIcsFile(
-                                                    appointment.uuid
-                                                );
-                                            }}
-                                        >
-                                            {t("components.organisms.appointment.show.divButtonSpanTelecharger")}
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </dd>
                     </div>
-                    <div className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                        <dt className="text-sm font-medium text-gray-900 py-4">
-                            {t("components.organisms.appointment.show.divDtLaisserAvis")}
-                        </dt>
-                        <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                            <CreateFeedbacks appointment={appointment.uuid} />
-                        </dd>
-                    </div>
-                    <div className="mt-4 bg-white shadow rounded-lg p-6">
-                        <dt className="text-lg font-semibold text-gray-900 pb-4">
-                            {t("components.organisms.appointment.show.divDtAvis")}
-                        </dt>
-                        <dd className="mt-2">
-                            {appointment.feedbacks.map((feedback, index) => (
-                                <div key={index} className="mb-5 last:mb-0">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <h3 className="text-md font-medium text-gray-900">
-                                            {appointment.userID.firstname}{" "}
-                                            {appointment.userID.lastname}
-                                        </h3>
-                                        <span className="text-sm text-gray-500">
-                                            {new Date(
-                                                feedback.createdAt
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center mb-2">
-                                        {[...Array(5)].map((_, i) => (
-                                            <svg
-                                                key={i}
-                                                className={`h-5 w-5 ${
-                                                    i < feedback.rating
-                                                        ? "text-yellow-400"
-                                                        : "text-gray-300"
-                                                }`}
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.785.57-1.84-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
-                                            </svg>
-                                        ))}
-                                    </div>
-                                    <p className="text-gray-700">
-                                        {feedback.comment}
-                                    </p>
-                                    <p
-                                        className={`mt-2 text-sm ${
-                                            feedback.verify
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {feedback.verify
-                                            ? "Vérifié"
-                                            : "Non vérifié"}
-                                    </p>
-                                </div>
-                            ))}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-    );
+                  </div>
+                  <div className="ml-4 flex-shrink-0">
+                    <button
+                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                      onClick={() => {
+                        downloadIcsFile(appointment.uuid);
+                      }}
+                    >
+                      {t(
+                        "components.organisms.appointment.show.divButtonSpanTelecharger",
+                      )}
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </dd>
+          </div>
+          <div className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <dt className="text-sm font-medium text-gray-900 py-4">
+              {t("components.organisms.appointment.show.divDtLaisserAvis")}
+            </dt>
+            <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <CreateFeedbacks
+                appointment={appointment.uuid}
+                addComment={addComment}
+              />
+            </dd>
+          </div>
+          <div className="mt-4 bg-white shadow rounded-lg p-6">
+            <dt className="text-lg font-semibold text-gray-900 pb-4">
+              {t("components.organisms.appointment.show.divDtAvis")}
+            </dt>
+            <dd className="mt-2">
+              {appointment.feedbacks.map((feedback, index) => (
+                <div key={index} className="mb-5 last:mb-0">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="text-md font-medium text-gray-900">
+                      {appointment.userID.firstname}{" "}
+                      {appointment.userID.lastname}
+                    </h3>
+                    <span className="text-sm text-gray-500">
+                      {new Date(feedback.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`h-5 w-5 ${
+                          i < feedback.rating
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.785.57-1.84-.197-1.54-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-gray-700">{feedback.comment}</p>
+                  <p
+                    className={`mt-2 text-sm ${
+                      feedback.verify ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {feedback.verify ? "Vérifié" : "Non vérifié"}
+                  </p>
+                </div>
+              ))}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  );
 }
 
 function Skeleton() {
-    return (
-        <div className="animate-pulse">
-            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-            <div className="space-y-2 mt-2">
-                <div className="h-4 bg-gray-300 rounded w-5/6"></div>
-                <div className="h-4 bg-gray-300 rounded w-4/6"></div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="animate-pulse">
+      <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+      <div className="space-y-2 mt-2">
+        <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+        <div className="h-4 bg-gray-300 rounded w-4/6"></div>
+      </div>
+    </div>
+  );
 }

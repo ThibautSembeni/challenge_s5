@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export default function Page() {
-
   const { login, isLoading, error, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   //translation
@@ -66,14 +65,6 @@ export default function Page() {
                   >
                     {t("pages.auth.login.labelPassword")}
                   </label>
-                  <div className="text-sm leading-6">
-                    <a
-                      href="#"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      {t("pages.auth.login.divHrefMotDePasseOublie")}
-                    </a>
-                  </div>
                 </div>
 
                 <div className="mt-2">
@@ -104,7 +95,7 @@ export default function Page() {
           </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            {t("pages.auth.login.pNouveau")} {" "}
+            {t("pages.auth.login.pNouveau")}{" "}
             <Link
               className={
                 "font-semibold leading-6 text-indigo-600 hover:text-indigo-500"

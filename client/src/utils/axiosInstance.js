@@ -5,7 +5,9 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    Authorization:
+      localStorage.getItem("access_token") &&
+      `Bearer ${localStorage.getItem("access_token")}`,
   },
 });
 
@@ -39,6 +41,9 @@ api.interceptors.response.use(
             .then((res) => {
               localStorage.setItem("access_token", res.data.token);
               localStorage.setItem("refresh_token", res.data.refresh_token);
+              api.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${res.data.token}`;
             })
             .catch((err) => {
               // window.location.href = "/";

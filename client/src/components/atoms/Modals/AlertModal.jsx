@@ -61,8 +61,9 @@ export default function AlertModal({ open, setOpen, title, actions, content }) {
                 </div>
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-2">
                   {actions &&
-                    actions.map((btn) => (
+                    actions.map((btn, index) => (
                       <button
+                        key={index}
                         type="button"
                         className={classNames(
                           btn.type === "primary" &&

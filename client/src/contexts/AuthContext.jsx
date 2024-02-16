@@ -1,8 +1,21 @@
-import React, {createContext, useCallback, useContext, useEffect, useState,} from "react";
-import {getAuthenticated, getLogout, postLogin, postRegister, refreshToken,} from "@/api/auth";
-import {useNavigate} from "react-router-dom";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  getAuthenticated,
+  getLogout,
+  postLogin,
+  postRegister,
+  refreshToken,
+} from "@/api/auth";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axiosInstance.js";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext(null);
 
@@ -11,7 +24,7 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -80,11 +93,13 @@ const AuthProvider = ({ children }) => {
       .then(() => {
         setUser(null);
         setIsAuthenticated(false);
+        localStorage.removeItem("user");
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("selectedClinic");
         setAccessToken(null);
         setRefreshToken(null);
+        navigate("/");
       })
       .finally(() => setIsLoading(false));
   };
@@ -109,12 +124,14 @@ const AuthProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 200) {
           setUser(res.data);
+          localStorage.setItem("user", JSON.stringify(res.data));
           setIsAuthenticated(true);
         }
       })
       .catch((err) => {
         if (err.request.status === 401) {
           setUser(null);
+          localStorage.removeItem("user");
           setIsAuthenticated(false);
         }
       });
@@ -151,21 +168,20 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        isAuthenticated,
-        isLoading,
-        error,
-        register,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const values = useMemo(
+    () => ({
+      user,
+      login,
+      logout,
+      isAuthenticated,
+      isLoading,
+      error,
+      register,
+    }),
+    [user, login, logout, isAuthenticated, isLoading, error, register],
   );
+
+  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

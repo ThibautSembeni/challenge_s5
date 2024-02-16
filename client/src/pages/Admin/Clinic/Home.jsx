@@ -1,5 +1,9 @@
-import {useEffect, useState} from "react";
-import {BookOpenIcon, BuildingOfficeIcon, UsersIcon,} from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import {
+  BookOpenIcon,
+  BuildingOfficeIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 import CalendarOpenCloseComponent from "@/components/organisms/Veterinarian/CalendarOpenCloseComponent.jsx";
 import {
   getAllClinicsByManager,
@@ -8,15 +12,15 @@ import {
   getCountVeterinariesByClinic,
   getOneClinics,
 } from "@/api/clinic/Clinic.jsx";
-import {useAuth} from "@/contexts/AuthContext.jsx";
-import SideBar, {TopSideBar} from "@/components/molecules/Navbar/SideBar.jsx";
+import { useAuth } from "@/contexts/AuthContext.jsx";
+import SideBar, { TopSideBar } from "@/components/molecules/Navbar/SideBar.jsx";
 import Loading from "@/components/molecules/Loading.jsx";
-import {useClinic} from "@/contexts/ClinicAdminContext.jsx";
-import {useTranslation} from "react-i18next";
+import { useClinic } from "@/contexts/ClinicAdminContext.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
-  const {user} = useAuth();
-  const {selectedClinic, navigation} = useClinic();
+  const { user } = useAuth();
+  const { selectedClinic, navigation } = useClinic();
   const { t } = useTranslation();
 
   const [clinicsData, setClinicsData] = useState([]);
@@ -30,37 +34,48 @@ export default function Home() {
   }, [user.uuid, selectedClinic]);
 
   useEffect(() => {
-    async function fetchStarts() {
+    function fetchStarts() {
       setIsLoading(true);
 
-      const vetCount = await getCountVeterinariesByClinic();
-      const clinicCount = await getCountClinicsByManager();
-      const appointmentCount =
-        await getCountScheduledAppointmentsByClinic();
-
-      setStats([
-        {
-          id: 1,
-          name: "Nombre de vétérinaires",
-          stat: `${vetCount.data} vétérinaires`,
-          icon: UsersIcon,
-        },
-        {
-          id: 2,
-          name: "Nombre de cliniques",
-          stat: `${clinicCount.data} cliniques`,
-          icon: BuildingOfficeIcon,
-        },
-        {
-          id: 3,
-          name: "Nombre de rendez-vous programmés",
-          stat: `${appointmentCount.data} rendez-vous`,
-          icon: BookOpenIcon,
-        },
-      ]);
+      return new Promise((resolve, reject) => {
+        Promise.all([
+          getCountVeterinariesByClinic(),
+          getCountClinicsByManager(),
+          getCountScheduledAppointmentsByClinic(),
+        ])
+          .then(([vetCount, clinicCount, appointmentCount]) => {
+            setStats([
+              {
+                id: 1,
+                name: "Nombre de vétérinaires",
+                stat: `${vetCount.data} vétérinaires`,
+                icon: UsersIcon,
+              },
+              {
+                id: 2,
+                name: "Nombre de cliniques",
+                stat: `${clinicCount.data} cliniques`,
+                icon: BuildingOfficeIcon,
+              },
+              {
+                id: 3,
+                name: "Nombre de rendez-vous programmés",
+                stat: `${appointmentCount.data} rendez-vous`,
+                icon: BookOpenIcon,
+              },
+            ]);
+            setIsLoading(false);
+            resolve();
+          })
+          .catch((error) => {
+            console.error("Error fetching data: ", error);
+            setIsLoading(false);
+            reject(error);
+          });
+      });
     }
 
-    fetchStarts().then(() => setIsLoading(false));
+    fetchStarts();
   }, []);
 
   const fetchAndSetClinicsData = async (userUuid) => {
@@ -83,7 +98,7 @@ export default function Home() {
       const transformedClinics = clinics.map((clinic) => ({
         clinicInfo: clinic,
         teams: clinic.veterinarians.map(
-          ({firstname, lastname, specialties, uuid}) => ({
+          ({ firstname, lastname, specialties, uuid }) => ({
             name: `${firstname} ${lastname}`,
             initial: `${firstname[0]}`,
             role: specialties,
@@ -125,7 +140,7 @@ export default function Home() {
   return (
     <>
       {isLoading ? (
-        <Loading/>
+        <Loading />
       ) : (
         <>
           <div>
@@ -145,7 +160,6 @@ export default function Home() {
 
               <main className="py-10">
                 <div className="px-4 sm:px-6 lg:px-8">
-
                   {user.roles.includes("ROLE_MANAGER") && (
                     <div className="mb-20">
                       <h3 className="text-base font-semibold leading-6 text-gray-900">
@@ -164,7 +178,6 @@ export default function Home() {
                                   className="h-6 w-6 text-white"
                                   aria-hidden="true"
                                 />
-
                               </div>
                               <p className="ml-16 truncate text-sm font-medium text-gray-500">
                                 {item.name}
@@ -176,7 +189,6 @@ export default function Home() {
                               </p>
 
                               <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6"></div>
-
                             </dd>
                           </div>
                         ))}
@@ -185,8 +197,6 @@ export default function Home() {
                   )}
 
                   <div className="mb-20">
-
-
                     {clinicsData.map((clinic) => (
                       <div key={clinic.clinicInfo.uuid}>
                         <CalendarOpenCloseComponent

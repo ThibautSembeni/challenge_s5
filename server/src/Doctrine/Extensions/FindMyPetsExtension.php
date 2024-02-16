@@ -33,9 +33,9 @@ final class FindMyPetsExtension implements QueryCollectionExtensionInterface, Qu
         if (Pets::class !== $resourceClass || $this->security->isGranted('ROLE_ADMIN') || null === $user = $this->security->getUser()) {
             return;
         }
-
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder->andWhere(sprintf('%s.userID = :userID', $rootAlias));
-        $queryBuilder->setParameter('userID', $user->getId());
+        $queryBuilder->setParameter('userID', $user);
+        $queryBuilder->andWhere(sprintf('%s.deletedAt IS NULL', $rootAlias));
     }
 }
