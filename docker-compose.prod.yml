@@ -19,6 +19,15 @@ services:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
       - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN}
+      - TWILIO_DSN=${TWILIO_DSN}
+      - SENDINBLUE_API_KEY=${SENDINBLUE_API_KEY}
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+
+
+
   database:
     container_name: database
     image: postgres:latest
