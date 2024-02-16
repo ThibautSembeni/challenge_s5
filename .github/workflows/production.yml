@@ -41,6 +41,11 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           CORS_ALLOW_ORIGIN: ${{ secrets.CORS_ALLOW_ORIGIN }}
+          TWILIO_DSN: ${{ secrets.TWILIO_DSN }}
+          SENDINBLUE_API_KEY: ${{ secrets.SENDINBLUE_API_KEY }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           known_hosts: |
             ${{secrets.OVH_VM_IP}} ${{secrets.OVH_VM_KNOW_HOST}}
