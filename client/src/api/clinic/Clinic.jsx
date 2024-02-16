@@ -13,7 +13,7 @@ export const getAllClinics = async ({
     pagination,
     ...filters,
   });
-  return axios.get(
+  return axiosInstance.get(
     `${import.meta.env.VITE_API_URL}/clinics?${params.toString()}`,
   );
 };
