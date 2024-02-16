@@ -57,7 +57,7 @@ const list = [
                 element: <h1>About</h1>,
             },
             {
-                path: "search/:city",
+                path: "search",
                 element: <SearchResult />,
             },
             {
@@ -168,37 +168,37 @@ const list = [
         ],
     },
     {
-    path: "gestion",
-    element: <Outlet />,
-    roles: ["ROLE_VETERINARIAN"],
-    children: [
-      {
-        path: "",
-        element: <Manage />,
+        path: "gestion",
+        element: <Outlet />,
         roles: ["ROLE_VETERINARIAN"],
-      },
-      {
-        path: "calendrier",
-        element: <Manage type={"calendar"} />,
-        roles: ["ROLE_VETERINARIAN"],
-      },
-      {
-        path: "services",
-        element: <Manage type={"services"} />,
-        roles: ["ROLE_VETERINARIAN"],
-      },
-      {
-        path: "commentaires",
-        element: <Manage type={"comments"} />,
-        roles: ["ROLE_VETERINARIAN"],
-      },
-                    {
+        children: [
+            {
+                path: "",
+                element: <Manage />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
+                path: "calendrier",
+                element: <Manage type={"calendar"} />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
+                path: "services",
+                element: <Manage type={"services"} />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
+                path: "commentaires",
+                element: <Manage type={"comments"} />,
+                roles: ["ROLE_VETERINARIAN"],
+            },
+            {
                 path: "rendez-vous",
                 element: <Manage type={"appointments"} />,
                 roles: ["ROLE_VETERINARIAN"],
             },
-    ],
-  },
+        ],
+    },
     {
         path: "connexion",
         element: <Login />,
