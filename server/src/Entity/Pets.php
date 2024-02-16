@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
         new GetCollection(normalizationContext: ['groups' => ['pets:read:collection']]),
         new Get(normalizationContext: ['groups' => ['pets:read:item']]),
         new Post(normalizationContext: ['groups' => ['pets:write:item']]),
-        new Patch(normalizationContext: ['groups' => ['pets:update:item']]),
+        new Patch(normalizationContext: ['groups' => ['pets:read:item']], denormalizationContext: ['groups' => ['pets:update:item']]),
         new Delete()
     ],
     normalizationContext: ['groups' => ['pets:read:collection']],
