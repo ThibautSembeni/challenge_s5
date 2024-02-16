@@ -44,7 +44,6 @@ security:
         - { path: ^/api/clinics, method: POST, roles: PUBLIC_ACCESS }
         - { path: ^/api/feedbacks, roles: PUBLIC_ACCESS }
         - { path: ^/api/chatbot, method: POST, roles: PUBLIC_ACCESS }
-        - { path: ^/api/create-payments, roles: IS_AUTHENTICATED_FULLY}
         - { path: ^/, roles: PUBLIC_ACCESS }
 
     providers:

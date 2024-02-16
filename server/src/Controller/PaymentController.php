@@ -38,7 +38,7 @@ class PaymentController extends AbstractController
                 'payment_method' => $paymentMethodId,
                 'confirmation_method' => 'manual',
                 'confirm' => true,
-                'return_url' => $_ENV['VITE_PUBLIC_API_URL'].'/validation-de-paiement',
+                'return_url' => $_ENV['PUBLIC_APP_URL'].'/validation-de-paiement',
             ]);
 
             $payment = new Payments();

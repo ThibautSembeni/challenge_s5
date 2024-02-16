@@ -24,9 +24,7 @@ services:
       - STRIPE_API_KEY=${STRIPE_API_KEY}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-
-
-
+      - PUBLIC_APP_URL=${PUBLIC_APP_URL}
 
   database:
     container_name: database
