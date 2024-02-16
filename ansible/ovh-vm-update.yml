@@ -54,3 +54,13 @@
         container: php
         command: php bin/console doctrine:migrations:migrate --no-interaction
       register: result
+    - name: Grant permissions
+      community.docker.docker_container_exec:
+        container: php
+        command: chmod -R 777 /srv/app/var
+      register: result
+    - name: Grant permissions
+      community.docker.docker_container_exec:
+        container: php
+        command: chmod -R 777 /srv/app/public/media/kbis
+      register: result
