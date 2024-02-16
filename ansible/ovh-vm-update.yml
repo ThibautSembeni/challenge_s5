@@ -34,6 +34,11 @@
         state: present
         build: true
       register: output
+    - name: Install dependencies
+      community.docker.docker_container_exec:
+        container: php
+        command: composer install -o
+      register: result
     - name: Run JWT key generation
       community.docker.docker_container_exec:
         container: php
