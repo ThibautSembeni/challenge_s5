@@ -45,7 +45,7 @@ export const updateOnePayments = async (id, { amount, status }) => {
 
 export const createPayments = async ({ paymentMethod }) => {
   try {
-    const payment = axiosInstance.post(`/create-payments`, {
+    const payment = await axiosInstance.post(`/create-payments`, {
       paymentMethod,
     });
 
